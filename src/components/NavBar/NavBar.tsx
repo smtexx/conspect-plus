@@ -9,7 +9,8 @@ export default function NavBar() {
   return (
     <Navbar
       expand="lg"
-      className="bg-body-tertiary px-2 py-3 py-lg-2"
+      className="bg-body-tertiary px-2 py-3 px-lg-3 py-lg-2"
+      collapseOnSelect={true}
     >
       <Container>
         <Navbar.Brand href="#home">
