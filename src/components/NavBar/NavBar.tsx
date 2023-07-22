@@ -64,7 +64,7 @@ export default function NavBar() {
                 </Link>
               </NavDropdown.Item>
               <NavDropdown.Item>
-                <Link className="nav-link p-0" to="/user/change">
+                <Link className="nav-link p-0" to="/user">
                   Сменить пользователя
                 </Link>
               </NavDropdown.Item>
