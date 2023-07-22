@@ -48,46 +48,50 @@ export default function QuickLinks() {
   const recentLinks = useLoaderData() as T_RecentLinks;
 
   return (
-    <Card>
-      <Card.Header>
-        <Nav variant="tabs" defaultActiveKey="#notes">
-          <Nav.Item>
-            <Nav.Link
-              active={type === E_QuickLinkTypes.NOTE}
-              href="#notes"
-            >
-              Конспект
-            </Nav.Link>
-          </Nav.Item>
-          <Nav.Item>
-            <Nav.Link
-              active={type === E_QuickLinkTypes.RESOURCE}
-              href="#resources"
-            >
-              Ресурс
-            </Nav.Link>
-          </Nav.Item>
-          <Nav.Item>
-            <Nav.Link
-              active={type === E_QuickLinkTypes.DRAFT}
-              href="#drafts"
-            >
-              Черновик
-            </Nav.Link>
-          </Nav.Item>
-        </Nav>
-      </Card.Header>
-      <Card.Body>
-        <Card.Text>{cardDescription[type].text}</Card.Text>
-        <ul className="d-flex flex-column">
-          {recentLinks[type].map((link) => (
-            <li className="pb-2" key={link.href}>
-              <Link to={link.href}>{link.text}</Link> (
-              {link.wasActive.toLocaleString()})
-            </li>
-          ))}
-        </ul>
-      </Card.Body>
-    </Card>
+    <div className="row h-100">
+      <div className="col h-100">
+        <Card className="h-100">
+          <Card.Header>
+            <Nav variant="tabs" defaultActiveKey="#notes">
+              <Nav.Item>
+                <Nav.Link
+                  active={type === E_QuickLinkTypes.NOTE}
+                  href="#notes"
+                >
+                  Конспект
+                </Nav.Link>
+              </Nav.Item>
+              <Nav.Item>
+                <Nav.Link
+                  active={type === E_QuickLinkTypes.RESOURCE}
+                  href="#resources"
+                >
+                  Ресурс
+                </Nav.Link>
+              </Nav.Item>
+              <Nav.Item>
+                <Nav.Link
+                  active={type === E_QuickLinkTypes.DRAFT}
+                  href="#drafts"
+                >
+                  Черновик
+                </Nav.Link>
+              </Nav.Item>
+            </Nav>
+          </Card.Header>
+          <Card.Body>
+            <Card.Text>{cardDescription[type].text}</Card.Text>
+            <ul className="d-flex flex-column">
+              {recentLinks[type].map((link) => (
+                <li className="pb-2" key={link.href}>
+                  <Link to={link.href}>{link.text}</Link> (
+                  {link.wasActive.toLocaleString()})
+                </li>
+              ))}
+            </ul>
+          </Card.Body>
+        </Card>
+      </div>
+    </div>
   );
 }
