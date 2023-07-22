@@ -4,6 +4,7 @@ import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import Logo from '../Logo/Logo';
 import { BiSolidUserCircle } from 'react-icons/bi';
+import { Link } from 'react-router-dom';
 
 export default function NavBar() {
   return (
@@ -20,42 +21,74 @@ export default function NavBar() {
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ms-auto pt-3 pt-lg-0">
             <div className="border-top border-2 mb-3 "></div>
-            <Nav.Link href="#home">На главную</Nav.Link>
-            <NavDropdown title="Мои записки" id="notes-nav-dropdown">
-              <NavDropdown.Item href="#action/3.1">
-                Конспекты
+            <Nav.Link>
+              <Link className="nav-link p-0" to="/">
+                На главную
+              </Link>
+            </Nav.Link>
+            <NavDropdown
+              title="Мои записи"
+              id="conspects-nav-dropdown"
+            >
+              <NavDropdown.Item>
+                <Link className="nav-link p-0" to="/conspect">
+                  Конспекты
+                </Link>
               </NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.2">
-                Ресурсы
+              <NavDropdown.Item>
+                <Link className="nav-link p-0" to="/resource">
+                  Ресурсы
+                </Link>
               </NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.2">
-                Черновики
+              <NavDropdown.Item>
+                <Link className="nav-link p-0" to="/draft">
+                  Черновики
+                </Link>
               </NavDropdown.Item>
               <NavDropdown.Divider />
-              <NavDropdown.Item href="#action/3.4">
-                Создать конспект
+              <NavDropdown.Item>
+                <Link className="nav-link p-0" to="/conspect/create">
+                  Создать конспект
+                </Link>
               </NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.4">
-                Создать ресурс
+              <NavDropdown.Item>
+                <Link className="nav-link p-0" to="/resource/create">
+                  Создать ресурс
+                </Link>
               </NavDropdown.Item>
             </NavDropdown>
             <NavDropdown title="Пользователи" id="users-nav-dropdown">
-              <NavDropdown.Item href="#action/3.1">
-                Новый пользователь
+              <NavDropdown.Item>
+                <Link className="nav-link p-0" to="/user/create">
+                  Новый пользователь
+                </Link>
               </NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.1">
-                Сменить пользователя
+              <NavDropdown.Item>
+                <Link className="nav-link p-0" to="/user/change">
+                  Сменить пользователя
+                </Link>
               </NavDropdown.Item>
             </NavDropdown>
             <NavDropdown title="Данные" id="data-nav-dropdown">
-              <NavDropdown.Item href="#action/3.1">
-                Импорт данных
+              <NavDropdown.Item>
+                <Link className="nav-link p-0" to="/data/save">
+                  Сохранить данные
+                </Link>
+              </NavDropdown.Item>
+              <NavDropdown.Item>
+                <Link className="nav-link p-0" to="/data/import">
+                  Импорт данных
+                </Link>
+              </NavDropdown.Item>
+              <NavDropdown.Item>
+                <Link className="nav-link p-0" to="/data/export">
+                  Экспорт данных
+                </Link>
               </NavDropdown.Item>
               <NavDropdown.Item href="#action/3.1">
-                Экспорт данных
-              </NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.1">
-                Экспорт данных и очистка
+                <Link className="nav-link p-0" to="/data/signout">
+                  Экспорт данных и очистка
+                </Link>
               </NavDropdown.Item>
             </NavDropdown>
             <div className="border-top border-2 my-3 my-lg-0"></div>
