@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Card, Nav } from 'react-bootstrap';
-import { Link, useLoaderData, useLocation } from 'react-router-dom';
-import { T_RecentLinks } from '../../app/controller/loadRecentLinks';
+import { Link, useLocation } from 'react-router-dom';
+import { getFakeRecentLinks } from '../../fakeData/getFakeRecentLinks';
 
 export enum E_QuickLinkTypes {
   NOTE = 'note',
@@ -16,7 +16,7 @@ const cardDescription: {
     text: 'Конспекты, которые вы недавно просматривали',
   },
   [E_QuickLinkTypes.RESOURCE]: {
-    text: 'Недавно открытые ссылки на ресурсы',
+    text: 'Ссылки на ресурсы, которые были недавно открыты',
   },
   [E_QuickLinkTypes.DRAFT]: {
     text: 'Черновики конспектов, которые надавно редактировались',
@@ -45,7 +45,7 @@ export default function QuickLinks() {
     }
   }, [hash]);
 
-  const recentLinks = useLoaderData() as T_RecentLinks;
+  const { links } = getFakeRecentLinks(type);
 
   return (
     <div className="row h-100">
@@ -82,7 +82,7 @@ export default function QuickLinks() {
           <Card.Body>
             <Card.Text>{cardDescription[type].text}</Card.Text>
             <ul className="d-flex flex-column">
-              {recentLinks[type].map((link) => (
+              {links.map((link) => (
                 <li className="pb-2" key={link.href}>
                   <Link to={link.href}>{link.text}</Link> (
                   {link.wasActive.toLocaleString()})
