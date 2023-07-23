@@ -1,4 +1,4 @@
-import { Card, Button } from 'react-bootstrap';
+import { Card, Button, Accordion } from 'react-bootstrap';
 
 interface I_DataCard {
   header: string;
@@ -7,7 +7,7 @@ interface I_DataCard {
   buttonHandler: () => void;
 }
 
-const dataCards: I_DataCard[] = [
+const dataActions: I_DataCard[] = [
   {
     header: 'Сохранить изменения',
     text: `Изменения которые вы внесли в Ваши конспекты хронятся
@@ -19,7 +19,7 @@ const dataCards: I_DataCard[] = [
   },
   {
     header: 'Экспортировать данные',
-    text: `Вы можете выполнить экспорт данных вашего аккаунта в файл.
+    text: `Выполнить экспорт данных вашего аккаунта в файл.
     Это позволит вам загрузить данные в приложение, открытое на другом 
     устройстве или в другом браузере. Таким образом вы можете 
     работать с вашими конспектами где вам удобно.`,
@@ -37,10 +37,10 @@ const dataCards: I_DataCard[] = [
   },
   {
     header: 'Экспортировать и выйти',
-    text: `Выполняется импорт данных в файл аналогично функции "Экспортировать данные".
+    text: `Выполнить импорт данных в файл аналогично функции "Экспортировать данные".
     После чего аккаунт пользователя удаляется из приложения. Подходит в случае, если вы
     больше не планируете работать с приложением на данном устройстве.`,
-    buttonText: 'Экспорт и Выход',
+    buttonText: 'Экспортировать и выйти',
     buttonHandler: () => {},
   },
 ];
@@ -48,7 +48,54 @@ const dataCards: I_DataCard[] = [
 export default function Data() {
   return (
     <div className="row gy-4">
-      {dataCards.map((card, idx) => (
+      <div className="col-12 ">
+        <Card>
+          <Card.Header as="h5" className="text-white">
+            Менеджмент данных
+          </Card.Header>
+          <Card.Body className="px-lg-4">
+            <Accordion defaultActiveKey="0">
+              {dataActions.map((action, idx) => (
+                <Accordion.Item eventKey={idx.toString()}>
+                  <Accordion.Header>
+                    <span className="text-white fw-weight-bold">
+                      {action.header}
+                    </span>
+                  </Accordion.Header>
+                  <Accordion.Body>
+                    <p style={{ maxWidth: '40rem' }}>{action.text}</p>
+                    <Button
+                      className="mb-4 ms-3"
+                      variant="primary"
+                      onClick={action.buttonHandler}
+                    >
+                      {action.buttonText}
+                    </Button>
+                  </Accordion.Body>
+                </Accordion.Item>
+              ))}
+            </Accordion>
+
+            {/* {dataActions.map((action, idx) => (
+              <div key={idx}>
+                <Card.Title>{action.header}</Card.Title>
+                <Card.Text style={{ maxWidth: '40rem' }}>
+                  {action.text}
+                </Card.Text>
+                <Button
+                  className="ms-3 mb-4"
+                  variant="warning"
+                  onClick={action.buttonHandler}
+                >
+                  {action.buttonText}
+                </Button>
+              </div>
+            ))} */}
+          </Card.Body>
+        </Card>
+      </div>
+
+      {/* {dataCards.map((card, idx) => (
         <div
           className="col-sm-12 col-lg-6 col-xxl-4 d-flex align-items-stretch"
           key={idx}
@@ -69,7 +116,7 @@ export default function Data() {
             </Card.Body>
           </Card>
         </div>
-      ))}
+      ))} */}
     </div>
   );
 }

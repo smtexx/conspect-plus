@@ -2,6 +2,7 @@ import { Button, Card, Modal } from 'react-bootstrap';
 import { getFakeUsers } from '../../fakeData/getFakeUsers';
 import { ChangeEvent, useState } from 'react';
 import { BsFillPersonCheckFill } from 'react-icons/bs';
+import { BiLogIn } from 'react-icons/bi';
 
 export default function Users() {
   const [modalShown, setModalShown] = useState(false);
@@ -39,56 +40,90 @@ export default function Users() {
   return (
     <>
       <div className="row gy-4">
-        {users.map((user) => (
-          <div className="col-sm-12 col-lg-6 col-xxl-4">
-            <Card border={user.isActive ? 'light' : ''}>
-              <Card.Header as="h5" className="text-white d-flex">
-                <span>{user.login}</span>
-                {user.isActive ? (
-                  <span className="ms-auto lh-1">
-                    <BsFillPersonCheckFill />
-                  </span>
-                ) : null}
-              </Card.Header>
-              <Card.Body className="d-flex flex-column">
-                <Card.Text>
-                  <p className="mb-0">
-                    Время последней активности:{' '}
-                    <span className="text-white">
-                      {user.isActive
-                        ? 'сейчас'
-                        : user.lastActivity.toLocaleString()}
-                    </span>
-                    .
-                  </p>
-                  <p>
-                    Количество созданных записей:{' '}
-                    <span className="text-white">
-                      {user.notesQty}
-                    </span>
-                    .
-                  </p>
-                </Card.Text>
-                <Button
-                  className="align-self-end"
-                  variant={user.isActive ? 'secondary' : 'light'}
-                  disabled={user.isActive}
-                >
-                  Войти
-                </Button>
-              </Card.Body>
-            </Card>
-          </div>
-        ))}
-      </div>
-      <div className="row mt-4 justify-content-end">
-        <div className="col-auto">
-          <Button
-            variant="warning"
-            onClick={() => setModalShown(true)}
-          >
-            Создать учетную запись
-          </Button>
+        <div className="col-12 ">
+          <Card>
+            <Card.Header as="h5" className="text-white ">
+              Учетные записи
+            </Card.Header>
+            <Card.Body className="px-lg-4">
+              <Card.Title>Существующие учетные записи</Card.Title>
+              <Card.Text style={{ maxWidth: '40rem' }}>
+                Ниже представлен список учетных записей, сохраненных в
+                приложении. Вы можете использовать одну из них.
+              </Card.Text>
+              <div className="row px-3 gy-4 gx-1 mb-4">
+                {users.map((user) => (
+                  <div className="col d-flex align-items-stretch">
+                    <Card
+                      style={{ width: '20rem' }}
+                      border={user.isActive ? 'primary' : ''}
+                    >
+                      <Card.Body>
+                        <Card.Title
+                          className={`d-flex ${
+                            user.isActive ? 'text-white' : ''
+                          }`}
+                        >
+                          <span>{user.login}</span>
+                          {user.isActive ? (
+                            <span className="ms-auto d-flex text-primary">
+                              <BsFillPersonCheckFill />
+                            </span>
+                          ) : null}
+                        </Card.Title>
+                        <Card.Text>
+                          <p className="mb-1">
+                            Обновлена:{' '}
+                            <span className="text-white ms-2">
+                              {user.isActive
+                                ? 'активна'
+                                : user.lastActivity.toLocaleString()}
+                            </span>
+                          </p>
+                          <p>
+                            Всего записей:{' '}
+                            <span className="text-white ms-2">
+                              {user.notesQty}
+                            </span>
+                          </p>
+                        </Card.Text>
+                        <div
+                          className="d-flex justify-content-end"
+                          style={{
+                            visibility: user.isActive
+                              ? 'hidden'
+                              : undefined,
+                          }}
+                        >
+                          <Button
+                            variant="primary"
+                            className="d-flex"
+                          >
+                            <BiLogIn />
+                          </Button>
+                        </div>
+                      </Card.Body>
+                    </Card>
+                  </div>
+                ))}
+              </div>
+
+              <Card.Title>Создание учетной записи</Card.Title>
+              <Card.Text style={{ maxWidth: '40rem' }}>
+                Вы можете создать новую учетную запись пользователя
+                ниже. Удаление учетных записей осуществляется в
+                разделе менеджмента данных.
+              </Card.Text>
+
+              <Button
+                className="ms-3 mb-5"
+                variant="primary"
+                onClick={() => setModalShown(true)}
+              >
+                Создать учетную запись
+              </Button>
+            </Card.Body>
+          </Card>
         </div>
       </div>
 
@@ -129,7 +164,7 @@ export default function Users() {
             Отмена
           </Button>
           <Button
-            variant="warning"
+            variant="primary"
             onClick={handleSaveUser}
             disabled={saveDisabled}
           >
