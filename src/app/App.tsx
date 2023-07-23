@@ -7,6 +7,7 @@ import Root from './view/routes/Root';
 import ErrorPage from './view/routes/ErrorPage';
 import QuickLinks from '../components/QuickLinks/QuickLinks';
 import Users from '../components/Users/Users';
+import Data from '../components/Data/Data';
 
 const router = createBrowserRouter([
   {
@@ -21,6 +22,10 @@ const router = createBrowserRouter([
       {
         path: 'users',
         element: <Users />,
+      },
+      {
+        path: 'data',
+        element: <Data />,
       },
     ],
   },
