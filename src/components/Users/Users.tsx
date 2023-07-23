@@ -50,7 +50,7 @@ export default function Users() {
                   </span>
                 ) : null}
               </Card.Header>
-              <Card.Body>
+              <Card.Body className="d-flex flex-column">
                 <Card.Text>
                   <p className="mb-0">
                     Время последней активности:{' '}
@@ -70,6 +70,7 @@ export default function Users() {
                   </p>
                 </Card.Text>
                 <Button
+                  className="align-self-end"
                   variant={user.isActive ? 'secondary' : 'light'}
                   disabled={user.isActive}
                 >
