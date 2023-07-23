@@ -6,7 +6,7 @@ export default function Footer() {
           <address className="m-0 text-center">
             Связь с разработчиком:{' '}
             <a
-              className="link-secondary"
+              className="link-primary"
               href="mailto:smtexx@hotmail.com"
               rel="noreferrer noopener"
             >
