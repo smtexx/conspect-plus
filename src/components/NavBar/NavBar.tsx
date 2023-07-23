@@ -5,34 +5,53 @@ import NavDropdown from 'react-bootstrap/NavDropdown';
 import Logo from '../Logo/Logo';
 import { BiSolidUserCircle } from 'react-icons/bi';
 import { Link } from 'react-router-dom';
+import { useState } from 'react';
 
 export default function NavBar() {
+  const [opened, setOpened] = useState(false);
+
   return (
     <Navbar
       expand="lg"
       className="bg-body-tertiary px-2 py-3 px-lg-3 py-lg-2"
       collapseOnSelect={true}
+      expanded={opened}
     >
       <Container>
         <Navbar.Brand href="#home">
           <Logo />
         </Navbar.Brand>
-        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+        <Navbar.Toggle
+          aria-controls="basic-navbar-nav"
+          onClick={() => setOpened(!opened)}
+        />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ms-auto pt-3 pt-lg-0">
             <div className="border-top border-2 mb-3 "></div>
             <Nav.Link>
-              <Link className="nav-link p-0" to="/">
+              <Link
+                className="nav-link p-0"
+                to="/"
+                onClick={() => setOpened(false)}
+              >
                 На главную
               </Link>
             </Nav.Link>
             <Nav.Link>
-              <Link className="nav-link p-0" to="/users">
+              <Link
+                className="nav-link p-0"
+                to="/users"
+                onClick={() => setOpened(false)}
+              >
                 Пользователи
               </Link>
             </Nav.Link>
             <Nav.Link>
-              <Link className="nav-link p-0" to="/data">
+              <Link
+                className="nav-link p-0"
+                to="/data"
+                onClick={() => setOpened(false)}
+              >
                 Данные
               </Link>
             </Nav.Link>
@@ -41,29 +60,30 @@ export default function NavBar() {
               id="conspects-nav-dropdown"
             >
               <NavDropdown.Item>
-                <Link className="nav-link p-0" to="/conspect">
+                <Link
+                  className="nav-link p-0"
+                  to="/conspect"
+                  onClick={() => setOpened(false)}
+                >
                   Конспекты
                 </Link>
               </NavDropdown.Item>
               <NavDropdown.Item>
-                <Link className="nav-link p-0" to="/resource">
+                <Link
+                  className="nav-link p-0"
+                  to="/resource"
+                  onClick={() => setOpened(false)}
+                >
                   Ресурсы
                 </Link>
               </NavDropdown.Item>
               <NavDropdown.Item>
-                <Link className="nav-link p-0" to="/draft">
+                <Link
+                  className="nav-link p-0"
+                  to="/draft"
+                  onClick={() => setOpened(false)}
+                >
                   Черновики
-                </Link>
-              </NavDropdown.Item>
-              <NavDropdown.Divider />
-              <NavDropdown.Item>
-                <Link className="nav-link p-0" to="/conspect/create">
-                  Создать конспект
-                </Link>
-              </NavDropdown.Item>
-              <NavDropdown.Item>
-                <Link className="nav-link p-0" to="/resource/create">
-                  Создать ресурс
                 </Link>
               </NavDropdown.Item>
             </NavDropdown>
