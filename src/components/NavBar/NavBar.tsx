@@ -26,6 +26,16 @@ export default function NavBar() {
                 На главную
               </Link>
             </Nav.Link>
+            <Nav.Link>
+              <Link className="nav-link p-0" to="/users">
+                Пользователи
+              </Link>
+            </Nav.Link>
+            <Nav.Link>
+              <Link className="nav-link p-0" to="/data">
+                Данные
+              </Link>
+            </Nav.Link>
             <NavDropdown
               title="Мои записи"
               id="conspects-nav-dropdown"
@@ -54,40 +64,6 @@ export default function NavBar() {
               <NavDropdown.Item>
                 <Link className="nav-link p-0" to="/resource/create">
                   Создать ресурс
-                </Link>
-              </NavDropdown.Item>
-            </NavDropdown>
-            <NavDropdown title="Пользователи" id="users-nav-dropdown">
-              <NavDropdown.Item>
-                <Link className="nav-link p-0" to="/user/create">
-                  Новый пользователь
-                </Link>
-              </NavDropdown.Item>
-              <NavDropdown.Item>
-                <Link className="nav-link p-0" to="/user">
-                  Сменить пользователя
-                </Link>
-              </NavDropdown.Item>
-            </NavDropdown>
-            <NavDropdown title="Данные" id="data-nav-dropdown">
-              <NavDropdown.Item>
-                <Link className="nav-link p-0" to="/data/save">
-                  Сохранить данные
-                </Link>
-              </NavDropdown.Item>
-              <NavDropdown.Item>
-                <Link className="nav-link p-0" to="/data/import">
-                  Импорт данных
-                </Link>
-              </NavDropdown.Item>
-              <NavDropdown.Item>
-                <Link className="nav-link p-0" to="/data/export">
-                  Экспорт данных
-                </Link>
-              </NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.1">
-                <Link className="nav-link p-0" to="/data/signout">
-                  Экспорт данных и очистка
                 </Link>
               </NavDropdown.Item>
             </NavDropdown>
