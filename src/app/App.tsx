@@ -8,6 +8,7 @@ import ErrorPage from './view/routes/ErrorPage';
 import QuickLinks from '../components/QuickLinks/QuickLinks';
 import Users from '../components/Users/Users';
 import Data from '../components/Data/Data';
+import Conspect from '../components/Conspect/Conspect';
 
 const router = createBrowserRouter([
   {
@@ -26,6 +27,10 @@ const router = createBrowserRouter([
       {
         path: 'data',
         element: <Data />,
+      },
+      {
+        path: 'conspect',
+        element: <Conspect />,
       },
     ],
   },
