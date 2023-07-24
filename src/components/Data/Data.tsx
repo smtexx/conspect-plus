@@ -7,6 +7,8 @@ import {
   Alert,
 } from 'react-bootstrap';
 import { ChangeEvent } from 'react';
+import MessageModal from '../MessageModal/MessageModal';
+import ConfirmModal from '../ConfirmModal/ConfirmModal';
 
 interface I_DataCard {
   header: string;
@@ -121,118 +123,100 @@ export default function Data() {
   ];
 
   return (
-    <div className="row gy-4">
-      <div className="col-12">
-        <Card>
-          <Card.Header as="h5" className="text-white">
-            Менеджмент данных
-          </Card.Header>
-          <Card.Body className="px-lg-4">
-            <Accordion defaultActiveKey="0" className="mb-5">
-              {dataActions.map((action, idx) => (
-                <Accordion.Item eventKey={idx.toString()}>
-                  <Accordion.Header>
-                    <span className="text-white fw-weight-bold">
-                      {action.header}
-                    </span>
-                  </Accordion.Header>
-                  <Accordion.Body>
-                    <p style={{ maxWidth: '40rem' }}>{action.text}</p>
-                    <Button
-                      className="mb-4 ms-3"
-                      variant="primary"
-                      onClick={action.buttonHandler}
-                    >
-                      {action.buttonText}
-                    </Button>
-                  </Accordion.Body>
-                </Accordion.Item>
-              ))}
-            </Accordion>
-          </Card.Body>
-        </Card>
-      </div>
+    <>
+      <Card className="w-100 pb-4">
+        <Card.Header as="h5" className="text-white fs-4 py-3 px-4">
+          Менеджмент данных
+        </Card.Header>
+        <Card.Body className="px-lg-4">
+          <Accordion defaultActiveKey="0">
+            {dataActions.map((action, idx) => (
+              <Accordion.Item eventKey={idx.toString()}>
+                <Accordion.Header>
+                  <span className="text-white fw-weight-bold">
+                    {action.header}
+                  </span>
+                </Accordion.Header>
+                <Accordion.Body>
+                  <p style={{ maxWidth: '40rem' }}>{action.text}</p>
+                  <Button
+                    className="mb-4 ms-3"
+                    variant="primary"
+                    onClick={action.buttonHandler}
+                  >
+                    {action.buttonText}
+                  </Button>
+                </Accordion.Body>
+              </Accordion.Item>
+            ))}
+          </Accordion>
+        </Card.Body>
+      </Card>
 
       {/* Notifiaction modal */}
-      <Modal show={messageModalOpen} onHide={closeMessageModal}>
-        <Modal.Header
-          className={
-            messageType === E_MessageTypes.ERROR
-              ? 'bg-danger text-white'
-              : ''
-          }
-        >
-          <Modal.Title>
-            {messageType === E_MessageTypes.ERROR
-              ? 'Ошибка выполнения'
-              : 'Завершено успешно'}
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>{modalMessages[messageType]}</Modal.Body>
-        <Modal.Footer>
-          <Button variant="primary" onClick={closeMessageModal}>
-            {messageType === E_MessageTypes.ERROR
-              ? 'Закрыть'
-              : 'Отлично'}
-          </Button>
-        </Modal.Footer>
-      </Modal>
+      <MessageModal
+        open={messageModalOpen}
+        onHide={closeMessageModal}
+        modalText={modalMessages[messageType]}
+        title={
+          messageType === E_MessageTypes.ERROR
+            ? 'Ошибка выполнения'
+            : 'Завершено успешно'
+        }
+        type={
+          messageType === E_MessageTypes.ERROR ? 'error' : 'primary'
+        }
+        buttonText={
+          messageType === E_MessageTypes.ERROR ? 'Закрыть' : 'Отлично'
+        }
+        buttonHandler={closeMessageModal}
+      />
 
       {/* Import modal */}
-      <Modal show={importModalOpen} onHide={closeImportModal}>
-        <Modal.Header closeButton={false}>
-          <Modal.Title>Импорт данных из файла</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
+      <ConfirmModal
+        title="Импорт данных из файла"
+        open={importModalOpen}
+        disabled={!fileAccepted}
+        onHide={closeImportModal}
+        buttonText="Импортировать"
+        buttonHandler={handleFileImport}
+      >
+        <p>
+          Выберите файл содержащий данные с конспектами, которые будут
+          импортированы в приложение.
+        </p>
+
+        <Alert variant="danger">
+          <Alert.Heading>Предупреждение</Alert.Heading>
           <p>
-            Выберите файл содержащий данные с конспектами, которые
-            будут импортированы в приложение.
+            Все данные текущего пользовательского аккаунта будут
+            заменены данными импортированными из файла. Если вы не
+            уверены в результате, рекомендуем создать новый
+            пользовательский аккаунт и выполнить импорт данных внутри
+            него.
           </p>
+        </Alert>
 
-          <Alert variant="danger">
-            <Alert.Heading>Предупреждение</Alert.Heading>
-            <p>
-              Все данные текущего пользовательского аккаунта будут
-              заменены данными импортированными из файла. Если вы не
-              уверены в результате, рекомендуем создать новый
-              пользовательский аккаунт и выполнить импорт данных
-              внутри него.
-            </p>
-          </Alert>
-
-          <label
-            htmlFor="importFile"
-            className="form-label mb-2 text-white"
-          >
-            Файл данных:
-          </label>
-          <input
-            type="file"
-            id="importFile"
-            className="form-control"
-            aria-labelledby="fileHelpBlock"
-            accept=".tip"
-            onChange={handleFileChange}
-            // value={login}
-            // autoFocus={true}
-          />
-          <div id="fileHelpBlock" className="form-text">
-            Файл пользовательских конспектов filename.tip
-          </div>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={closeImportModal}>
-            Отмена
-          </Button>
-          <Button
-            variant="primary"
-            onClick={handleFileImport}
-            disabled={!fileAccepted}
-          >
-            Импортировать
-          </Button>
-        </Modal.Footer>
-      </Modal>
-    </div>
+        <label
+          htmlFor="importFile"
+          className="form-label mb-2 text-white"
+        >
+          Файл данных:
+        </label>
+        <input
+          type="file"
+          id="importFile"
+          className="form-control"
+          aria-labelledby="fileHelpBlock"
+          accept=".tip"
+          onChange={handleFileChange}
+          // value={login}
+          // autoFocus={true}
+        />
+        <div id="fileHelpBlock" className="form-text">
+          Файл пользовательских конспектов filename.tip
+        </div>
+      </ConfirmModal>
+    </>
   );
 }
