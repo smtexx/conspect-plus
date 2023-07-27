@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Card, Nav } from 'react-bootstrap';
 import { Link, useLocation } from 'react-router-dom';
 import { getFakeRecentLinks } from '../../fakeData/getFakeRecentLinks';
+import Screen from '../Screen/Screen';
 
 export enum E_QuickLinkTypes {
   NOTE = 'note',
@@ -48,50 +49,48 @@ export default function QuickLinks() {
   const { links } = getFakeRecentLinks(type);
 
   return (
-    <div className="row h-100">
-      <div className="col h-100">
-        <Card className="h-100">
-          <Card.Header>
-            <Nav variant="tabs" defaultActiveKey="#notes">
-              <Nav.Item>
-                <Nav.Link
-                  active={type === E_QuickLinkTypes.NOTE}
-                  href="#notes"
-                >
-                  Конспект
-                </Nav.Link>
-              </Nav.Item>
-              <Nav.Item>
-                <Nav.Link
-                  active={type === E_QuickLinkTypes.RESOURCE}
-                  href="#resources"
-                >
-                  Ресурс
-                </Nav.Link>
-              </Nav.Item>
-              <Nav.Item>
-                <Nav.Link
-                  active={type === E_QuickLinkTypes.DRAFT}
-                  href="#drafts"
-                >
-                  Черновик
-                </Nav.Link>
-              </Nav.Item>
-            </Nav>
-          </Card.Header>
-          <Card.Body>
-            <Card.Text>{cardDescription[type].text}</Card.Text>
-            <ul className="d-flex flex-column">
-              {links.map((link) => (
-                <li className="pb-2" key={link.href}>
-                  <Link to={link.href}>{link.text}</Link> (
-                  {link.wasActive.toLocaleString()})
-                </li>
-              ))}
-            </ul>
-          </Card.Body>
-        </Card>
-      </div>
-    </div>
+    <Screen title="Быстрые ссылки">
+      <Card className="w-100" style={{ minHeight: '100%' }}>
+        <Card.Header>
+          <Nav variant="tabs" defaultActiveKey="#notes">
+            <Nav.Item>
+              <Nav.Link
+                active={type === E_QuickLinkTypes.NOTE}
+                href="#notes"
+              >
+                Конспект
+              </Nav.Link>
+            </Nav.Item>
+            <Nav.Item>
+              <Nav.Link
+                active={type === E_QuickLinkTypes.RESOURCE}
+                href="#resources"
+              >
+                Ресурс
+              </Nav.Link>
+            </Nav.Item>
+            <Nav.Item>
+              <Nav.Link
+                active={type === E_QuickLinkTypes.DRAFT}
+                href="#drafts"
+              >
+                Черновик
+              </Nav.Link>
+            </Nav.Item>
+          </Nav>
+        </Card.Header>
+        <Card.Body>
+          <Card.Text>{cardDescription[type].text}</Card.Text>
+          <ul className="d-flex flex-column">
+            {links.map((link) => (
+              <li className="pb-2" key={link.href}>
+                <Link to={link.href}>{link.text}</Link> (
+                {link.wasActive.toLocaleString()})
+              </li>
+            ))}
+          </ul>
+        </Card.Body>
+      </Card>
+    </Screen>
   );
 }
