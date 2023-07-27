@@ -1,14 +1,9 @@
 import { useState } from 'react';
-import {
-  Card,
-  Button,
-  Accordion,
-  Modal,
-  Alert,
-} from 'react-bootstrap';
+import { Button, Accordion, Alert } from 'react-bootstrap';
 import { ChangeEvent } from 'react';
 import MessageModal from '../MessageModal/MessageModal';
 import ConfirmModal from '../ConfirmModal/ConfirmModal';
+import Screen from '../Screen/Screen';
 
 interface I_DataCard {
   header: string;
@@ -124,34 +119,29 @@ export default function Data() {
 
   return (
     <>
-      <Card className="w-100 pb-4">
-        <Card.Header as="h5" className="text-white fs-4 py-3 px-4">
-          Менеджмент данных
-        </Card.Header>
-        <Card.Body className="px-lg-4">
-          <Accordion defaultActiveKey="0">
-            {dataActions.map((action, idx) => (
-              <Accordion.Item eventKey={idx.toString()}>
-                <Accordion.Header>
-                  <span className="text-white fw-weight-bold">
-                    {action.header}
-                  </span>
-                </Accordion.Header>
-                <Accordion.Body>
-                  <p style={{ maxWidth: '40rem' }}>{action.text}</p>
-                  <Button
-                    className="mb-4 ms-3"
-                    variant="primary"
-                    onClick={action.buttonHandler}
-                  >
-                    {action.buttonText}
-                  </Button>
-                </Accordion.Body>
-              </Accordion.Item>
-            ))}
-          </Accordion>
-        </Card.Body>
-      </Card>
+      <Screen title="Менеджмент данных">
+        <Accordion defaultActiveKey="0">
+          {dataActions.map((action, idx) => (
+            <Accordion.Item eventKey={idx.toString()}>
+              <Accordion.Header>
+                <span className="text-white fw-weight-bold">
+                  {action.header}
+                </span>
+              </Accordion.Header>
+              <Accordion.Body>
+                <p style={{ maxWidth: '40rem' }}>{action.text}</p>
+                <Button
+                  className="mb-4 mt-2 ms-lg-3 fw-bold"
+                  variant="primary"
+                  onClick={action.buttonHandler}
+                >
+                  {action.buttonText}
+                </Button>
+              </Accordion.Body>
+            </Accordion.Item>
+          ))}
+        </Accordion>
+      </Screen>
 
       {/* Notifiaction modal */}
       <MessageModal
