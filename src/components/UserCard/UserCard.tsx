@@ -20,16 +20,18 @@ export default function UserCard({
   return (
     <button
       style={{ background: 'none', border: 'none' }}
-      className={`cm-card-link w-100 text-start p-0 ${
+      className={`cm-card-link text-start p-0 ${
         isActive ? 'active' : ''
       }`}
       onClick={onClick}
       disabled={isActive}
     >
-      <Card className="w-100">
+      <Card style={{ width: '18rem' }}>
         <Card.Body>
           <Card.Title className="d-flex align-items-center justify-content-between">
-            <span>{title}</span>
+            <span className="overflow-hidden text-nowrap me-2">
+              {title}
+            </span>
             <span className="d-flex signed-in">
               {isActive ? (
                 <BsFillPersonCheckFill />

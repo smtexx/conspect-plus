@@ -1,4 +1,4 @@
-import { Button, Card } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import { getFakeUsers } from '../../fakeData/getFakeUsers';
 import { ChangeEvent, useState } from 'react';
 import ConfirmModal from '../ConfirmModal/ConfirmModal';
@@ -46,13 +46,9 @@ export default function Users() {
           Ниже представлен список учетных записей, сохраненных в
           приложении. Вы можете использовать одну из них.
         </p>
-        <div className="row px-3 gy-4 mb-4 justify-content-start">
+        <div className="row px-3 gy-4 mb-4 justify-content-start align-items-stretch">
           {users.map((user) => (
-            <div
-              key={user.login}
-              className="col d-flex align-items-stretch flex-grow-0"
-              style={{ flexBasis: '20rem' }}
-            >
+            <div key={user.login} className="col-auto">
               <UserCard
                 key={user.login}
                 title={user.login}
