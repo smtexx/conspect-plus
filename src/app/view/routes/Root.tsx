@@ -23,12 +23,14 @@ export default function Root() {
   }, [pathname, users, navigate]);
 
   return (
-    <div className="container vh-100 d-flex flex-column">
+    <div className="container min-vh-100 d-flex flex-column">
       <div className="row mb-4">
         <NavBar />
       </div>
-      <main className="flex-grow-1 mb-4">
-        <Outlet />
+      <main className="row flex-grow-1 mb-4 ">
+        <div className="col-12 d-flex">
+          <Outlet />
+        </div>
       </main>
       <div className="row">
         <div className="col">
