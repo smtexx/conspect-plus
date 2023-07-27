@@ -59,7 +59,7 @@ export default function NavBar() {
               title="Мои записи"
               id="conspects-nav-dropdown"
             >
-              <NavDropdown.Item>
+              <NavDropdown.Item as={'div'}>
                 <Link
                   className="nav-link p-0"
                   to="/conspect"
@@ -68,7 +68,7 @@ export default function NavBar() {
                   Конспекты
                 </Link>
               </NavDropdown.Item>
-              <NavDropdown.Item>
+              <NavDropdown.Item as={'div'}>
                 <Link
                   className="nav-link p-0"
                   to="/resource"
@@ -77,7 +77,7 @@ export default function NavBar() {
                   Ресурсы
                 </Link>
               </NavDropdown.Item>
-              <NavDropdown.Item>
+              <NavDropdown.Item as={'div'}>
                 <Link
                   className="nav-link p-0"
                   to="/draft"
