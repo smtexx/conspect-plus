@@ -1,9 +1,9 @@
 import { Button, Card } from 'react-bootstrap';
 import { getFakeUsers } from '../../fakeData/getFakeUsers';
 import { ChangeEvent, useState } from 'react';
-import { BsFillPersonCheckFill } from 'react-icons/bs';
-import { BiLogIn } from 'react-icons/bi';
 import ConfirmModal from '../ConfirmModal/ConfirmModal';
+import Screen from '../Screen/Screen';
+import UserCard from '../UserCard/UserCard';
 
 export default function Users() {
   const [modalShown, setModalShown] = useState(false);
@@ -40,86 +40,44 @@ export default function Users() {
 
   return (
     <>
-      <Card className="w-100 pb-4">
-        <Card.Header as="h5" className="text-white fs-4 py-3 px-4">
-          Учетные записи
-        </Card.Header>
-        <Card.Body className="px-lg-4">
-          <Card.Title>Существующие учетные записи</Card.Title>
-          <Card.Text style={{ maxWidth: '40rem' }}>
-            Ниже представлен список учетных записей, сохраненных в
-            приложении. Вы можете использовать одну из них.
-          </Card.Text>
-          <div className="row px-3 gy-4 gx-1 mb-4">
-            {users.map((user) => (
-              <div className="col d-flex align-items-stretch">
-                <Card
-                  style={{ width: '20rem' }}
-                  border={user.isActive ? 'primary' : ''}
-                >
-                  <Card.Body>
-                    <Card.Title
-                      className={`d-flex ${
-                        user.isActive ? 'text-white' : ''
-                      }`}
-                    >
-                      <span>{user.login}</span>
-                      {user.isActive ? (
-                        <span className="ms-auto d-flex text-primary">
-                          <BsFillPersonCheckFill />
-                        </span>
-                      ) : null}
-                    </Card.Title>
-                    <Card.Text>
-                      <p className="mb-1">
-                        Обновлена:{' '}
-                        <span className="text-white ms-2">
-                          {user.isActive
-                            ? 'активна'
-                            : user.lastActivity.toLocaleString()}
-                        </span>
-                      </p>
-                      <p>
-                        Всего записей:{' '}
-                        <span className="text-white ms-2">
-                          {user.notesQty}
-                        </span>
-                      </p>
-                    </Card.Text>
-                    <div
-                      className="d-flex justify-content-end"
-                      style={{
-                        visibility: user.isActive
-                          ? 'hidden'
-                          : undefined,
-                      }}
-                    >
-                      <Button variant="primary" className="d-flex">
-                        <BiLogIn />
-                      </Button>
-                    </div>
-                  </Card.Body>
-                </Card>
-              </div>
-            ))}
-          </div>
-
-          <Card.Title>Создание учетной записи</Card.Title>
-          <Card.Text style={{ maxWidth: '40rem' }}>
-            Вы можете создать новую учетную запись пользователя ниже.
-            Удаление учетных записей осуществляется в разделе
-            менеджмента данных.
-          </Card.Text>
-
-          <Button
-            className="ms-3"
-            variant="primary"
-            onClick={() => setModalShown(true)}
-          >
-            Создать учетную запись
-          </Button>
-        </Card.Body>
-      </Card>
+      <Screen title="Учетные записи">
+        <h5>Существующие учетные записи</h5>
+        <p style={{ maxWidth: '40rem' }}>
+          Ниже представлен список учетных записей, сохраненных в
+          приложении. Вы можете использовать одну из них.
+        </p>
+        <div className="row px-3 gy-4 mb-4 justify-content-start">
+          {users.map((user) => (
+            <div
+              key={user.login}
+              className="col d-flex align-items-stretch flex-grow-0"
+              style={{ flexBasis: '20rem' }}
+            >
+              <UserCard
+                key={user.login}
+                title={user.login}
+                description={`Количество записей: ${user.notesQty}`}
+                saved={user.lastActivity}
+                isActive={user.isActive}
+                onClick={() => {}}
+              />
+            </div>
+          ))}
+        </div>
+        <h5>Создание учетной записи</h5>
+        <p style={{ maxWidth: '40rem' }}>
+          Вы можете создать новую учетную запись пользователя ниже.
+          Удаление учетных записей осуществляется в разделе
+          менеджмента данных.
+        </p>
+        <Button
+          className="mt-2 ms-lg-3 fw-bold"
+          variant="primary"
+          onClick={() => setModalShown(true)}
+        >
+          Создать учетную запись
+        </Button>
+      </Screen>
 
       <ConfirmModal
         title="Создание учетной записи"
