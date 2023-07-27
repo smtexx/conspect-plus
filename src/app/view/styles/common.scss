@@ -1,0 +1,59 @@
+.cm-screen-button {
+  border: none;
+  background: none;
+  transition: color 0.15s ease-in-out;
+
+  &.hidden {
+    visibility: hidden;
+  }
+
+  @media (hover: hover) {
+    &:hover {
+      color: $primary !important;
+    }
+  }
+}
+
+.cm-icon-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.75rem;
+  border: none;
+  background: none;
+  transition: color 0.15s ease-in-out;
+
+  @media (hover: hover) {
+    &:hover {
+      color: $primary !important;
+    }
+  }
+}
+
+.cm-card-link {
+  text-decoration: none;
+  transition: box-shadow 0.15s ease-in, color 0.15s ease-in;
+  border-radius: $border-radius;
+
+  &.active {
+    outline: 2px solid $primary;
+
+    .signed-in,
+    .h5 {
+      color: $primary;
+    }
+  }
+
+  .h5 {
+    transition: color 0.15s ease-in-out;
+  }
+
+  @media (hover: hover) {
+    &:hover:not(.active) {
+      box-shadow: 0 0 10px 2px $primary;
+      .h5 {
+        color: $primary;
+      }
+    }
+  }
+}
