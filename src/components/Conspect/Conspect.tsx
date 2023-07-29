@@ -4,6 +4,7 @@ import { fakeConspects } from '../../fakeData/getFakeConspects';
 import DataCard from '../DataCard/DataCard';
 import CustomSideMenu from '../CustomSideMenu/CustomSideMenu';
 import CreateConspectForm from '../CreateConspectForm/CreateConspectForm';
+import CustomSideForm from '../CustomSideForm/CustomSideForm';
 
 export default function Conspect() {
   const [menuIsOpen, setMenuIsOpen] = useState(false);
@@ -35,7 +36,13 @@ export default function Conspect() {
       </Screen>
 
       <CustomSideMenu show={menuIsOpen} onHide={handleMenuClose}>
-        <CreateConspectForm />
+        <CustomSideForm
+          title="Создать конспект"
+          description="Для создания нового конспекта заполните поля с названием и
+    описанием конспекта:"
+        >
+          <CreateConspectForm />
+        </CustomSideForm>
       </CustomSideMenu>
     </>
   );
