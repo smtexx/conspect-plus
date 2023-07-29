@@ -3,6 +3,8 @@ import { useState } from 'react';
 import Screen from '../Screen/Screen';
 import ResourceLink from '../ResourceLink/ResourceLink';
 import CustomSideMenu from '../CustomSideMenu/CustomSideMenu';
+import CreateConspectForm from '../CreateConspectForm/CreateConspectForm';
+import CustomSideForm from '../CustomSideForm/CustomSideForm';
 
 export default function Section() {
   const [optionsIsOpen, setOptionsIsOpen] = useState(false);
@@ -38,7 +40,12 @@ export default function Section() {
         show={optionsIsOpen}
         onHide={handleOptionsClose}
       >
-        Hello
+        <CustomSideForm
+          title="Изменить конспект"
+          description="Для изменения названия или описания конспекта, введите новые значения в поля ниже."
+        >
+          <CreateConspectForm />
+        </CustomSideForm>
       </CustomSideMenu>
     </>
   );
