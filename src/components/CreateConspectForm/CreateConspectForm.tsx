@@ -1,7 +1,6 @@
 import { Button, FloatingLabel } from 'react-bootstrap';
 import { Form } from 'react-bootstrap';
 import { useState, ChangeEvent } from 'react';
-import CustomSideForm from '../CustomSideForm/CustomSideForm';
 
 export default function CreateConspectForm() {
   const [title, setTitle] = useState('');
@@ -39,11 +38,7 @@ export default function CreateConspectForm() {
   }
 
   return (
-    <CustomSideForm
-      title="Создать конспект"
-      description="Для создания нового конспекта заполните поля с названием и
-    описанием конспекта:"
-    >
+    <>
       <FloatingLabel
         controlId="conspectTitleInput"
         label="Название конспекта"
@@ -79,6 +74,6 @@ export default function CreateConspectForm() {
           Создать
         </Button>
       </div>
-    </CustomSideForm>
+    </>
   );
 }
