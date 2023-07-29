@@ -7,6 +7,7 @@ import CreateConspectForm from '../CreateConspectForm/CreateConspectForm';
 import CustomSideForm from '../CustomSideForm/CustomSideForm';
 import DeleteDataForm from '../DeleteDataForm/DeleteDataForm';
 import CreateSectionForm from '../CreateSectionForm/CreateSectionForm';
+import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 
 export default function Sections() {
   const [optionsIsOpen, setOptionsIsOpen] = useState(false);
@@ -25,6 +26,7 @@ export default function Sections() {
         title={conspect.title}
         optionsHandler={handleOptionsOpen}
       >
+        <Breadcrumbs />
         <ul className="list-unstyled cm-links-list">
           {conspect.sections.map((section, idx) => (
             <li key={section.id}>
