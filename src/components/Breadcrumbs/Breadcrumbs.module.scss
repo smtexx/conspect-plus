@@ -1,0 +1,19 @@
+.list {
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+
+  @media (min-width: 768px) {
+    flex-direction: row;
+  }
+}
+
+.listItem {
+  display: flex;
+  align-items: center;
+}
+
+.link {
+  padding: 0.25rem;
+}
