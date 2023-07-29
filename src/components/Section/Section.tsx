@@ -6,6 +6,7 @@ import CustomSideMenu from '../CustomSideMenu/CustomSideMenu';
 import CreateConspectForm from '../CreateConspectForm/CreateConspectForm';
 import CustomSideForm from '../CustomSideForm/CustomSideForm';
 import DeleteDataForm from '../DeleteDataForm/DeleteDataForm';
+import CreateSectionForm from '../CreateSectionForm/CreateSectionForm';
 
 export default function Section() {
   const [optionsIsOpen, setOptionsIsOpen] = useState(false);
@@ -46,7 +47,7 @@ export default function Section() {
           description="Для изменения названия или описания конспекта, введите новые значения в поля ниже."
         >
           <CreateConspectForm />
-
+          <CreateSectionForm />
           <DeleteDataForm
             title="Удалить конспект"
             description="Удалить текущий конспект без возможности восстановления."
