@@ -8,7 +8,7 @@ import CustomSideForm from '../CustomSideForm/CustomSideForm';
 import DeleteDataForm from '../DeleteDataForm/DeleteDataForm';
 import CreateSectionForm from '../CreateSectionForm/CreateSectionForm';
 
-export default function Section() {
+export default function Sections() {
   const [optionsIsOpen, setOptionsIsOpen] = useState(false);
 
   function handleOptionsOpen() {

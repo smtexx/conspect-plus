@@ -6,7 +6,7 @@ import CustomSideMenu from '../CustomSideMenu/CustomSideMenu';
 import CreateConspectForm from '../CreateConspectForm/CreateConspectForm';
 import CustomSideForm from '../CustomSideForm/CustomSideForm';
 
-export default function Conspect() {
+export default function Conspects() {
   const [menuIsOpen, setMenuIsOpen] = useState(false);
 
   function handleMenuOpen() {

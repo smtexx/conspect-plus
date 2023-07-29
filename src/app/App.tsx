@@ -8,8 +8,8 @@ import ErrorPage from './view/routes/ErrorPage';
 import QuickLinks from '../components/QuickLinks/QuickLinks';
 import Users from '../components/Users/Users';
 import Data from '../components/Data/Data';
-import Conspect from '../components/Conspect/Conspect';
-import Section from '../components/Section/Section';
+import Conspects from '../components/Conspects/Conspects';
+import Sections from '../components/Sections/Sections';
 
 const router = createBrowserRouter([
   {
@@ -31,11 +31,11 @@ const router = createBrowserRouter([
       },
       {
         path: 'conspect',
-        element: <Conspect />,
+        element: <Conspects />,
       },
       {
         path: 'conspect/:conspectID',
-        element: <Section />,
+        element: <Sections />,
       },
     ],
   },
