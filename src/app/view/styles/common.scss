@@ -81,11 +81,11 @@
 
 @keyframes blink {
   0% {
-    color: $primary;
+    color: rgba(var(--bs-link-color-rgb), var(--bs-link-opacity, 1));
   }
 
   70% {
-    color: $primary;
+    color: rgba(var(--bs-link-color-rgb), var(--bs-link-opacity, 1));
   }
 
   71% {
