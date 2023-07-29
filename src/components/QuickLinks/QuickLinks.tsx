@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import { Card, Nav } from 'react-bootstrap';
-import { Link, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { getFakeRecentLinks } from '../../fakeData/getFakeRecentLinks';
 import Screen from '../Screen/Screen';
+import ResourceLink from '../ResourceLink/ResourceLink';
 
 export enum E_QuickLinkTypes {
   NOTE = 'note',
@@ -96,11 +97,16 @@ export default function QuickLinks() {
         </Card.Header>
         <Card.Body>
           <Card.Text>{cardDescription[type].text}</Card.Text>
-          <ul className="d-flex flex-column">
-            {links.map((link) => (
-              <li className="pb-2" key={link.href}>
-                <Link to={link.href}>{link.text}</Link> (
-                {link.wasActive.toLocaleString()})
+          <ul className="list-unstyled cm-links-list ms-3">
+            {links.map((link, idx) => (
+              <li key={link.href}>
+                <ResourceLink
+                  to={link.href}
+                  text={`${
+                    link.text
+                  } [${link.wasActive.toLocaleString()}]`}
+                  counter={idx}
+                />
               </li>
             ))}
           </ul>
