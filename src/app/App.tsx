@@ -10,6 +10,7 @@ import Users from '../components/Users/Users';
 import Data from '../components/Data/Data';
 import Conspects from '../components/Conspects/Conspects';
 import Sections from '../components/Sections/Sections';
+import Pages from '../components/Pages/Pages';
 
 const router = createBrowserRouter([
   {
@@ -36,6 +37,10 @@ const router = createBrowserRouter([
       {
         path: 'conspect/:conspectID',
         element: <Sections />,
+      },
+      {
+        path: 'conspect/:conspectID/:sectionID',
+        element: <Pages />,
       },
     ],
   },
