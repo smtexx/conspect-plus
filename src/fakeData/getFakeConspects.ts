@@ -16,7 +16,7 @@ function getFakeConspects(): I_Conspects {
         title: 'HTML разметка',
         description: 'Основные правила написания HTML разметки с MDN',
         saved: getRandomDate(),
-        topics: [
+        sections: [
           {
             id: getRandomId(),
             title: 'Блочные теги',
@@ -39,7 +39,7 @@ function getFakeConspects(): I_Conspects {
         title: 'CSS стили',
         description: 'Правила написания CSS стилей. Источник MDN',
         saved: getRandomDate(),
-        topics: [
+        sections: [
           {
             id: getRandomId(),
             title: 'Блочная модель',
@@ -57,7 +57,7 @@ function getFakeConspects(): I_Conspects {
         title: 'JavaScript',
         description: 'Основы JavaScript с сайта learn.javascript.ru',
         saved: getRandomDate(),
-        topics: [
+        sections: [
           {
             id: getRandomId(),
             title: 'Типы данных',
@@ -90,7 +90,7 @@ function getFakeConspects(): I_Conspects {
         title: 'HTML разметка',
         description: 'Основные правила написания HTML разметки с MDN',
         saved: getRandomDate(),
-        topics: [
+        sections: [
           {
             id: getRandomId(),
             title: 'Блочные теги',
@@ -113,7 +113,7 @@ function getFakeConspects(): I_Conspects {
         title: 'CSS стили',
         description: 'Правила написания CSS стилей. Источник MDN',
         saved: getRandomDate(),
-        topics: [
+        sections: [
           {
             id: getRandomId(),
             title: 'Блочная модель',
@@ -131,7 +131,7 @@ function getFakeConspects(): I_Conspects {
         title: 'JavaScript',
         description: 'Основы JavaScript с сайта learn.javascript.ru',
         saved: getRandomDate(),
-        topics: [
+        sections: [
           {
             id: getRandomId(),
             title: 'Типы данных',
