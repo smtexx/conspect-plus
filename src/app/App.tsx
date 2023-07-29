@@ -9,6 +9,7 @@ import QuickLinks from '../components/QuickLinks/QuickLinks';
 import Users from '../components/Users/Users';
 import Data from '../components/Data/Data';
 import Conspect from '../components/Conspect/Conspect';
+import Section from '../components/Section/Section';
 
 const router = createBrowserRouter([
   {
@@ -31,6 +32,10 @@ const router = createBrowserRouter([
       {
         path: 'conspect',
         element: <Conspect />,
+      },
+      {
+        path: 'conspect/:conspectID',
+        element: <Section />,
       },
     ],
   },
