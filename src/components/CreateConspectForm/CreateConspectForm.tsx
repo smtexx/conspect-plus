@@ -71,7 +71,7 @@ export default function CreateConspectForm() {
       </p>
       <div className="pt-3 d-flex justify-content-end">
         <Button variant="primary" disabled={createDisabled}>
-          Создать
+          Сохранить
         </Button>
       </div>
     </>
