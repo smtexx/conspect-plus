@@ -57,3 +57,38 @@
     }
   }
 }
+
+.cm-resource-link {
+  display: flex;
+  column-gap: 0.25rem;
+  padding: 0.5rem 0;
+  text-decoration: none;
+
+  span:first-of-type {
+    flex: 0 0 3rem;
+    font-family: $font-family-monospace;
+    color: $secondary;
+  }
+
+  @media (hover: hover) {
+    &:hover {
+      span:first-of-type {
+        animation: blink infinite linear 0.8s;
+      }
+    }
+  }
+}
+
+@keyframes blink {
+  0% {
+    color: $primary;
+  }
+
+  70% {
+    color: $primary;
+  }
+
+  71% {
+    color: transparent;
+  }
+}
