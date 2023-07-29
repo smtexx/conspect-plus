@@ -7,11 +7,12 @@ export interface I_Storage {
 export interface I_Conspect {
   id: string;
   title: string;
-  saveDate: string;
-  topics: I_Topic[];
+  description: string;
+  saved: Date;
+  sections: I_Section[];
 }
 
-export interface I_Topic {
+interface I_Section {
   id: string;
   title: string;
   pages: I_Page[];
@@ -20,6 +21,8 @@ export interface I_Topic {
 export interface I_Page {
   id: string;
   title: string;
+  saved: Date;
+  created: Date;
   tokens: T_Token[];
   markup: string;
 }
