@@ -55,6 +55,11 @@ export default function QuickLinks() {
           <Nav variant="tabs" defaultActiveKey="#notes">
             <Nav.Item>
               <Nav.Link
+                className={
+                  type === E_QuickLinkTypes.NOTE
+                    ? 'text-white'
+                    : 'text-secondary'
+                }
                 active={type === E_QuickLinkTypes.NOTE}
                 href="#notes"
               >
@@ -63,6 +68,11 @@ export default function QuickLinks() {
             </Nav.Item>
             <Nav.Item>
               <Nav.Link
+                className={
+                  type === E_QuickLinkTypes.RESOURCE
+                    ? 'text-white'
+                    : 'text-secondary'
+                }
                 active={type === E_QuickLinkTypes.RESOURCE}
                 href="#resources"
               >
@@ -71,6 +81,11 @@ export default function QuickLinks() {
             </Nav.Item>
             <Nav.Item>
               <Nav.Link
+                className={
+                  type === E_QuickLinkTypes.DRAFT
+                    ? 'text-white'
+                    : 'text-secondary'
+                }
                 active={type === E_QuickLinkTypes.DRAFT}
                 href="#drafts"
               >
