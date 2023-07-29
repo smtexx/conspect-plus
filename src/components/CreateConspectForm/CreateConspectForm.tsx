@@ -69,7 +69,7 @@ export default function CreateConspectForm() {
       <p id="descriptionHelpBlock" className="form-text">
         {`Длинна описания от ${conspectRules.descriptionLength[0]} до ${conspectRules.descriptionLength[1]} символов.`}
       </p>
-      <div className="pt-3 d-flex justify-content-end">
+      <div className="pt-3 pb-5 d-flex justify-content-end">
         <Button variant="primary" disabled={createDisabled}>
           Сохранить
         </Button>
