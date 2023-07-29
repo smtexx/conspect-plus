@@ -14,6 +14,26 @@
   align-items: center;
 }
 
+.divider {
+  color: var(--bs-gray);
+}
+
 .link {
   padding: 0.25rem;
+  text-decoration: none;
+  color: var(--bs-gray-500);
+  transition: color 0.15s ease-in-out;
+
+  @media (hover: hover) {
+    &:hover {
+      color: rgba(
+        var(--bs-link-color-rgb),
+        var(--bs-link-opacity, 1)
+      );
+    }
+  }
+}
+
+span.link:hover {
+  color: var(--bs-gray-500);
 }

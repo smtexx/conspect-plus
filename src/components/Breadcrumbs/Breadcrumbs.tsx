@@ -31,6 +31,7 @@ export default function Breadcrumbs() {
           );
         })}
       </ol>
+      <div className="border-bottom mb-4"></div>
     </nav>
   );
 }
