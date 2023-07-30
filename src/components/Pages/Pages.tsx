@@ -51,19 +51,19 @@ export default function Pages() {
         onHide={handleOptionsClose}
       >
         <CustomSideForm
-          title="Изменить раздел"
-          description="Для изменения названия раздела, введите новое значение в поле ниже."
-        >
-          <CreateSectionForm />
-        </CustomSideForm>
-
-        <CustomSideForm
           title="Создать страницу"
           description="Для создания новой страницы в текущем разделе конспекта, нажмите на кнопку ниже. Вы будете перенаправлены в редактор страниц."
         >
           <div className="d-flex justify-content-end">
             <Button variant="primary">Создать</Button>
           </div>
+        </CustomSideForm>
+
+        <CustomSideForm
+          title="Изменить раздел"
+          description="Для изменения названия раздела, введите новое значение в поле ниже."
+        >
+          <CreateSectionForm />
         </CustomSideForm>
 
         <DeleteDataForm
