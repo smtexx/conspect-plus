@@ -1,4 +1,5 @@
 import { Offcanvas } from 'react-bootstrap';
+import s from './CustomSideMenu.module.scss';
 
 interface I_Props {
   show: boolean;
@@ -16,7 +17,9 @@ export default function CustomSideMenu({
       <Offcanvas.Header closeButton>
         <Offcanvas.Title as="h4">Редактор</Offcanvas.Title>
       </Offcanvas.Header>
-      <Offcanvas.Body>{children}</Offcanvas.Body>
+      <Offcanvas.Body>
+        <div className={s.content}>{children}</div>
+      </Offcanvas.Body>
     </Offcanvas>
   );
 }

@@ -1,0 +1,12 @@
+.content {
+  display: flex;
+  flex-direction: column;
+  row-gap: 2rem;
+  padding-bottom: 3rem;
+
+  & > *:not(:last-child) {
+    padding-bottom: 2rem;
+    border-bottom: var(--bs-border-width) var(--bs-border-style)
+      var(--bs-border-color);
+  }
+}
