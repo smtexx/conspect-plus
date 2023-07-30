@@ -34,7 +34,7 @@ export default function DeleteDataForm({
   return (
     <>
       <CustomSideForm title={title} description={description}>
-        <div className="pt-3 pb-5 d-flex justify-content-end">
+        <div className="pt-3 d-flex justify-content-end">
           <Button variant="primary" onClick={handleModalIsOpen}>
             Удалить
           </Button>
