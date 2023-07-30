@@ -11,6 +11,7 @@ import Data from '../components/Data/Data';
 import Conspects from '../components/Conspects/Conspects';
 import Sections from '../components/Sections/Sections';
 import Pages from '../components/Pages/Pages';
+import Note from '../components/Note/Note';
 
 const router = createBrowserRouter([
   {
@@ -41,6 +42,10 @@ const router = createBrowserRouter([
       {
         path: 'conspect/:conspectID/:sectionID',
         element: <Pages />,
+      },
+      {
+        path: 'conspect/:conspectID/:sectionID/:pageID',
+        element: <Note />,
       },
     ],
   },
