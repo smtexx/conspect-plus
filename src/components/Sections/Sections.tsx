@@ -45,19 +45,26 @@ export default function Sections() {
         onHide={handleOptionsClose}
       >
         <CustomSideForm
+          title="Создать раздел"
+          description="Для создания нового раздела в текущем конспекте заполните поле с названием раздела ниже:"
+        >
+          <CreateSectionForm />
+        </CustomSideForm>
+
+        <CustomSideForm
           title="Изменить конспект"
           description="Для изменения названия или описания конспекта, введите новые значения в поля ниже."
         >
           <CreateConspectForm />
-          <CreateSectionForm />
-          <DeleteDataForm
-            title="Удалить конспект"
-            description="Удалить текущий конспект без возможности восстановления."
-            confirmTitle="Удаление конспекта"
-            confirmText="Вы действительно уверены что хотите удалить текущий конспект без возможности восстановления?"
-            deleteHandler={() => {}}
-          />
         </CustomSideForm>
+
+        <DeleteDataForm
+          title="Удалить конспект"
+          description="Удалить текущий конспект без возможности восстановления."
+          confirmTitle="Удаление конспекта"
+          confirmText="Вы действительно уверены что хотите удалить текущий конспект без возможности восстановления?"
+          deleteHandler={() => {}}
+        />
       </CustomSideMenu>
     </>
   );
