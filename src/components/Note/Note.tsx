@@ -24,14 +24,17 @@ export default function Note() {
     <>
       <Screen title={page.title} optionsHandler={handleOptionsOpen}>
         <Breadcrumbs />
-        <p className="mb-0">
-          <span>Создано: </span>
-          <span>{page.created.toLocaleString()}</span>
-        </p>
-        <p>
-          <span>Изменено: </span>
-          <span>{page.saved.toLocaleString()}</span>
-        </p>
+        <table>
+          <tr>
+            <td className="pe-3">Создано: </td>{' '}
+            <td>{page.created.toLocaleString()}</td>
+          </tr>
+          <tr>
+            <td className="pe-3">Изменено: </td>{' '}
+            <td>{page.saved.toLocaleString()}</td>
+          </tr>
+        </table>
+
         <div className="text-white pt-3">
           {page.tokens.map((token, idx) => (
             <Token key={idx} token={token} />
