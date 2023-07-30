@@ -8,7 +8,7 @@ export default function Breadcrumbs() {
   let href = '';
 
   return (
-    <nav aria-label="breadcrumb">
+    <nav aria-label="breadcrumb" className="border-bottom mb-2">
       <ol className={s.list}>
         {routes.map((route, idx) => {
           href += `/${route.path}`;
@@ -31,7 +31,6 @@ export default function Breadcrumbs() {
           );
         })}
       </ol>
-      <div className="border-bottom mb-4"></div>
     </nav>
   );
 }
