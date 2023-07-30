@@ -67,7 +67,7 @@ export default function Users() {
           менеджмента данных.
         </p>
         <Button
-          className="mt-2 ms-lg-3 fw-bold"
+          className="mt-2 ms-lg-3"
           variant="primary"
           onClick={() => setModalShown(true)}
         >

@@ -122,7 +122,7 @@ export default function Data() {
       <Screen title="Менеджмент данных">
         <Accordion defaultActiveKey="0">
           {dataActions.map((action, idx) => (
-            <Accordion.Item eventKey={idx.toString()}>
+            <Accordion.Item key={idx} eventKey={idx.toString()}>
               <Accordion.Header>
                 <span className="text-white fw-weight-bold">
                   {action.header}
@@ -131,7 +131,7 @@ export default function Data() {
               <Accordion.Body>
                 <p style={{ maxWidth: '40rem' }}>{action.text}</p>
                 <Button
-                  className="mb-4 mt-2 ms-lg-3 fw-bold"
+                  className="mb-4 mt-2 ms-lg-3"
                   variant="primary"
                   onClick={action.buttonHandler}
                 >
