@@ -1,4 +1,8 @@
 $btn-focus-width: 1px;
 $primary: #ffc107;
 
+a:hover {
+  color: $primary;
+}
+
 @import '~bootstrap/scss/bootstrap';
