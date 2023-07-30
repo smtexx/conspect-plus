@@ -30,31 +30,44 @@ export const sampleToParse = `
 ##_/O
 
 ##_C
-let a = true;  
-##_T Создаем переменную ##_/T
-if(a) {
-  ##_T Если значение true - уходим в лес ##_/T
-  goAway();
+export interface I_RoutePath {
+  ##_T Экспортируем интерфейс ##_/T
+  text: string;
+  path: string;
 }
-##_/C
+
+export function getFakeRoutes(): { routes: I_RoutePath[] } {
+  return {
+    ##_T Возвращаем из функции ##_B объект ##_/B содержащий текущий маршрут ##_/T
+    routes: [
+      { text: 'Конспекты', path: 'conspect', isOk: true },
+      { text: 'JavaScript', path: 'conpectID' },
+      { text: 'Работа с функциями', path: 'sectionID' },
+      { text: 'Основы', path: 'pageID', idx: 15 },
+    ],
+  };
+}
+(typescript)##_/C
 
 ##_C
-<header class="entry-header" aria-label="Содержимое">
-<h1 class="entry-title" itemprop="headline">Экранирование спец. символов HTML</h1>
-##_T Главный заголовок страницы ##_/T
-  <div class="entry-meta">
-    <span class="posted-on">
-      <time  
-        class="entry-date published" 
-        datetime="2023-06-14T08:36:25+03:00" 
-        itemprop="datePublished"
-      >
-        14.06.2023
-      </time>
-    </span>
-  </div>
-</header>
-##_/C
+<!DOCTYPE html>
+##_T Тип документа ##_/T
+<html>
+  <head>
+  ##_T В теге head размещается информация о документе ##_/T
+    <title>My First Webpage</title>
+    <meta charset="UTF-8">
+    <meta name="description" content="This is my first website. It includes lots of information about my life.">
+  </head>
+  <body>
+    <h1>Welcome to my webpage</h1>
+    <p>Welcome to <em>my</em> brand new website.</p>
+    <p>This site will be my <strong>new<strong> home on the web.</p>
+    <a href="http://www.google.com">Google</a>
+    ##_T Так можно создать ссылку ##_/T
+  </body>
+</html>
+(html)##_/C
 
 ##_R Что такое mvc? (https://ru.wikipedia.org/wiki/Model-View-Controller)##_/R
 `;
