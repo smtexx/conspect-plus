@@ -6,7 +6,6 @@ import CustomSideMenu from '../CustomSideMenu/CustomSideMenu';
 import Screen from '../Screen/Screen';
 import Token from '../Token/Token';
 import { useState } from 'react';
-import CreateSectionForm from '../CreateSectionForm/CreateSectionForm';
 import DeleteDataForm from '../DeleteDataForm/DeleteDataForm';
 
 export default function Note() {
