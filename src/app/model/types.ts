@@ -58,6 +58,7 @@ export interface I_LinkToken {
 export interface I_CodeToken {
   type: E_TokenType.C;
   text: string;
+  lang: string;
   tips: {
     line: number;
     html: string;

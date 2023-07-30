@@ -140,7 +140,7 @@ describe('Function parseCodeToken:', () => {
 
         const b = 300;
         ##_T Просто константа ##_/T
-      `,
+      (javascript)`,
     };
     const token: I_CodeToken = {
       type: E_TokenType.C,
@@ -148,6 +148,7 @@ describe('Function parseCodeToken:', () => {
         <Button onClick={console.log('Hello!')}>Greet</Button>
 
         const b = 300;`,
+      lang: 'javascript',
       tips: [
         {
           line: 1,

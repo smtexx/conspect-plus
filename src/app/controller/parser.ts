@@ -24,9 +24,9 @@ export function normalizeWs(str: string): string {
 
 export function parseDecorationMarkers(markup: string): string {
   const replacers = [
-    ['B', '<strong class="cheat-marker-bold">', '</strong>'],
-    ['I', '<em class="cheat-marker-italic">', '</em>'],
-    ['M', '<mark class="cheat-marker-marked">', '</mark>'],
+    ['B', '<strong class="cm-marker-bold">', '</strong>'],
+    ['I', '<em class="cm-marker-italic">', '</em>'],
+    ['M', '<mark class="cm-marker-marked">', '</mark>'],
   ];
 
   let parsed = markup;
@@ -44,7 +44,7 @@ export function parseLinkMarkers(markup: string): string {
   return markup.replace(
     /##_A(.+?)\((.+?)\)##_\/A/gs,
     (match, p1, p2) =>
-      `<a class="cheat-marker-link" target="_blank" rel="noopener noreferrer" href="${normalizeWs(
+      `<a class="cm-marker-link" target="_blank" rel="noopener noreferrer" href="${normalizeWs(
         p2
       )}">${normalizeWs(p1)}</a>`
   );
@@ -144,11 +144,18 @@ export function parseCodeToken(
   const token: I_CodeToken = {
     type: E_TokenType.C,
     text: preparsedToken.innerMarkup,
+    lang: '',
     tips: [],
   };
 
   // Delete start line break if there is one
   token.text = token.text.replace(/^ *\n/, '');
+
+  // Extract language type
+  token.text = token.text.replace(/\(([a-z]+)\)$/, (match, p1) => {
+    token.lang = p1;
+    return '';
+  });
 
   const tipRegExp = / *##_T(.+?)##_\/T *\n/s;
 
@@ -220,7 +227,9 @@ export function parse(markup: string): T_Token[] {
     switch (preparsedToken.type) {
       case E_TokenType.C:
         token = parseCodeToken(preparsedToken);
-        token.text = hljs.highlightAuto(token.text).value;
+        token.text = hljs.highlight(token.text, {
+          language: token.lang,
+        }).value;
         break;
 
       case E_TokenType.H:
