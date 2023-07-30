@@ -1,0 +1,40 @@
+.wrapper {
+  display: flex;
+  column-gap: 0.25rem;
+  padding: 0.375rem 0;
+  text-decoration: none;
+
+  @media (hover: hover) {
+    &:hover {
+      .marker {
+        animation: blink infinite linear 0.8s;
+      }
+
+      .text {
+        color: var(--bs-primary);
+      }
+    }
+  }
+}
+
+.marker {
+  flex: 0 0 3rem;
+  font-family: var(--bs-font-monospace);
+  color: var(--bs-secondary);
+}
+
+.text {
+  transition: color 0.15s ease-in-out;
+}
+
+@keyframes blink {
+  0% {
+    color: var(--bs-primary);
+  }
+  70% {
+    color: var(--bs-primary);
+  }
+  71% {
+    color: transparent;
+  }
+}
