@@ -7,6 +7,7 @@ import Screen from '../Screen/Screen';
 import Token from '../Token/Token';
 import { useState } from 'react';
 import DeleteDataForm from '../DeleteDataForm/DeleteDataForm';
+import TipScreen from '../TipScreen/TipScreen';
 
 export default function Note() {
   const [optionsIsOpen, setOptionsIsOpen] = useState(false);
@@ -40,6 +41,7 @@ export default function Note() {
             <Token key={idx} token={token} />
           ))}
         </div>
+        <TipScreen />
       </Screen>
 
       <CustomSideMenu
