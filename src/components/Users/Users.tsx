@@ -1,4 +1,4 @@
-import { Button } from 'react-bootstrap';
+import { Button, FloatingLabel, Form } from 'react-bootstrap';
 import { getFakeUsers } from '../../fakeData/getFakeUsers';
 import { ChangeEvent, useState } from 'react';
 import ConfirmModal from '../ConfirmModal/ConfirmModal';
@@ -90,25 +90,23 @@ export default function Users() {
           Для ее создания введите новое имя пользователя в поле ниже и
           нажмите на кнопку создать.
         </p>
-        <label
-          htmlFor="inputLogin"
-          className="form-label mb-2 text-white"
+
+        <FloatingLabel
+          controlId="inputLogin"
+          label="Имя пользователя"
         >
-          Имя пользователя:
-        </label>
-        <input
-          type="text"
-          id="inputLogin"
-          className="form-control"
-          aria-labelledby="loginHelpBlock"
-          onChange={handleLoginChange}
-          value={login}
-          autoFocus={true}
-        />
-        <div id="loginHelpBlock" className="form-text">
+          <Form.Control
+            type="text"
+            placeholder="Имя пользователя"
+            value={login}
+            onChange={handleLoginChange}
+            aria-labelledby="loginHelpBlock"
+          />
+        </FloatingLabel>
+        <p id="loginHelpBlock" className="form-text">
           Имя пользователя должно состоять из букв, цифр, символов
           нижнего подчеркивания, иметь длинну 3-20 знаков.
-        </div>
+        </p>
       </ConfirmModal>
     </>
   );
