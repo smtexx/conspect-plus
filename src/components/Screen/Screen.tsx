@@ -14,7 +14,7 @@ export default function Screen({
   optionsHandler,
 }: I_Props) {
   return (
-    <Card className="w-100 pb-4">
+    <Card className="w-100 pb-5">
       <Card.Header
         as="h3"
         className="text-white fs-4 ps-4 d-flex align-items-center"
