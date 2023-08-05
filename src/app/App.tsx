@@ -12,6 +12,7 @@ import Conspects from '../components/Conspects/Conspects';
 import Sections from '../components/Sections/Sections';
 import Pages from '../components/Pages/Pages';
 import Note from '../components/Note/Note';
+import Editor from '../components/Editor/Editor';
 
 const router = createBrowserRouter([
   {
@@ -46,6 +47,10 @@ const router = createBrowserRouter([
       {
         path: 'conspect/:conspectID/:sectionID/:pageID',
         element: <Note />,
+      },
+      {
+        path: 'edit',
+        element: <Editor />,
       },
     ],
   },
