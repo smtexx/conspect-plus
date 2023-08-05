@@ -1,3 +1,4 @@
+import { Fragment } from 'react';
 import { E_TokenType, T_Token } from '../../app/model/types';
 
 interface I_Props {
@@ -80,7 +81,7 @@ export default function Token({ token }: I_Props) {
               );
               if (currentTip) {
                 return (
-                  <>
+                  <Fragment key={idx}>
                     <button
                       className="cm-token-code-tip"
                       onClick={() => handleTipClick(currentTip.html)}
@@ -88,7 +89,7 @@ export default function Token({ token }: I_Props) {
                       ?
                     </button>
                     {' \n'}
-                  </>
+                  </Fragment>
                 );
               } else {
                 return '\n';
