@@ -28,7 +28,7 @@ export default function NavBar() {
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ms-auto pt-3 pt-lg-0">
             <div className="border-top border-2 mb-3 "></div>
-            <Nav.Link>
+            <Nav.Link as="div">
               <Link
                 className="nav-link p-0"
                 to="/"
@@ -37,7 +37,7 @@ export default function NavBar() {
                 На главную
               </Link>
             </Nav.Link>
-            <Nav.Link>
+            <Nav.Link as="div">
               <Link
                 className="nav-link p-0"
                 to="/users"
@@ -46,7 +46,7 @@ export default function NavBar() {
                 Пользователи
               </Link>
             </Nav.Link>
-            <Nav.Link>
+            <Nav.Link as="div">
               <Link
                 className="nav-link p-0"
                 to="/data"
