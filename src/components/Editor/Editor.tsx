@@ -231,6 +231,7 @@ export default function Editor() {
 
       // Nesting of identical tags
       const identicalTagsNesting = markup.match(
+        // eslint-disable-next-line no-useless-escape
         /##_([HSPUOCWRLTBIMA])[^(##_\/(\1)]*?##_(\1)/s
       );
 
