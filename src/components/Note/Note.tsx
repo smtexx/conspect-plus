@@ -8,6 +8,7 @@ import Token from '../Token/Token';
 import { useState } from 'react';
 import DeleteDataForm from '../DeleteDataForm/DeleteDataForm';
 import TipScreen from '../TipScreen/TipScreen';
+import PageInfo from '../PageInfo/PageInfo';
 
 export default function Note() {
   const [optionsIsOpen, setOptionsIsOpen] = useState(false);
@@ -25,16 +26,14 @@ export default function Note() {
     <>
       <Screen title={page.title} optionsHandler={handleOptionsOpen}>
         <Breadcrumbs />
-        <table>
-          <tr>
-            <td className="pe-3">Создано: </td>{' '}
-            <td>{page.created.toLocaleString()}</td>
-          </tr>
-          <tr>
-            <td className="pe-3">Изменено: </td>{' '}
-            <td>{page.saved.toLocaleString()}</td>
-          </tr>
-        </table>
+        <PageInfo
+          tables={[
+            [
+              ['Создано: ', page.created.toLocaleString()],
+              ['Изменено: ', page.saved.toLocaleString()],
+            ],
+          ]}
+        />
 
         <div className="text-white pt-3">
           {page.tokens.map((token, idx) => (
