@@ -6,28 +6,30 @@ import { useState } from 'react';
 interface I_Props {
   title: string;
   description: string;
+  buttonText: string;
   confirmTitle: string;
   confirmText: string;
-  deleteHandler: () => void;
+  processHandler: () => void;
 }
 
-export default function DeleteDataForm({
+export default function ProcessDataFormPart({
   title,
   description,
-  confirmText,
+  buttonText,
   confirmTitle,
-  deleteHandler,
+  confirmText,
+  processHandler,
 }: I_Props) {
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
   function handleModalClose() {
     setModalIsOpen(false);
   }
-  function handleModalIsOpen() {
+  function handleModalOpen() {
     setModalIsOpen(true);
   }
   function handleModalConfirm() {
-    deleteHandler();
+    processHandler();
     handleModalClose();
   }
 
@@ -35,8 +37,8 @@ export default function DeleteDataForm({
     <>
       <CustomSideForm title={title} description={description}>
         <div className="pt-3 d-flex justify-content-end">
-          <Button variant="primary" onClick={handleModalIsOpen}>
-            Удалить
+          <Button variant="primary" onClick={handleModalOpen}>
+            {buttonText}
           </Button>
         </div>
       </CustomSideForm>
@@ -46,7 +48,7 @@ export default function DeleteDataForm({
         open={modalIsOpen}
         disabled={false}
         onHide={handleModalClose}
-        buttonText="Удалить"
+        buttonText={buttonText}
         buttonHandler={handleModalConfirm}
       >
         <p>{confirmText}</p>
