@@ -1,14 +1,11 @@
 import { fakeConspects } from '../../fakeData/getFakeConspects';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
-import CreateSectionForm from '../CreateSectionForm/CreateSectionForm';
-import CustomSideForm from '../CustomSideForm/CustomSideForm';
 import CustomSideMenu from '../CustomSideMenu/CustomSideMenu';
-import DeleteDataForm from '../DeleteDataForm/DeleteDataForm';
 import ResourceLink from '../ResourceLink/ResourceLink';
 import { useState } from 'react';
-
 import Screen from '../Screen/Screen';
-import { Button } from 'react-bootstrap';
+import ProcessDataFormPart from '../ProcessDataFormPart/ProcessDataFormPart';
+import EditBlockFormPart from '../EditBlockFormPart/EditBlockFormPart';
 
 export default function Pages() {
   const [optionsIsOpen, setOptionsIsOpen] = useState(false);
@@ -50,28 +47,33 @@ export default function Pages() {
         show={optionsIsOpen}
         onHide={handleOptionsClose}
       >
-        <CustomSideForm
+        <ProcessDataFormPart
           title="Создать страницу"
           description="Для создания новой страницы в текущем разделе конспекта, нажмите на кнопку ниже. Вы будете перенаправлены в редактор страниц."
-        >
-          <div className="d-flex justify-content-end">
-            <Button variant="primary">Создать</Button>
-          </div>
-        </CustomSideForm>
+          buttonText="Создать"
+          confirmTitle="Создать страницу"
+          confirmText="Вы действительно хотите создать новую страницу в текущем разделе конспекта?"
+          processHandler={() => console.log('Страница создана!')}
+        />
 
-        <CustomSideForm
+        <EditBlockFormPart
           title="Изменить раздел"
-          description="Для изменения названия раздела, введите новое значение в поле ниже."
-        >
-          <CreateSectionForm />
-        </CustomSideForm>
-
-        <DeleteDataForm
+          description="Для изменения названия раздела, введите новое значение в поле ниже:"
+          titleFieldConfig={{
+            placeholder: 'Название раздела',
+            minLength: 3,
+            maxLength: 20,
+          }}
+          buttonText="Создать"
+          buttonHandler={() => console.log('Раздел изменен!')}
+        />
+        <ProcessDataFormPart
           title="Удалить раздел"
-          description="Удалить текущий раздел конспекта со всеми вложенными страницами без возможности восстановления."
+          description="Удалить текущий раздел конспекта вместе со всеми вложенными страницами без возможности восстановления."
+          buttonText="Удалить"
           confirmTitle="Удаление раздела"
-          confirmText="Вы действительно уверены что хотите удалить текущий раздел конспекта, со всеми вложенными страницами, без возможности восстановления?"
-          deleteHandler={() => {}}
+          confirmText="Вы действительно уверены что хотите удалить текущий раздел без возможности восстановления?"
+          processHandler={() => console.log('Раздел удален!')}
         />
       </CustomSideMenu>
     </>

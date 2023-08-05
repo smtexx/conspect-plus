@@ -3,8 +3,7 @@ import Screen from '../Screen/Screen';
 import { fakeConspects } from '../../fakeData/getFakeConspects';
 import DataCard from '../DataCard/DataCard';
 import CustomSideMenu from '../CustomSideMenu/CustomSideMenu';
-import CreateConspectForm from '../CreateConspectForm/CreateConspectForm';
-import CustomSideForm from '../CustomSideForm/CustomSideForm';
+import EditBlockFormPart from '../EditBlockFormPart/EditBlockFormPart';
 
 export default function Conspects() {
   const [menuIsOpen, setMenuIsOpen] = useState(false);
@@ -36,13 +35,25 @@ export default function Conspects() {
       </Screen>
 
       <CustomSideMenu show={menuIsOpen} onHide={handleMenuClose}>
-        <CustomSideForm
+        <EditBlockFormPart
           title="Создать конспект"
-          description="Для создания нового конспекта заполните поля с названием и
-    описанием конспекта:"
-        >
-          <CreateConspectForm />
-        </CustomSideForm>
+          description="Для создания нового конспекта заполните поля с названием и описанием конспекта: "
+          titleFieldConfig={{
+            placeholder: 'Название конспекта',
+            minLength: 3,
+            maxLength: 20,
+          }}
+          descriptionFieldConfig={{
+            placeholder: 'Описание конспекта',
+            minLength: 3,
+            maxLength: 40,
+          }}
+          buttonText="Создать"
+          buttonHandler={() => {
+            console.log('Конспект создан!');
+            setMenuIsOpen(false);
+          }}
+        />
       </CustomSideMenu>
     </>
   );

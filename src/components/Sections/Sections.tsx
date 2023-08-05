@@ -3,11 +3,9 @@ import { useState } from 'react';
 import Screen from '../Screen/Screen';
 import ResourceLink from '../ResourceLink/ResourceLink';
 import CustomSideMenu from '../CustomSideMenu/CustomSideMenu';
-import CreateConspectForm from '../CreateConspectForm/CreateConspectForm';
-import CustomSideForm from '../CustomSideForm/CustomSideForm';
-import DeleteDataForm from '../DeleteDataForm/DeleteDataForm';
-import CreateSectionForm from '../CreateSectionForm/CreateSectionForm';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
+import EditBlockFormPart from '../EditBlockFormPart/EditBlockFormPart';
+import ProcessDataFormPart from '../ProcessDataFormPart/ProcessDataFormPart';
 
 export default function Sections() {
   const [optionsIsOpen, setOptionsIsOpen] = useState(false);
@@ -44,26 +42,46 @@ export default function Sections() {
         show={optionsIsOpen}
         onHide={handleOptionsClose}
       >
-        <CustomSideForm
+        <EditBlockFormPart
           title="Создать раздел"
           description="Для создания нового раздела в текущем конспекте заполните поле с названием раздела ниже:"
-        >
-          <CreateSectionForm />
-        </CustomSideForm>
+          titleFieldConfig={{
+            placeholder: 'Название раздела',
+            minLength: 3,
+            maxLength: 20,
+          }}
+          buttonText="Создать"
+          buttonHandler={() => {
+            console.log('Раздел создан!');
+          }}
+        />
 
-        <CustomSideForm
+        <EditBlockFormPart
           title="Изменить конспект"
-          description="Для изменения названия или описания конспекта, введите новые значения в поля ниже."
-        >
-          <CreateConspectForm />
-        </CustomSideForm>
+          description="Для изменения названия или описания конспекта, введите новые значения в поля ниже:"
+          titleFieldConfig={{
+            placeholder: 'Название конспекта',
+            minLength: 3,
+            maxLength: 20,
+          }}
+          descriptionFieldConfig={{
+            placeholder: 'Описание конспекта',
+            minLength: 3,
+            maxLength: 40,
+          }}
+          buttonText="Сохранить"
+          buttonHandler={() => {
+            console.log('Конспект изменен!');
+          }}
+        />
 
-        <DeleteDataForm
+        <ProcessDataFormPart
           title="Удалить конспект"
-          description="Удалить текущий конспект без возможности восстановления."
+          description="Удалить текущий конспект вместе со всеми вложенными разделами и страницами без возможности восстановления."
+          buttonText="Удалить"
           confirmTitle="Удаление конспекта"
           confirmText="Вы действительно уверены что хотите удалить текущий конспект без возможности восстановления?"
-          deleteHandler={() => {}}
+          processHandler={() => console.log('Конспект удален!')}
         />
       </CustomSideMenu>
     </>
