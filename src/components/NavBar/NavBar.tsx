@@ -18,8 +18,10 @@ export default function NavBar() {
       expanded={opened}
     >
       <Container>
-        <Navbar.Brand href="#home">
-          <Logo />
+        <Navbar.Brand as="div">
+          <Link to="/" className="text-decoration-none">
+            <Logo />
+          </Link>
         </Navbar.Brand>
         <Navbar.Toggle
           aria-controls="basic-navbar-nav"
@@ -71,10 +73,10 @@ export default function NavBar() {
               <NavDropdown.Item as={'div'}>
                 <Link
                   className="nav-link p-0"
-                  to="/resource"
+                  to="/linkset"
                   onClick={() => setOpened(false)}
                 >
-                  Ресурсы
+                  Ссылки
                 </Link>
               </NavDropdown.Item>
               <NavDropdown.Item as={'div'}>
