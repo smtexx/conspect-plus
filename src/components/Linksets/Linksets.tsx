@@ -5,7 +5,7 @@ import DataCard from '../DataCard/DataCard';
 import Screen from '../Screen/Screen';
 import EditBlockFormPart from '../EditBlockFormPart/EditBlockFormPart';
 
-export default function Linkset() {
+export default function Linksets() {
   const [menuIsOpen, setMenuIsOpen] = useState(false);
 
   function handleMenuOpen() {
