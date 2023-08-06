@@ -15,6 +15,8 @@ import Note from '../components/Note/Note';
 import Editor from '../components/Editor/Editor';
 import Linksets from '../components/Linksets/Linksets';
 import Links from '../components/Links/Links';
+import Search from '../components/Search/Search';
+import Help from '../components/Help/Help';
 
 const router = createBrowserRouter([
   {
@@ -61,6 +63,14 @@ const router = createBrowserRouter([
       {
         path: 'linkset/:linksetID',
         element: <Links />,
+      },
+      {
+        path: 'search',
+        element: <Search />,
+      },
+      {
+        path: 'help',
+        element: <Help />,
       },
     ],
   },
