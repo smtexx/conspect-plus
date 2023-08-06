@@ -13,6 +13,8 @@ import Sections from '../components/Sections/Sections';
 import Pages from '../components/Pages/Pages';
 import Note from '../components/Note/Note';
 import Editor from '../components/Editor/Editor';
+import Linkset from '../components/Linkset/Linkset';
+import Links from '../components/Links/Links';
 
 const router = createBrowserRouter([
   {
@@ -51,6 +53,14 @@ const router = createBrowserRouter([
       {
         path: 'edit',
         element: <Editor />,
+      },
+      {
+        path: 'linkset',
+        element: <Linkset />,
+      },
+      {
+        path: 'linkset/:linksetID',
+        element: <Links />,
       },
     ],
   },
