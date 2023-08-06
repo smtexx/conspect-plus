@@ -5,7 +5,7 @@ import Screen from '../Screen/Screen';
 import PageInfo from '../PageInfo/PageInfo';
 import ProcessDataFormPart from '../ProcessDataFormPart/ProcessDataFormPart';
 import { getFakeResources } from '../../fakeData/getFakeResources';
-import OutsideLink from '../OutsideLink/OutsideLink';
+import CustomLink from '../CustomLink/CustomLink';
 
 export default function Links() {
   const [optionsIsOpen, setOptionsIsOpen] = useState(false);
@@ -37,11 +37,13 @@ export default function Links() {
 
         <ul className="list-unstyled">
           {linkset.tokens.map((token, idx) => (
-            <OutsideLink
-              text={token.text}
-              href={token.href}
-              key={idx}
-            />
+            <li key={idx}>
+              <CustomLink
+                text={token.text}
+                href={token.href}
+                external
+              />
+            </li>
           ))}
         </ul>
       </Screen>

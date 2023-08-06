@@ -1,11 +1,11 @@
 import { fakeConspects } from '../../fakeData/getFakeConspects';
 import { useState } from 'react';
 import Screen from '../Screen/Screen';
-import ResourceLink from '../ResourceLink/ResourceLink';
 import CustomSideMenu from '../CustomSideMenu/CustomSideMenu';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 import EditBlockFormPart from '../EditBlockFormPart/EditBlockFormPart';
 import ProcessDataFormPart from '../ProcessDataFormPart/ProcessDataFormPart';
+import CustomLink from '../CustomLink/CustomLink';
 
 export default function Sections() {
   const [optionsIsOpen, setOptionsIsOpen] = useState(false);
@@ -28,10 +28,10 @@ export default function Sections() {
         <ul className="list-unstyled cm-links-list">
           {conspect.sections.map((section, idx) => (
             <li key={section.id}>
-              <ResourceLink
-                to={`/conspect/${conspect.id}/${section.id}`}
+              <CustomLink
+                href={`/conspect/${conspect.id}/${section.id}`}
                 text={section.title}
-                counter={idx}
+                counter={idx + 1}
               />
             </li>
           ))}
