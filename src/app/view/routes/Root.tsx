@@ -14,11 +14,9 @@ export default function Root() {
       users.findIndex((user) => user.isActive) !== -1 ? true : false;
 
     if (isLoggedIn && pathname === '/') {
-      navigate('/recent#notes');
+      navigate('/quicklinks#notes');
     } else if (!isLoggedIn && users.length !== 0) {
-      navigate('/user');
-    } else if (users.length === 0) {
-      navigate('/user/create');
+      navigate('/users');
     }
   }, [pathname, users, navigate]);
 
