@@ -13,7 +13,7 @@ interface I_RecentLinks {
 export function getFakeRecentLinks(
   type: E_QuickLinkTypes
 ): I_RecentLinks {
-  if (type === E_QuickLinkTypes.NOTE) {
+  if (type === E_QuickLinkTypes.NOTES) {
     return {
       links: [
         {
@@ -34,43 +34,43 @@ export function getFakeRecentLinks(
       ],
     };
   }
-  if (type === E_QuickLinkTypes.RESOURCE) {
+  if (type === E_QuickLinkTypes.LINKS) {
     return {
       links: [
         {
           text: 'Важный ресурс 1',
-          href: '/resource/link1',
+          href: 'https://ya.ru',
           wasActive: new Date(),
         },
         {
           text: 'Важный ресурс 2',
-          href: '/resource/link2',
+          href: 'https://ya.ru',
           wasActive: new Date(),
         },
         {
           text: 'Важный ресурс 3',
-          href: '/resource/link3',
+          href: 'https://ya.ru',
           wasActive: new Date(),
         },
         {
           text: 'Важный ресурс 4',
-          href: '/resource/link4',
+          href: 'https://ya.ru',
           wasActive: new Date(),
         },
       ],
     };
   }
-  if (type === E_QuickLinkTypes.DRAFT) {
+  if (type === E_QuickLinkTypes.DRAFTS) {
     return {
       links: [
         {
           text: 'Черновик 1',
-          href: '/draft/1',
+          href: '/edit/1',
           wasActive: new Date(),
         },
         {
           text: 'Черновик 2',
-          href: '/draft/2',
+          href: '/edit/2',
           wasActive: new Date(),
         },
       ],
