@@ -1,116 +1,99 @@
-import { useState, useEffect } from 'react';
-import { Card, Nav } from 'react-bootstrap';
-import { useLocation } from 'react-router-dom';
+import { useState } from 'react';
 import { getFakeRecentLinks } from '../../fakeData/getFakeRecentLinks';
 import Screen from '../Screen/Screen';
-import ResourceLink from '../ResourceLink/ResourceLink';
+import CustomLink from '../CustomLink/CustomLink';
 
 export enum E_QuickLinkTypes {
-  NOTE = 'note',
-  RESOURCE = 'resource',
-  DRAFT = 'draft',
+  NOTES = 'notes',
+  LINKS = 'links',
+  DRAFTS = 'drafts',
 }
 
 const cardDescription: {
   [prop in E_QuickLinkTypes]: { text: string };
 } = {
-  [E_QuickLinkTypes.NOTE]: {
-    text: 'Конспекты, которые вы недавно просматривали',
+  [E_QuickLinkTypes.NOTES]: {
+    text: 'Последние из просмотренных страниц конспектов:',
   },
-  [E_QuickLinkTypes.RESOURCE]: {
-    text: 'Ссылки на ресурсы, которые были недавно открыты',
+  [E_QuickLinkTypes.LINKS]: {
+    text: 'Ссылки на ресурсы, которые были недавно открыты:',
   },
-  [E_QuickLinkTypes.DRAFT]: {
-    text: 'Черновики конспектов, которые надавно редактировались',
+  [E_QuickLinkTypes.DRAFTS]: {
+    text: 'Черновики страниц, которые редактировались, но небыли сохранены:',
   },
 };
 
 export default function QuickLinks() {
-  const { hash } = useLocation();
-  const [type, setType] = useState<E_QuickLinkTypes>(
-    E_QuickLinkTypes.NOTE
-  );
-
-  useEffect(() => {
-    switch (hash) {
-      case '#drafts':
-        setType(E_QuickLinkTypes.DRAFT);
-        break;
-
-      case '#resources':
-        setType(E_QuickLinkTypes.RESOURCE);
-        break;
-
-      default:
-        setType(E_QuickLinkTypes.NOTE);
-        break;
-    }
-  }, [hash]);
-
+  const [type, setType] = useState(E_QuickLinkTypes.NOTES);
   const { links } = getFakeRecentLinks(type);
 
   return (
     <Screen title="Быстрые ссылки">
-      <Card className="w-100" style={{ minHeight: '100%' }}>
-        <Card.Header>
-          <Nav variant="tabs" defaultActiveKey="#notes">
-            <Nav.Item>
-              <Nav.Link
-                className={
-                  type === E_QuickLinkTypes.NOTE
-                    ? 'text-white'
-                    : 'text-secondary'
-                }
-                active={type === E_QuickLinkTypes.NOTE}
-                href="#notes"
-              >
-                Конспект
-              </Nav.Link>
-            </Nav.Item>
-            <Nav.Item>
-              <Nav.Link
-                className={
-                  type === E_QuickLinkTypes.RESOURCE
-                    ? 'text-white'
-                    : 'text-secondary'
-                }
-                active={type === E_QuickLinkTypes.RESOURCE}
-                href="#resources"
-              >
-                Ресурс
-              </Nav.Link>
-            </Nav.Item>
-            <Nav.Item>
-              <Nav.Link
-                className={
-                  type === E_QuickLinkTypes.DRAFT
-                    ? 'text-white'
-                    : 'text-secondary'
-                }
-                active={type === E_QuickLinkTypes.DRAFT}
-                href="#drafts"
-              >
-                Черновик
-              </Nav.Link>
-            </Nav.Item>
-          </Nav>
-        </Card.Header>
-        <Card.Body>
-          <Card.Text>{cardDescription[type].text}</Card.Text>
-          <ul className="list-unstyled cm-links-list ms-3">
-            {links.map((link, idx) => (
-              <li key={link.href}>
-                <ResourceLink
-                  to={link.href}
+      <ul className="nav nav-tabs">
+        <li className="nav-item">
+          <button
+            onClick={() => setType(E_QuickLinkTypes.NOTES)}
+            className={`nav-link ${
+              type === E_QuickLinkTypes.NOTES
+                ? 'active'
+                : 'text-secondary'
+            }`}
+            aria-current={
+              type === E_QuickLinkTypes.NOTES ? 'page' : undefined
+            }
+          >
+            Страницы
+          </button>
+        </li>
+        <li className="nav-item">
+          <button
+            onClick={() => setType(E_QuickLinkTypes.LINKS)}
+            className={`nav-link ${
+              type === E_QuickLinkTypes.LINKS
+                ? 'active'
+                : 'text-secondary'
+            }`}
+            aria-current={
+              type === E_QuickLinkTypes.LINKS ? 'page' : undefined
+            }
+          >
+            Ссылки
+          </button>
+        </li>
+        <li className="nav-item">
+          <button
+            onClick={() => setType(E_QuickLinkTypes.DRAFTS)}
+            className={`nav-link ${
+              type === E_QuickLinkTypes.DRAFTS
+                ? 'active'
+                : 'text-secondary'
+            }`}
+            aria-current={
+              type === E_QuickLinkTypes.DRAFTS ? 'page' : undefined
+            }
+          >
+            Черновики
+          </button>
+        </li>
+      </ul>
+      <div className="border border-top-0 h-100 py-3 px-4">
+        <p>{cardDescription[type].text}</p>
+        <ul className="list-unstyled">
+          {links.map((link, idx) => (
+            <li key={idx}>
+              {
+                <CustomLink
+                  href={link.href}
                   text={link.text}
-                  counter={idx}
                   date={link.wasActive}
+                  counter={idx + 1}
+                  external={type === E_QuickLinkTypes.LINKS}
                 />
-              </li>
-            ))}
-          </ul>
-        </Card.Body>
-      </Card>
+              }
+            </li>
+          ))}
+        </ul>
+      </div>
     </Screen>
   );
 }
