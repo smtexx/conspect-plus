@@ -102,10 +102,9 @@ export default function QuickLinks() {
               <li key={link.href}>
                 <ResourceLink
                   to={link.href}
-                  text={`${
-                    link.text
-                  } [${link.wasActive.toLocaleString()}]`}
+                  text={link.text}
                   counter={idx}
+                  date={link.wasActive}
                 />
               </li>
             ))}
