@@ -13,6 +13,10 @@
       .text {
         color: var(--bs-primary);
       }
+
+      .date {
+        color: var(--bs-primary);
+      }
     }
   }
 }
@@ -24,6 +28,12 @@
 }
 
 .text {
+  transition: color 0.15s ease-in-out;
+}
+
+.date {
+  padding-left: 1rem;
+  color: var(--bs-secondary);
   transition: color 0.15s ease-in-out;
 }
 
