@@ -1,7 +1,7 @@
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 import Footer from '../../../components/Footer/Footer';
 import NavBar from '../../../components/NavBar/NavBar';
-import { useEffect } from 'react';
 import { getFakeUsers } from '../../../fakeData/getFakeUsers';
 
 export default function Root() {
@@ -14,7 +14,7 @@ export default function Root() {
       users.findIndex((user) => user.isActive) !== -1 ? true : false;
 
     if (isLoggedIn && pathname === '/') {
-      navigate('/quicklinks#notes');
+      navigate('/quicklinks');
     } else if (!isLoggedIn && users.length !== 0) {
       navigate('/users');
     }
