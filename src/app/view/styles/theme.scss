@@ -1,9 +1,13 @@
-$btn-focus-width: 1px;
 $primary: #ffc107;
+$btn-focus-width: 1px;
 $enable-negative-margins: true;
 
 a:hover {
   color: $primary;
+}
+
+.nav-link.active:not(.dropdown) {
+  color: $primary !important;
 }
 
 @import '~bootstrap/scss/bootstrap';
