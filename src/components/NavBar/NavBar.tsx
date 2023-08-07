@@ -82,22 +82,36 @@ export default function NavBar() {
               <NavDropdown.Item as={'div'}>
                 <Link
                   className="nav-link p-0"
-                  to="/draft"
+                  to="/search"
                   onClick={() => setOpened(false)}
                 >
-                  Черновики
+                  Поиск
+                </Link>
+              </NavDropdown.Item>
+              <NavDropdown.Item as={'div'}>
+                <Link
+                  className="nav-link p-0"
+                  to="/help"
+                  onClick={() => setOpened(false)}
+                >
+                  Инструкция
                 </Link>
               </NavDropdown.Item>
             </NavDropdown>
             <div className="border-top border-2 my-3 my-lg-0"></div>
-            <Navbar.Text>
-              <p className="d-flex align-items-center mb-0 ms-lg-5 text-light">
-                <span className="d-flex fs-2 me-3">
+            <Nav.Link as="div">
+              <Link
+                to="/users"
+                className="d-flex align-items-center ms-lg-5 text-white text-decoration-none"
+                aria-label="Активный пользователь"
+                onClick={() => setOpened(false)}
+              >
+                <span className="d-flex fs-3 me-2">
                   <BiSolidUserCircle />
                 </span>{' '}
                 Роман
-              </p>
-            </Navbar.Text>
+              </Link>
+            </Nav.Link>
           </Nav>
         </Navbar.Collapse>
       </Container>
