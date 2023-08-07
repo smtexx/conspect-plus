@@ -3,8 +3,8 @@ import {
   createBrowserRouter,
   RouterProvider,
 } from 'react-router-dom';
-import Root from './view/routes/Root';
-import ErrorPage from './view/routes/ErrorPage';
+import Root from './Root';
+import ErrorPage from './ErrorPage';
 import QuickLinks from '../components/QuickLinks/QuickLinks';
 import Users from '../components/Users/Users';
 import Data from '../components/Data/Data';

@@ -1,8 +1,8 @@
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
-import Footer from '../../../components/Footer/Footer';
-import NavBar from '../../../components/NavBar/NavBar';
-import { getFakeUsers } from '../../../fakeData/getFakeUsers';
+import Footer from '../components/Footer/Footer';
+import NavBar from '../components/NavBar/NavBar';
+import { getFakeUsers } from '../fakeData/getFakeUsers';
 
 export default function Root() {
   const navigate = useNavigate();
