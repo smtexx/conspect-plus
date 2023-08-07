@@ -17,6 +17,7 @@ import Linksets from '../components/Linksets/Linksets';
 import Links from '../components/Links/Links';
 import Search from '../components/Search/Search';
 import Help from '../components/Help/Help';
+import Page404 from '../components/Page404/Page404';
 
 const router = createBrowserRouter([
   {
@@ -72,6 +73,7 @@ const router = createBrowserRouter([
         path: 'help',
         element: <Help />,
       },
+      { path: '*', element: <Page404 /> },
     ],
   },
 ]);
