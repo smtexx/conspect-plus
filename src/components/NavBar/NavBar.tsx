@@ -4,11 +4,12 @@ import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import Logo from '../Logo/Logo';
 import { BiSolidUserCircle } from 'react-icons/bi';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useState } from 'react';
 
 export default function NavBar() {
   const [opened, setOpened] = useState(false);
+  const { pathname } = useLocation();
 
   return (
     <Navbar
@@ -32,7 +33,9 @@ export default function NavBar() {
             <div className="border-top border-2 mb-3 "></div>
             <Nav.Link as="div">
               <Link
-                className="nav-link p-0"
+                className={`nav-link p-0${
+                  pathname === '/quicklinks' ? ' active' : ''
+                }`}
                 to="/"
                 onClick={() => setOpened(false)}
               >
@@ -41,7 +44,9 @@ export default function NavBar() {
             </Nav.Link>
             <Nav.Link as="div">
               <Link
-                className="nav-link p-0"
+                className={`nav-link p-0${
+                  pathname === '/users' ? ' active' : ''
+                }`}
                 to="/users"
                 onClick={() => setOpened(false)}
               >
@@ -50,7 +55,9 @@ export default function NavBar() {
             </Nav.Link>
             <Nav.Link as="div">
               <Link
-                className="nav-link p-0"
+                className={`nav-link p-0${
+                  pathname === '/data' ? ' active' : ''
+                }`}
                 to="/data"
                 onClick={() => setOpened(false)}
               >
@@ -63,7 +70,9 @@ export default function NavBar() {
             >
               <NavDropdown.Item as={'div'}>
                 <Link
-                  className="nav-link p-0"
+                  className={`nav-link p-0${
+                    pathname.startsWith('/conspect') ? ' active' : ''
+                  }`}
                   to="/conspect"
                   onClick={() => setOpened(false)}
                 >
@@ -72,7 +81,9 @@ export default function NavBar() {
               </NavDropdown.Item>
               <NavDropdown.Item as={'div'}>
                 <Link
-                  className="nav-link p-0"
+                  className={`nav-link p-0${
+                    pathname.startsWith('/linkset') ? ' active' : ''
+                  }`}
                   to="/linkset"
                   onClick={() => setOpened(false)}
                 >
@@ -81,7 +92,9 @@ export default function NavBar() {
               </NavDropdown.Item>
               <NavDropdown.Item as={'div'}>
                 <Link
-                  className="nav-link p-0"
+                  className={`nav-link p-0${
+                    pathname.startsWith('/search') ? ' active' : ''
+                  }`}
                   to="/search"
                   onClick={() => setOpened(false)}
                 >
@@ -90,7 +103,9 @@ export default function NavBar() {
               </NavDropdown.Item>
               <NavDropdown.Item as={'div'}>
                 <Link
-                  className="nav-link p-0"
+                  className={`nav-link p-0${
+                    pathname.startsWith('/help') ? ' active' : ''
+                  }`}
                   to="/help"
                   onClick={() => setOpened(false)}
                 >
