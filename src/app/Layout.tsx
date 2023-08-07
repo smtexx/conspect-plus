@@ -4,7 +4,7 @@ import Footer from '../components/Footer/Footer';
 import NavBar from '../components/NavBar/NavBar';
 import { getFakeUsers } from '../fakeData/getFakeUsers';
 
-export default function Root() {
+export default function Layout() {
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const { users } = getFakeUsers();
