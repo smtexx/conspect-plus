@@ -16,7 +16,7 @@ export default function Screen({
   return (
     <Card className="w-100 pb-5">
       <Card.Header
-        as="h3"
+        as="h1"
         className="fs-4 ps-4 d-flex align-items-center"
       >
         {title}

@@ -123,10 +123,8 @@ export default function Data() {
         <Accordion defaultActiveKey="0">
           {dataActions.map((action, idx) => (
             <Accordion.Item key={idx} eventKey={idx.toString()}>
-              <Accordion.Header>
-                <span className="text-white fw-weight-bold">
-                  {action.header}
-                </span>
+              <Accordion.Header as="h2">
+                <span className="h5 mb-0">{action.header}</span>
               </Accordion.Header>
               <Accordion.Body>
                 <p style={{ maxWidth: '40rem' }}>{action.text}</p>

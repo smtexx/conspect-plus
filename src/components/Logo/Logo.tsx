@@ -1,11 +1,14 @@
+import { Link } from 'react-router-dom';
 import s from './Logo.module.scss';
 
 export default function Logo() {
   return (
     <>
-      <header className={s.header}>
-        <h1 className={s.title}>Конспект</h1>
-      </header>
+      <div className={s.wrapper}>
+        <Link className={s.title} to="/">
+          Конспект
+        </Link>
+      </div>
       <main></main>
     </>
   );

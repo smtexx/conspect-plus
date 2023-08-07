@@ -40,7 +40,10 @@ export default function UserCard({
               )}
             </span>
           </Card.Title>
-          <Card.Subtitle className="mb-2 text-muted">
+          <Card.Subtitle
+            className="mb-2 text-muted"
+            title="Последняя активность"
+          >
             {saved.toLocaleString()}
           </Card.Subtitle>
           <Card.Text>{description}</Card.Text>

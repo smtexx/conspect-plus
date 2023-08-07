@@ -22,9 +22,9 @@ export default function Layout() {
 
   return (
     <div className="container min-vh-100 d-flex flex-column">
-      <div className="row mb-4">
+      <header className="row mb-4">
         <NavBar />
-      </div>
+      </header>
       <main className="row flex-grow-1 mb-4 ">
         <div className="col-12 d-flex">
           <Outlet />
