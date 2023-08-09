@@ -1,24 +1,23 @@
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
-import { useEffect } from 'react';
 import Footer from '../components/Footer/Footer';
 import NavBar from '../components/NavBar/NavBar';
-import { getFakeUsers } from '../fakeData/getFakeUsers';
+import { useSelector } from 'react-redux';
+import { useEffect } from 'react';
+import { selectActiveUser } from './controller/redux/users/usersSlice';
 
 export default function Layout() {
+  // Redirect to /users if not logged in
   const navigate = useNavigate();
   const { pathname } = useLocation();
-  const { users } = getFakeUsers();
+  const user = useSelector(selectActiveUser);
 
   useEffect(() => {
-    const isLoggedIn =
-      users.findIndex((user) => user.isActive) !== -1 ? true : false;
-
-    if (isLoggedIn && pathname === '/') {
+    if (user && pathname === '/') {
       navigate('/quicklinks');
-    } else if (!isLoggedIn && users.length !== 0) {
+    } else if (!user) {
       navigate('/users');
     }
-  }, [pathname, users, navigate]);
+  }, [pathname, user, navigate]);
 
   return (
     <div className="container min-vh-100 d-flex flex-column">
