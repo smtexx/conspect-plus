@@ -6,25 +6,28 @@ import UserCard from '../UserCard/UserCard';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   createUser,
+  selectActiveUser,
   selectUsers,
   setUserActive,
 } from '../../app/controller/redux/users/usersSlice';
 
 export default function Users() {
-  const [modalShown, setModalShown] = useState(false);
+  const [createModalShown, setCreateModalShown] = useState(false);
+  const [switchModalLogin, setSwitchModalLogin] = useState('');
   const [login, setLogin] = useState('');
   const [saveDisabled, setSaveDisabled] = useState(true);
   const users = useSelector(selectUsers);
+  const activeUser = useSelector(selectActiveUser);
   const dispatch = useDispatch();
 
-  function handleCloseModal() {
+  function handleCloseCreateModal() {
     setSaveDisabled(true);
     setLogin('');
-    setModalShown(false);
+    setCreateModalShown(false);
   }
   function handleSaveUser() {
     dispatch(createUser(login));
-    handleCloseModal();
+    handleCloseCreateModal();
   }
   function handleLoginChange(e: ChangeEvent<HTMLInputElement>) {
     const value = e.target.value
@@ -63,7 +66,11 @@ export default function Users() {
                 lastActivity={user.lastActivity}
                 notes={user.notes}
                 onClick={() => {
-                  dispatch(setUserActive(user.login));
+                  if (activeUser) {
+                    setSwitchModalLogin(user.login);
+                  } else {
+                    dispatch(setUserActive(user.login));
+                  }
                 }}
               />
             </div>
@@ -78,7 +85,7 @@ export default function Users() {
         <Button
           className="mt-2 ms-lg-3"
           variant="primary"
-          onClick={() => setModalShown(true)}
+          onClick={() => setCreateModalShown(true)}
         >
           Создать учетную запись
         </Button>
@@ -86,8 +93,8 @@ export default function Users() {
 
       <ConfirmModal
         title="Создание учетной записи"
-        open={modalShown}
-        onHide={handleCloseModal}
+        open={createModalShown}
+        onHide={handleCloseCreateModal}
         buttonText="Создать"
         buttonHandler={handleSaveUser}
         disabled={saveDisabled}
@@ -115,6 +122,25 @@ export default function Users() {
         <p id="loginHelpBlock" className="form-text">
           Имя пользователя должно состоять из букв, цифр, символов
           нижнего подчеркивания, иметь длинну 3-20 знаков.
+        </p>
+      </ConfirmModal>
+
+      <ConfirmModal
+        title="Сменить учетную запись"
+        open={switchModalLogin !== ''}
+        onHide={() => setSwitchModalLogin('')}
+        buttonText="Сменить"
+        disabled={false}
+        buttonHandler={() => {
+          dispatch(setUserActive(switchModalLogin));
+          setSwitchModalLogin('');
+        }}
+      >
+        <p>
+          Вы действительно хотите изменить учетную запись на "
+          {switchModalLogin}"? Все несохраненные данные текущей
+          учетной записи {`"${activeUser?.login}"`} будут утеряны.
+          Убедитесь что сохранили данные перед сменой пользователя.
         </p>
       </ConfirmModal>
     </>
