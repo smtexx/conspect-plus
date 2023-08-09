@@ -4,12 +4,16 @@ import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import Logo from '../Logo/Logo';
 import { BiSolidUserCircle } from 'react-icons/bi';
+import { BsIncognito } from 'react-icons/bs';
 import { Link, useLocation } from 'react-router-dom';
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { selectActiveUser } from '../../app/controller/redux/users/usersSlice';
 
 export default function NavBar() {
   const [opened, setOpened] = useState(false);
   const { pathname } = useLocation();
+  const user = useSelector(selectActiveUser);
 
   return (
     <Navbar
@@ -20,9 +24,7 @@ export default function NavBar() {
     >
       <Container>
         <Navbar.Brand as="div">
-          <Link to="/" className="text-decoration-none">
-            <Logo />
-          </Link>
+          <Logo />
         </Navbar.Brand>
         <Navbar.Toggle
           aria-controls="basic-navbar-nav"
@@ -121,10 +123,20 @@ export default function NavBar() {
                 aria-label="Активный пользователь"
                 onClick={() => setOpened(false)}
               >
-                <span className="d-flex fs-3 me-2">
-                  <BiSolidUserCircle />
-                </span>{' '}
-                Роман
+                {user ? (
+                  <>
+                    <span className="d-flex fs-3 me-2">
+                      {<BiSolidUserCircle />}
+                    </span>{' '}
+                    {user.login}
+                  </>
+                ) : (
+                  <>
+                    <span className="d-flex fs-3 me-2 text-secondary">
+                      {<BsIncognito />}
+                    </span>{' '}
+                  </>
+                )}
               </Link>
             </Nav.Link>
           </Nav>
