@@ -18,6 +18,8 @@ import Links from '../components/Links/Links';
 import Search from '../components/Search/Search';
 import Help from '../components/Help/Help';
 import Page404 from '../components/Page404/Page404';
+import { Provider } from 'react-redux';
+import { store } from './controller/redux/store';
 
 const router = createBrowserRouter([
   {
@@ -79,5 +81,9 @@ const router = createBrowserRouter([
 ]);
 
 export default function App() {
-  return <RouterProvider router={router} />;
+  return (
+    <Provider store={store}>
+      <RouterProvider router={router} />;
+    </Provider>
+  );
 }
