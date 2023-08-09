@@ -3,18 +3,20 @@ import { BsFillPersonCheckFill } from 'react-icons/bs';
 import { BiLogInCircle } from 'react-icons/bi';
 
 interface I_Props {
+  login: string;
   isActive: boolean;
-  title: string;
-  description: string;
-  saved: Date;
+  created: Date;
+  lastActivity: Date;
+  notes: number;
   onClick: () => void;
 }
 
 export default function UserCard({
+  login,
   isActive,
-  title,
-  description,
-  saved,
+  created,
+  lastActivity,
+  notes,
   onClick,
 }: I_Props) {
   return (
@@ -30,7 +32,7 @@ export default function UserCard({
         <Card.Body>
           <Card.Title className="d-flex align-items-center justify-content-between">
             <span className="overflow-hidden text-nowrap me-2">
-              {title}
+              {login}
             </span>
             <span className="d-flex signed-in">
               {isActive ? (
@@ -42,11 +44,26 @@ export default function UserCard({
           </Card.Title>
           <Card.Subtitle
             className="mb-2 text-muted"
-            title="Последняя активность"
+            title="Дата создания"
           >
-            {saved.toLocaleString()}
+            <span className="pe-2">Создан:</span>{' '}
+            {created.toLocaleDateString()}
           </Card.Subtitle>
-          <Card.Text>{description}</Card.Text>
+
+          <table>
+            <thead></thead>
+            <tbody>
+              <tr>
+                <td className="pe-2">Активен:</td>
+                <td>{created.toLocaleString()}</td>
+              </tr>
+              <tr>
+                <td>Записей:</td>
+                <td>{notes}</td>
+              </tr>
+            </tbody>
+            <tfoot></tfoot>
+          </table>
         </Card.Body>
       </Card>
     </button>

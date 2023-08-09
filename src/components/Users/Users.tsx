@@ -1,16 +1,21 @@
 import { Button, FloatingLabel, Form } from 'react-bootstrap';
-import { getFakeUsers } from '../../fakeData/getFakeUsers';
 import { ChangeEvent, useState } from 'react';
 import ConfirmModal from '../ConfirmModal/ConfirmModal';
 import Screen from '../Screen/Screen';
 import UserCard from '../UserCard/UserCard';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  createUser,
+  selectUsers,
+  setUserActive,
+} from '../../app/controller/redux/users/usersSlice';
 
 export default function Users() {
   const [modalShown, setModalShown] = useState(false);
   const [login, setLogin] = useState('');
   const [saveDisabled, setSaveDisabled] = useState(true);
-
-  const { users } = getFakeUsers();
+  const users = useSelector(selectUsers);
+  const dispatch = useDispatch();
 
   function handleCloseModal() {
     setSaveDisabled(true);
@@ -18,6 +23,7 @@ export default function Users() {
     setModalShown(false);
   }
   function handleSaveUser() {
+    dispatch(createUser(login));
     handleCloseModal();
   }
   function handleLoginChange(e: ChangeEvent<HTMLInputElement>) {
@@ -43,19 +49,22 @@ export default function Users() {
       <Screen title="Учетные записи">
         <h2 className="fs-5">Существующие учетные записи</h2>
         <p style={{ maxWidth: '40rem' }}>
-          Ниже представлен список учетных записей, сохраненных в
-          приложении. Вы можете использовать одну из них.
+          {users.length === 0
+            ? 'Учетных записей не найдено. Создайте новую учетную запись для работы с приложением.'
+            : 'Ниже представлен список учетных записей, сохраненных в приложении. Вы можете использовать одну из них.'}
         </p>
         <div className="row px-3 gy-4 mb-4 justify-content-start align-items-stretch">
           {users.map((user) => (
             <div key={user.login} className="col-auto">
               <UserCard
-                key={user.login}
-                title={user.login}
-                description={`Количество записей: ${user.notesQty}`}
-                saved={user.lastActivity}
+                login={user.login}
                 isActive={user.isActive}
-                onClick={() => {}}
+                created={user.created}
+                lastActivity={user.lastActivity}
+                notes={user.notes}
+                onClick={() => {
+                  dispatch(setUserActive(user.login));
+                }}
               />
             </div>
           ))}
