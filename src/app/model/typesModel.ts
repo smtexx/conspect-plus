@@ -114,41 +114,36 @@ export interface I_Linkset extends I_LinksetDraft {
 }
 
 // User data
-export interface I_FavoritePage {
+export interface I_ViewedPage {
   id: string;
   sectionID: string;
   conspectID: string;
   viewed: Date;
 }
 
-export interface I_FavoriteLink {
+export interface I_ViewedLink {
   text: string;
   href: string;
   viewed: Date;
+}
+
+export interface I_Viewed {
+  pages: I_ViewedPage[];
+  links: I_ViewedLink[];
 }
 
 export interface I_UserData {
   conspects: I_Conspect[];
   linksets: I_Linkset[];
   drafts: (I_PageDraft | I_LinksetDraft)[];
-}
-
-export interface I_Favorite {
-  pages: I_FavoritePage;
-  links: I_FavoriteLink;
-}
-
-export interface User {
-  login: string;
-  created: Date;
-  lastActivity: Date;
-  isActive: boolean;
-  data: I_UserData;
-  favorite: I_Favorite;
-}
-
-// App state
-export interface AppState {
-  users: User[];
+  viewed: I_Viewed;
   tip: string;
+}
+
+export interface I_User {
+  login: string;
+  created: string;
+  lastActivity: string;
+  isActive: boolean;
+  notes: number;
 }

@@ -5,8 +5,8 @@ import { BiLogInCircle } from 'react-icons/bi';
 interface I_Props {
   login: string;
   isActive: boolean;
-  created: Date;
-  lastActivity: Date;
+  created: string;
+  lastActivity: string;
   notes: number;
   onClick: () => void;
 }
@@ -47,7 +47,7 @@ export default function UserCard({
             title="Дата создания"
           >
             <span className="pe-2">Создан:</span>{' '}
-            {created.toLocaleDateString()}
+            {new Date(created).toLocaleDateString()}
           </Card.Subtitle>
 
           <table>
@@ -55,7 +55,7 @@ export default function UserCard({
             <tbody>
               <tr>
                 <td className="pe-2">Активен:</td>
-                <td>{created.toLocaleString()}</td>
+                <td>{new Date(lastActivity).toLocaleString()}</td>
               </tr>
               <tr>
                 <td>Записей:</td>

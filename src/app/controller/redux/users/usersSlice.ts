@@ -10,8 +10,8 @@ export const usersSlice = createSlice({
       state.push({
         login: action.payload,
         isActive: false,
-        created: new Date(),
-        lastActivity: new Date(),
+        created: new Date().toString(),
+        lastActivity: new Date().toString(),
         notes: 0,
       });
     },
