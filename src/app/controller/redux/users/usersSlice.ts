@@ -2,9 +2,11 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { RootState } from '../store';
 import { I_User } from '../../../model/typesModel';
 
+const initialState: I_User[] = [];
+
 export const usersSlice = createSlice({
   name: 'users',
-  initialState: [] as I_User[],
+  initialState,
   reducers: {
     createUser: (state, action: PayloadAction<string>) => {
       state.push({
@@ -24,10 +26,17 @@ export const usersSlice = createSlice({
         user.isActive = true;
       }
     },
+    updateUserActivity: (state) => {
+      const activeUser = state.find((user) => user.isActive);
+      if (activeUser) {
+        activeUser.lastActivity = new Date().toString();
+      }
+    },
   },
 });
 
-export const { createUser, setUserActive } = usersSlice.actions;
+export const { createUser, setUserActive, updateUserActivity } =
+  usersSlice.actions;
 export const { reducer: usersReducer } = usersSlice;
 
 // Selectors
