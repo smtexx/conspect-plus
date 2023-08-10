@@ -15,7 +15,7 @@ interface I_Props {
   titleFieldConfig: I_FieldConfig;
   descriptionFieldConfig?: I_FieldConfig;
   buttonText: string;
-  buttonHandler: () => void;
+  buttonHandler: (title: string, description: string) => void;
 }
 
 export default function EditBlockFormPart({
@@ -123,7 +123,7 @@ export default function EditBlockFormPart({
         <Button
           variant="primary"
           disabled={disabled}
-          onClick={buttonHandler}
+          onClick={() => buttonHandler(titleField, descriptionField)}
         >
           {buttonText}
         </Button>

@@ -1,12 +1,19 @@
 import { useState } from 'react';
 import Screen from '../Screen/Screen';
-import { fakeConspects } from '../../fakeData/getFakeConspects';
 import DataCard from '../DataCard/DataCard';
 import CustomSideMenu from '../CustomSideMenu/CustomSideMenu';
 import EditBlockFormPart from '../EditBlockFormPart/EditBlockFormPart';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  createConspect,
+  selectConspects,
+} from '../../app/controller/redux/data/dataSlice';
+import { updateUserActivity } from '../../app/controller/redux/users/usersSlice';
 
 export default function Conspects() {
   const [menuIsOpen, setMenuIsOpen] = useState(false);
+  const conspects = useSelector(selectConspects);
+  const dispatch = useDispatch();
 
   function handleMenuOpen() {
     setMenuIsOpen(true);
@@ -15,12 +22,22 @@ export default function Conspects() {
     setMenuIsOpen(false);
   }
 
-  const { conspects } = fakeConspects;
+  function handleCreateConspect(title: string, description: string) {
+    dispatch(updateUserActivity());
+    dispatch(createConspect({ title, description }));
+    setMenuIsOpen(false);
+  }
 
   return (
     <>
       <Screen title="Мои конспекты" optionsHandler={handleMenuOpen}>
         <div className="row gy-4 justify-content-start align-items-stretch">
+          {conspects.length === 0 && (
+            <p style={{ maxWidth: '40rem' }}>
+              Конспекты отсутствуют. Создайте новый конспект используя
+              меню опций в правой части заголовка окна.
+            </p>
+          )}
           {conspects.map(({ id, title, description, saved }) => (
             <div className="col-auto" key={id}>
               <DataCard
@@ -41,18 +58,15 @@ export default function Conspects() {
           titleFieldConfig={{
             placeholder: 'Название конспекта',
             minLength: 3,
-            maxLength: 20,
+            maxLength: 25,
           }}
           descriptionFieldConfig={{
             placeholder: 'Описание конспекта',
-            minLength: 3,
-            maxLength: 40,
+            minLength: 20,
+            maxLength: 60,
           }}
           buttonText="Создать"
-          buttonHandler={() => {
-            console.log('Конспект создан!');
-            setMenuIsOpen(false);
-          }}
+          buttonHandler={handleCreateConspect}
         />
       </CustomSideMenu>
     </>
