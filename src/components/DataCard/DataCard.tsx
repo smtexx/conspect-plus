@@ -5,7 +5,7 @@ interface I_Props {
   id: string;
   title: string;
   description: string;
-  saved: Date;
+  saved: string;
 }
 
 export default function DataCard({
@@ -18,11 +18,9 @@ export default function DataCard({
     <Link className="cm-card-link d-block" to={id}>
       <Card style={{ width: '20rem' }}>
         <Card.Body>
-          <Card.Title style={{ height: '2.5em', overflow: 'hidden' }}>
-            {title}
-          </Card.Title>
+          <Card.Title className="mb-4">{title}</Card.Title>
           <Card.Subtitle className="mb-2 text-muted">
-            {saved.toLocaleString()}
+            Изменен: {new Date(saved).toLocaleString()}
           </Card.Subtitle>
           <Card.Text style={{ height: '4.25em', overflow: 'hidden' }}>
             {description}

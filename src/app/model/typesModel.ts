@@ -69,8 +69,8 @@ export type T_Token =
 export interface I_Entity {
   id: string;
   title: string;
-  created: Date;
-  saved: Date;
+  created: string;
+  saved: string;
 }
 
 // Sections
