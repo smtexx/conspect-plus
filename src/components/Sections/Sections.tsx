@@ -93,7 +93,7 @@ export default function Sections() {
           titleFieldConfig={{
             placeholder: 'Название раздела',
             minLength: 3,
-            maxLength: 20,
+            maxLength: 25,
           }}
           buttonText="Создать"
           buttonHandler={handleCreateSection}
