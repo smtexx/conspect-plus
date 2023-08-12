@@ -27,7 +27,7 @@ export default function Linksets() {
                 id={id}
                 title={title}
                 description={description}
-                saved={saved}
+                saved={saved.toString()}
               />
             </div>
           ))}
