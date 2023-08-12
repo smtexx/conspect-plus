@@ -5,13 +5,18 @@ import EditBlockFormPart from '../EditBlockFormPart/EditBlockFormPart';
 import ProcessDataFormPart from '../ProcessDataFormPart/ProcessDataFormPart';
 import CustomLink from '../CustomLink/CustomLink';
 import { useParams } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { selectConspect } from '../../app/controller/redux/data/dataSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  createSection,
+  selectConspect,
+} from '../../app/controller/redux/data/dataSlice';
 import Page404 from '../Page404/Page404';
+import { updateUserActivity } from '../../app/controller/redux/users/usersSlice';
 
 export default function Sections() {
   const [optionsIsOpen, setOptionsIsOpen] = useState(false);
   const { conspectID } = useParams();
+  const dispatch = useDispatch();
   const conspect = useSelector((state) =>
     selectConspect(state, conspectID as string)
   );
@@ -21,6 +26,14 @@ export default function Sections() {
   }
   function handleOptionsClose() {
     setOptionsIsOpen(false);
+  }
+
+  function handleCreateSection(title: string) {
+    if (conspect !== undefined) {
+      dispatch(updateUserActivity());
+      dispatch(createSection({ conspectID: conspect.id, title }));
+      handleOptionsClose();
+    }
   }
 
   return conspect !== undefined ? (
@@ -62,9 +75,7 @@ export default function Sections() {
             maxLength: 20,
           }}
           buttonText="Создать"
-          buttonHandler={() => {
-            console.log('Раздел создан!');
-          }}
+          buttonHandler={handleCreateSection}
         />
 
         <EditBlockFormPart
