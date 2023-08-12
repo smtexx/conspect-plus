@@ -25,6 +25,7 @@ export const dataSlice = createSlice({
     clearData: (state) => {
       state = initialState;
     },
+
     createConspect: (
       state,
       action: PayloadAction<{ title: string; description: string }>
@@ -40,10 +41,30 @@ export const dataSlice = createSlice({
 
       state.conspects.push(newConspect);
     },
+
+    createSection: (
+      state,
+      action: PayloadAction<{ conspectID: string; title: string }>
+    ) => {
+      const conspect = state.conspects.find(
+        (c) => c.id === action.payload.conspectID
+      );
+
+      if (conspect !== undefined) {
+        conspect.sections.push({
+          id: createID(),
+          title: action.payload.title,
+          created: new Date().toString(),
+          saved: new Date().toString(),
+          pages: [],
+        });
+      }
+    },
   },
 });
 
-export const { clearData, createConspect } = dataSlice.actions;
+export const { clearData, createConspect, createSection } =
+  dataSlice.actions;
 export const { reducer: dataReducer } = dataSlice;
 
 // Selectors
