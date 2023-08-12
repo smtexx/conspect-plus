@@ -1,4 +1,3 @@
-import { fakeConspects } from '../../fakeData/getFakeConspects';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 import CustomSideMenu from '../CustomSideMenu/CustomSideMenu';
 import { useState } from 'react';
@@ -6,9 +5,26 @@ import Screen from '../Screen/Screen';
 import ProcessDataFormPart from '../ProcessDataFormPart/ProcessDataFormPart';
 import EditBlockFormPart from '../EditBlockFormPart/EditBlockFormPart';
 import CustomLink from '../CustomLink/CustomLink';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectConspect } from '../../app/controller/redux/data/dataSlice';
+import Page404 from '../Page404/Page404';
 
 export default function Pages() {
   const [optionsIsOpen, setOptionsIsOpen] = useState(false);
+  const { conspectID, sectionID } = useParams();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const conspect = useSelector((state) =>
+    selectConspect(state, conspectID as string)
+  );
+  const section =
+    conspect && conspect.sections.find((s) => s.id === sectionID);
+
+  // Route checking
+  if (conspect === undefined || section === undefined) {
+    return <Page404 />;
+  }
 
   function handleOptionsOpen() {
     setOptionsIsOpen(true);
@@ -17,12 +33,6 @@ export default function Pages() {
     setOptionsIsOpen(false);
   }
 
-  const section = fakeConspects.conspects[2].sections[1];
-  const { conspectID, sectionID } = {
-    conspectID: 'conspectID',
-    sectionID: 'sectionID',
-  };
-
   return (
     <>
       <Screen
@@ -30,17 +40,24 @@ export default function Pages() {
         optionsHandler={handleOptionsOpen}
       >
         <Breadcrumbs />
-        <ul className="list-unstyled cm-links-list">
-          {section.pages.map((page, idx) => (
-            <li key={page.id}>
-              <CustomLink
-                href={`/conspect/${conspectID}/${sectionID}/${page.id}`}
-                text={page.title}
-                counter={idx + 1}
-              />
-            </li>
-          ))}
-        </ul>
+        {section.pages.length === 0 ? (
+          <p style={{ maxWidth: '40rem' }}>
+            Страницы отсутствуют. Создайте новую страницу конспекта
+            используя меню опций в правой части заголовка окна.
+          </p>
+        ) : (
+          <ul className="list-unstyled cm-links-list">
+            {section.pages.map((page, idx) => (
+              <li key={page.id}>
+                <CustomLink
+                  href={`/conspect/${conspectID}/${sectionID}/${page.id}`}
+                  text={page.title}
+                  counter={idx + 1}
+                />
+              </li>
+            ))}
+          </ul>
+        )}
       </Screen>
 
       <CustomSideMenu
