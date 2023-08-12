@@ -32,22 +32,23 @@ export default function Conspects() {
     <>
       <Screen title="Мои конспекты" optionsHandler={handleMenuOpen}>
         <div className="row gy-4 justify-content-start align-items-stretch">
-          {conspects.length === 0 && (
+          {conspects.length === 0 ? (
             <p style={{ maxWidth: '40rem' }}>
               Конспекты отсутствуют. Создайте новый конспект используя
               меню опций в правой части заголовка окна.
             </p>
+          ) : (
+            conspects.map(({ id, title, description, saved }) => (
+              <div className="col-auto" key={id}>
+                <DataCard
+                  id={id}
+                  title={title}
+                  description={description}
+                  saved={saved}
+                />
+              </div>
+            ))
           )}
-          {conspects.map(({ id, title, description, saved }) => (
-            <div className="col-auto" key={id}>
-              <DataCard
-                id={id}
-                title={title}
-                description={description}
-                saved={saved}
-              />
-            </div>
-          ))}
         </div>
       </Screen>
 
