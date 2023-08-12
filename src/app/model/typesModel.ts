@@ -147,3 +147,8 @@ export interface I_User {
   isActive: boolean;
   notes: number;
 }
+
+export interface I_RoutePath {
+  text: string;
+  path: string;
+}
