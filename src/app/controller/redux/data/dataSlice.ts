@@ -78,6 +78,15 @@ export const dataSlice = createSlice({
         conspect.description = action.payload.description;
       }
     },
+
+    deleteConspect: (
+      state,
+      action: PayloadAction<{ conspectID: string }>
+    ) => {
+      state.conspects = state.conspects.filter(
+        (c) => c.id !== action.payload.conspectID
+      );
+    },
   },
 });
 
@@ -86,6 +95,7 @@ export const {
   createConspect,
   createSection,
   editConspect,
+  deleteConspect,
 } = dataSlice.actions;
 export const { reducer: dataReducer } = dataSlice;
 
