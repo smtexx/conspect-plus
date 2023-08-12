@@ -1,14 +1,20 @@
-import { fakeConspects } from '../../fakeData/getFakeConspects';
 import { useState } from 'react';
 import Screen from '../Screen/Screen';
 import CustomSideMenu from '../CustomSideMenu/CustomSideMenu';
-import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 import EditBlockFormPart from '../EditBlockFormPart/EditBlockFormPart';
 import ProcessDataFormPart from '../ProcessDataFormPart/ProcessDataFormPart';
 import CustomLink from '../CustomLink/CustomLink';
+import { useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { selectConspect } from '../../app/controller/redux/data/dataSlice';
+import Page404 from '../Page404/Page404';
 
 export default function Sections() {
   const [optionsIsOpen, setOptionsIsOpen] = useState(false);
+  const { conspectID } = useParams();
+  const conspect = useSelector((state) =>
+    selectConspect(state, conspectID as string)
+  );
 
   function handleOptionsOpen() {
     setOptionsIsOpen(true);
@@ -17,25 +23,30 @@ export default function Sections() {
     setOptionsIsOpen(false);
   }
 
-  const conspect = fakeConspects.conspects[2];
-  return (
+  return conspect !== undefined ? (
     <>
       <Screen
         title={conspect.title}
         optionsHandler={handleOptionsOpen}
       >
-        <Breadcrumbs />
-        <ul className="list-unstyled cm-links-list">
-          {conspect.sections.map((section, idx) => (
-            <li key={section.id}>
-              <CustomLink
-                href={`/conspect/${conspect.id}/${section.id}`}
-                text={section.title}
-                counter={idx + 1}
-              />
-            </li>
-          ))}
-        </ul>
+        {conspect.sections.length === 0 ? (
+          <p style={{ maxWidth: '40rem' }}>
+            Разделы отсутствуют. Создайте новый раздел конспекта
+            используя меню опций в правой части заголовка окна.
+          </p>
+        ) : (
+          <ul className="list-unstyled cm-links-list">
+            {conspect.sections.map((section, idx) => (
+              <li key={section.id}>
+                <CustomLink
+                  href={`/conspect/${conspect.id}/${section.id}`}
+                  text={section.title}
+                  counter={idx + 1}
+                />
+              </li>
+            ))}
+          </ul>
+        )}
       </Screen>
 
       <CustomSideMenu
@@ -85,5 +96,7 @@ export default function Sections() {
         />
       </CustomSideMenu>
     </>
+  ) : (
+    <Page404 />
   );
 }
