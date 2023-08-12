@@ -49,7 +49,7 @@ function getRoutePaths(
       (c) => c.id === conspectID
     );
     if (conspect === undefined) return ids;
-    const conspectLink = `/${conspectID}`;
+    const conspectLink = `/conspect/${conspectID}`;
     ids.push({ path: conspectLink, text: conspect.title });
 
     const sectionID = params[routeVars.conspect[1]];
