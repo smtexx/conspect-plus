@@ -4,10 +4,11 @@ import CustomSideMenu from '../CustomSideMenu/CustomSideMenu';
 import EditBlockFormPart from '../EditBlockFormPart/EditBlockFormPart';
 import ProcessDataFormPart from '../ProcessDataFormPart/ProcessDataFormPart';
 import CustomLink from '../CustomLink/CustomLink';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   createSection,
+  deleteConspect,
   editConspect,
   selectConspect,
 } from '../../app/controller/redux/data/dataSlice';
@@ -17,6 +18,7 @@ import { updateUserActivity } from '../../app/controller/redux/users/usersSlice'
 export default function Sections() {
   const [optionsIsOpen, setOptionsIsOpen] = useState(false);
   const { conspectID } = useParams();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const conspect = useSelector((state) =>
     selectConspect(state, conspectID as string)
@@ -44,6 +46,14 @@ export default function Sections() {
         editConspect({ conspectID: conspect.id, title, description })
       );
       handleOptionsClose();
+    }
+  }
+
+  function handleDeleteConspect() {
+    if (conspect !== undefined) {
+      navigate('/conspect');
+      dispatch(updateUserActivity());
+      dispatch(deleteConspect({ conspectID: conspect.id }));
     }
   }
 
@@ -100,7 +110,7 @@ export default function Sections() {
           descriptionFieldConfig={{
             placeholder: 'Описание конспекта',
             minLength: 20,
-            maxLength: 65,
+            maxLength: 60,
           }}
           buttonText="Сохранить"
           buttonHandler={handleEditConspect}
@@ -112,7 +122,7 @@ export default function Sections() {
           buttonText="Удалить"
           confirmTitle="Удаление конспекта"
           confirmText="Вы действительно уверены что хотите удалить текущий конспект без возможности восстановления?"
-          processHandler={() => console.log('Конспект удален!')}
+          processHandler={handleDeleteConspect}
         />
       </CustomSideMenu>
     </>
