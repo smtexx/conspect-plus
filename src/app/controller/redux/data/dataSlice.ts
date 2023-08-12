@@ -1,4 +1,8 @@
-import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import {
+  PayloadAction,
+  createSelector,
+  createSlice,
+} from '@reduxjs/toolkit';
 import { I_Conspect, I_UserData } from '../../../model/typesModel';
 import { createID } from '../../utils';
 import { RootState } from '../store';
@@ -45,3 +49,13 @@ export const { reducer: dataReducer } = dataSlice;
 // Selectors
 export const selectConspects = (state: RootState) =>
   state.data.conspects;
+
+export const selectConspect = createSelector(
+  [
+    (state: RootState) => state.data.conspects,
+    (state, conspectID: string) => conspectID,
+  ],
+  (conspects, conspectID) => {
+    return conspects.find((c) => c.id === conspectID);
+  }
+);
