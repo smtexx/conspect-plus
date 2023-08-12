@@ -8,6 +8,7 @@ import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   createSection,
+  editConspect,
   selectConspect,
 } from '../../app/controller/redux/data/dataSlice';
 import Page404 from '../Page404/Page404';
@@ -32,6 +33,16 @@ export default function Sections() {
     if (conspect !== undefined) {
       dispatch(updateUserActivity());
       dispatch(createSection({ conspectID: conspect.id, title }));
+      handleOptionsClose();
+    }
+  }
+
+  function handleEditConspect(title: string, description: string) {
+    if (conspect !== undefined) {
+      dispatch(updateUserActivity());
+      dispatch(
+        editConspect({ conspectID: conspect.id, title, description })
+      );
       handleOptionsClose();
     }
   }
@@ -84,17 +95,15 @@ export default function Sections() {
           titleFieldConfig={{
             placeholder: 'Название конспекта',
             minLength: 3,
-            maxLength: 20,
+            maxLength: 25,
           }}
           descriptionFieldConfig={{
             placeholder: 'Описание конспекта',
-            minLength: 3,
-            maxLength: 40,
+            minLength: 20,
+            maxLength: 65,
           }}
           buttonText="Сохранить"
-          buttonHandler={() => {
-            console.log('Конспект изменен!');
-          }}
+          buttonHandler={handleEditConspect}
         />
 
         <ProcessDataFormPart
