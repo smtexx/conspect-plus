@@ -60,11 +60,33 @@ export const dataSlice = createSlice({
         });
       }
     },
+
+    editConspect: (
+      state,
+      action: PayloadAction<{
+        conspectID: string;
+        title: string;
+        description: string;
+      }>
+    ) => {
+      const conspect = state.conspects.find(
+        (c) => c.id === action.payload.conspectID
+      );
+
+      if (conspect !== undefined) {
+        conspect.title = action.payload.title;
+        conspect.description = action.payload.description;
+      }
+    },
   },
 });
 
-export const { clearData, createConspect, createSection } =
-  dataSlice.actions;
+export const {
+  clearData,
+  createConspect,
+  createSection,
+  editConspect,
+} = dataSlice.actions;
 export const { reducer: dataReducer } = dataSlice;
 
 // Selectors
