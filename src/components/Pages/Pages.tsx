@@ -9,6 +9,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   createPageDraft,
+  editSection,
   selectConspect,
 } from '../../app/controller/redux/data/dataSlice';
 import Page404 from '../Page404/Page404';
@@ -17,7 +18,9 @@ import { updateUserActivity } from '../../app/controller/redux/users/usersSlice'
 
 export default function Pages() {
   const [optionsIsOpen, setOptionsIsOpen] = useState(false);
-  const { conspectID, sectionID } = useParams();
+  const params = useParams();
+  const conspectID = params.conspectID as string;
+  const sectionID = params.sectionID as string;
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -51,6 +54,12 @@ export default function Pages() {
       })
     );
     navigate(`/edit/${pageID}`);
+  };
+
+  const handleEditSection = (title: string) => {
+    dispatch(updateUserActivity());
+    dispatch(editSection({ conspectID, sectionID, title }));
+    handleOptionsClose();
   };
 
   return (
@@ -99,10 +108,10 @@ export default function Pages() {
           titleFieldConfig={{
             placeholder: 'Название раздела',
             minLength: 3,
-            maxLength: 20,
+            maxLength: 25,
           }}
-          buttonText="Создать"
-          buttonHandler={() => console.log('Раздел изменен!')}
+          buttonText="Сохранить"
+          buttonHandler={handleEditSection}
         />
         <ProcessDataFormPart
           title="Удалить раздел"
