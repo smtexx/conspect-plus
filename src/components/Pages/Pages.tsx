@@ -9,6 +9,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   createPageDraft,
+  deleteSection,
   editSection,
   selectConspect,
 } from '../../app/controller/redux/data/dataSlice';
@@ -60,6 +61,12 @@ export default function Pages() {
     dispatch(updateUserActivity());
     dispatch(editSection({ conspectID, sectionID, title }));
     handleOptionsClose();
+  };
+
+  const handleDeleteSection = () => {
+    navigate(`/conspect/${conspectID}`);
+    dispatch(updateUserActivity());
+    dispatch(deleteSection({ conspectID, sectionID }));
   };
 
   return (
@@ -119,7 +126,7 @@ export default function Pages() {
           buttonText="Удалить"
           confirmTitle="Удаление раздела"
           confirmText="Вы действительно уверены что хотите удалить текущий раздел без возможности восстановления?"
-          processHandler={() => console.log('Раздел удален!')}
+          processHandler={handleDeleteSection}
         />
       </CustomSideMenu>
     </>
