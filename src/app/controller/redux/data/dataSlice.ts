@@ -6,10 +6,13 @@ import {
 import {
   E_PageType,
   I_Conspect,
+  I_Page,
+  I_PageDraft,
   I_UserData,
 } from '../../../model/typesModel';
 import { createID } from '../../utils';
 import { RootState } from '../store';
+import { parse } from '../../parser';
 
 const initialState: I_UserData = {
   conspects: [],
@@ -146,6 +149,24 @@ export const dataSlice = createSlice({
         );
       }
     },
+
+    createPage: (state, action: PayloadAction<I_PageDraft>) => {
+      const conspect = state.conspects.find(
+        (c) => c.id === action.payload.conspectID
+      );
+      if (conspect !== undefined) {
+        const section = conspect.sections.find(
+          (s) => s.id === action.payload.sectionID
+        );
+        if (section) {
+          const newPage: I_Page = {
+            ...action.payload,
+            tokens: parse(action.payload.markup),
+          };
+          section.pages.push(newPage);
+        }
+      }
+    },
   },
 });
 
@@ -158,6 +179,7 @@ export const {
   createPageDraft,
   editSection,
   deleteSection,
+  createPage,
 } = dataSlice.actions;
 export const { reducer: dataReducer } = dataSlice;
 
