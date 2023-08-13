@@ -63,6 +63,7 @@ export type T_Token =
   | I_HeaderToken
   | I_TextToken
   | I_ListToken
+  | I_LinkToken
   | I_CodeToken;
 
 // Data entities
