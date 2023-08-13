@@ -8,7 +8,7 @@ import {
   I_PreparsedToken,
   I_TextToken,
   T_Token,
-} from '../model/types';
+} from '../model/typesModel';
 
 export function escapeUnsupportedChars(markup: string): string {
   return markup
