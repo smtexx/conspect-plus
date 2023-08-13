@@ -1,4 +1,3 @@
-import { fakeConspects } from '../../fakeData/getFakeConspects';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 import CustomSideMenu from '../CustomSideMenu/CustomSideMenu';
 import Screen from '../Screen/Screen';
@@ -7,9 +6,26 @@ import { useState } from 'react';
 import TipScreen from '../TipScreen/TipScreen';
 import PageInfo from '../PageInfo/PageInfo';
 import ProcessDataFormPart from '../ProcessDataFormPart/ProcessDataFormPart';
+import { useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { selectConspects } from '../../app/controller/redux/data/dataSlice';
+import Page404 from '../Page404/Page404';
 
 export default function Note() {
   const [optionsIsOpen, setOptionsIsOpen] = useState(false);
+  const params = useParams();
+  const conspectID = params.conspectID as string;
+  const sectionID = params.sectionID as string;
+  const pageID = params.pageID as string;
+  const conspects = useSelector(selectConspects);
+
+  const conspect = conspects.find((c) => c.id === conspectID);
+  const section = conspect?.sections.find((s) => s.id === sectionID);
+  const page = section?.pages.find((p) => p.id === pageID);
+
+  if (page === undefined) {
+    return <Page404 />;
+  }
 
   function handleOptionsOpen() {
     setOptionsIsOpen(true);
@@ -18,8 +34,6 @@ export default function Note() {
     setOptionsIsOpen(false);
   }
 
-  const page = fakeConspects.conspects[1].sections[1].pages[0];
-
   return (
     <>
       <Screen title={page.title} optionsHandler={handleOptionsOpen}>
@@ -27,8 +41,8 @@ export default function Note() {
         <PageInfo
           tables={[
             [
-              ['Создано: ', page.created.toLocaleString()],
-              ['Изменено: ', page.saved.toLocaleString()],
+              ['Создано: ', new Date(page.created).toLocaleString()],
+              ['Изменено: ', new Date(page.saved).toLocaleString()],
             ],
           ]}
         />

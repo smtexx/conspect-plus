@@ -1,13 +1,17 @@
 import { Fragment } from 'react';
 import { E_TokenType, T_Token } from '../../app/model/types';
+import { useDispatch } from 'react-redux';
+import { changeTip } from '../../app/controller/redux/data/dataSlice';
 
 interface I_Props {
   token: T_Token;
 }
 
 export default function Token({ token }: I_Props) {
+  const dispatch = useDispatch();
+
   function handleTipClick(html: string) {
-    console.log(html);
+    dispatch(changeTip({ html }));
   }
 
   switch (token.type) {

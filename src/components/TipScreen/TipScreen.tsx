@@ -1,8 +1,23 @@
 import { useEffect, useState } from 'react';
 import { Alert } from 'react-bootstrap';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  changeTip,
+  selectTip,
+} from '../../app/controller/redux/data/dataSlice';
 
 export default function TipScreen() {
   const [isShown, setIsShown] = useState(true);
+  const tip = useSelector(selectTip);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(
+      changeTip({
+        html: 'Нажмите на символ "?" внутри фрагмента с кодом, чтобы вывести справочную информацию.',
+      })
+    );
+  }, [dispatch]);
 
   function handlePageScroll() {
     const scrollHeight = Math.max(
@@ -31,14 +46,6 @@ export default function TipScreen() {
       window.removeEventListener('scroll', handlePageScroll);
     };
   }, []);
-
-  const tip = `
-    А тут параграф с разными видами текстового содержимого. 
-    Например текст выделенный <strong class="cm-marker-bold">Жирный текст</strong>, 
-    или текст написаный <em class="cm-marker-italic">курсивом</em>, 
-    ну и конечно <mark class="cm-marker-marked">маркированный текст</mark>. 
-    Как то так. А вот и текстовая ссылка <a class="cm-marker-link" target="_blank" 
-    rel="noopener noreferrer" href="https://ya.ru">Яндекс</a>`.trim();
 
   return (
     <div
