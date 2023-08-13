@@ -4,10 +4,15 @@ import { ChangeEvent, useRef, useState, useEffect } from 'react';
 import { E_Marker, E_TokenType } from '../../app/model/types';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import PageInfo from '../PageInfo/PageInfo';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../app/controller/redux/store';
 import Page404 from '../Page404/Page404';
 import { E_PageType } from '../../app/model/typesModel';
+import { updateUserActivity } from '../../app/controller/redux/users/usersSlice';
+import {
+  createPage,
+  deletePageDraft,
+} from '../../app/controller/redux/data/dataSlice';
 
 interface I_MenuButton {
   symbol: E_TokenType | E_Marker;
@@ -32,6 +37,7 @@ export default function Editor() {
   const [saveDisabled, setSaveDisabled] = useState(true);
   const markupRef = useRef<HTMLTextAreaElement>(null);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   // Extract data
   const draftID = useParams().draftID as string;
@@ -185,7 +191,21 @@ export default function Editor() {
   };
 
   const handleSavePage = () => {
-    navigate('/conspect/conspectID/sectionID/pageID');
+    dispatch(updateUserActivity());
+    if (draft.type === E_PageType.PAGE) {
+      dispatch(
+        createPage({
+          ...draft,
+          title,
+          markup,
+          saved: new Date().toString(),
+        })
+      );
+      navigate(
+        `/conspect/${draft.conspectID}/${draft.sectionID}/${draft.id}`
+      );
+    }
+    dispatch(deletePageDraft({ draftID: draftID }));
   };
 
   const checkNewPage = () => {
