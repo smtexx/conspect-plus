@@ -132,6 +132,20 @@ export const dataSlice = createSlice({
         }
       }
     },
+
+    deleteSection: (
+      state,
+      action: PayloadAction<{ conspectID: string; sectionID: string }>
+    ) => {
+      const conspect = state.conspects.find(
+        (c) => c.id === action.payload.conspectID
+      );
+      if (conspect !== undefined) {
+        conspect.sections = conspect.sections.filter(
+          (s) => s.id !== action.payload.sectionID
+        );
+      }
+    },
   },
 });
 
@@ -143,6 +157,7 @@ export const {
   deleteConspect,
   createPageDraft,
   editSection,
+  deleteSection,
 } = dataSlice.actions;
 export const { reducer: dataReducer } = dataSlice;
 
