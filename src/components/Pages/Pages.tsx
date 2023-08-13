@@ -7,14 +7,21 @@ import EditBlockFormPart from '../EditBlockFormPart/EditBlockFormPart';
 import CustomLink from '../CustomLink/CustomLink';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectConspect } from '../../app/controller/redux/data/dataSlice';
+import {
+  createPageDraft,
+  selectConspect,
+} from '../../app/controller/redux/data/dataSlice';
 import Page404 from '../Page404/Page404';
+import { createID } from '../../app/controller/utils';
+import { updateUserActivity } from '../../app/controller/redux/users/usersSlice';
 
 export default function Pages() {
   const [optionsIsOpen, setOptionsIsOpen] = useState(false);
   const { conspectID, sectionID } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  // Extract data
   const conspect = useSelector((state) =>
     selectConspect(state, conspectID as string)
   );
@@ -26,12 +33,25 @@ export default function Pages() {
     return <Page404 />;
   }
 
-  function handleOptionsOpen() {
+  const handleOptionsOpen = () => {
     setOptionsIsOpen(true);
-  }
-  function handleOptionsClose() {
+  };
+  const handleOptionsClose = () => {
     setOptionsIsOpen(false);
-  }
+  };
+
+  const handleCreatePage = () => {
+    const pageID = createID();
+    dispatch(updateUserActivity());
+    dispatch(
+      createPageDraft({
+        pageID,
+        conspectID: conspect.id,
+        sectionID: section.id,
+      })
+    );
+    navigate(`/edit/${pageID}`);
+  };
 
   return (
     <>
@@ -70,7 +90,7 @@ export default function Pages() {
           buttonText="Создать"
           confirmTitle="Создать страницу"
           confirmText="Вы действительно хотите создать новую страницу в текущем разделе конспекта?"
-          processHandler={() => console.log('Страница создана!')}
+          processHandler={handleCreatePage}
         />
 
         <EditBlockFormPart
