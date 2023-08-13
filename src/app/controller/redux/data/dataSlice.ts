@@ -49,25 +49,6 @@ export const dataSlice = createSlice({
       state.conspects.push(newConspect);
     },
 
-    createSection: (
-      state,
-      action: PayloadAction<{ conspectID: string; title: string }>
-    ) => {
-      const conspect = state.conspects.find(
-        (c) => c.id === action.payload.conspectID
-      );
-
-      if (conspect !== undefined) {
-        conspect.sections.push({
-          id: createID(),
-          title: action.payload.title,
-          created: new Date().toString(),
-          saved: new Date().toString(),
-          pages: [],
-        });
-      }
-    },
-
     editConspect: (
       state,
       action: PayloadAction<{
@@ -95,24 +76,23 @@ export const dataSlice = createSlice({
       );
     },
 
-    createPageDraft: (
+    createSection: (
       state,
-      action: PayloadAction<{
-        pageID: string;
-        conspectID: string;
-        sectionID: string;
-      }>
+      action: PayloadAction<{ conspectID: string; title: string }>
     ) => {
-      state.drafts.push({
-        conspectID: action.payload.conspectID,
-        sectionID: action.payload.sectionID,
-        id: action.payload.pageID,
-        title: '',
-        created: new Date().toString(),
-        saved: new Date().toString(),
-        markup: '',
-        type: E_PageType.PAGE,
-      });
+      const conspect = state.conspects.find(
+        (c) => c.id === action.payload.conspectID
+      );
+
+      if (conspect !== undefined) {
+        conspect.sections.push({
+          id: createID(),
+          title: action.payload.title,
+          created: new Date().toString(),
+          saved: new Date().toString(),
+          pages: [],
+        });
+      }
     },
 
     editSection: (
@@ -150,6 +130,35 @@ export const dataSlice = createSlice({
       }
     },
 
+    createPageDraft: (
+      state,
+      action: PayloadAction<{
+        pageID: string;
+        conspectID: string;
+        sectionID: string;
+      }>
+    ) => {
+      state.drafts.push({
+        conspectID: action.payload.conspectID,
+        sectionID: action.payload.sectionID,
+        id: action.payload.pageID,
+        title: '',
+        created: new Date().toString(),
+        saved: new Date().toString(),
+        markup: '',
+        type: E_PageType.PAGE,
+      });
+    },
+
+    deletePageDraft: (
+      state,
+      action: PayloadAction<{ draftID: string }>
+    ) => {
+      state.drafts = state.drafts.filter(
+        (d) => d.id !== action.payload.draftID
+      );
+    },
+
     createPage: (state, action: PayloadAction<I_PageDraft>) => {
       const conspect = state.conspects.find(
         (c) => c.id === action.payload.conspectID
@@ -173,12 +182,13 @@ export const dataSlice = createSlice({
 export const {
   clearData,
   createConspect,
-  createSection,
   editConspect,
   deleteConspect,
-  createPageDraft,
+  createSection,
   editSection,
   deleteSection,
+  createPageDraft,
+  deletePageDraft,
   createPage,
 } = dataSlice.actions;
 export const { reducer: dataReducer } = dataSlice;
