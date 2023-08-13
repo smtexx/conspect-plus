@@ -176,6 +176,10 @@ export const dataSlice = createSlice({
         }
       }
     },
+
+    changeTip: (state, action: PayloadAction<{ html: string }>) => {
+      state.tip = action.payload.html;
+    },
   },
 });
 
@@ -190,6 +194,7 @@ export const {
   createPageDraft,
   deletePageDraft,
   createPage,
+  changeTip,
 } = dataSlice.actions;
 export const { reducer: dataReducer } = dataSlice;
 
@@ -206,3 +211,5 @@ export const selectConspect = createSelector(
     return conspects.find((c) => c.id === conspectID);
   }
 );
+
+export const selectTip = (state: RootState) => state.data.tip;
