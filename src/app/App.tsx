@@ -56,7 +56,7 @@ const router = createBrowserRouter([
         element: <Note />,
       },
       {
-        path: 'edit',
+        path: 'edit/:draftID',
         element: <Editor />,
       },
       {
