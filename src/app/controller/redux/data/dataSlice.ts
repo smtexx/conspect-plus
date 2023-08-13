@@ -111,6 +111,27 @@ export const dataSlice = createSlice({
         type: E_PageType.PAGE,
       });
     },
+
+    editSection: (
+      state,
+      action: PayloadAction<{
+        conspectID: string;
+        sectionID: string;
+        title: string;
+      }>
+    ) => {
+      const conspect = state.conspects.find(
+        (c) => c.id === action.payload.conspectID
+      );
+      if (conspect !== undefined) {
+        const section = conspect.sections.find(
+          (s) => s.id === action.payload.sectionID
+        );
+        if (section !== undefined) {
+          section.title = action.payload.title;
+        }
+      }
+    },
   },
 });
 
@@ -121,6 +142,7 @@ export const {
   editConspect,
   deleteConspect,
   createPageDraft,
+  editSection,
 } = dataSlice.actions;
 export const { reducer: dataReducer } = dataSlice;
 
