@@ -3,7 +3,11 @@ import {
   createSelector,
   createSlice,
 } from '@reduxjs/toolkit';
-import { I_Conspect, I_UserData } from '../../../model/typesModel';
+import {
+  E_PageType,
+  I_Conspect,
+  I_UserData,
+} from '../../../model/typesModel';
 import { createID } from '../../utils';
 import { RootState } from '../store';
 
@@ -87,6 +91,26 @@ export const dataSlice = createSlice({
         (c) => c.id !== action.payload.conspectID
       );
     },
+
+    createPageDraft: (
+      state,
+      action: PayloadAction<{
+        pageID: string;
+        conspectID: string;
+        sectionID: string;
+      }>
+    ) => {
+      state.drafts.push({
+        conspectID: action.payload.conspectID,
+        sectionID: action.payload.sectionID,
+        id: action.payload.pageID,
+        title: '',
+        created: new Date().toString(),
+        saved: new Date().toString(),
+        markup: '',
+        type: E_PageType.PAGE,
+      });
+    },
   },
 });
 
@@ -96,6 +120,7 @@ export const {
   createSection,
   editConspect,
   deleteConspect,
+  createPageDraft,
 } = dataSlice.actions;
 export const { reducer: dataReducer } = dataSlice;
 
