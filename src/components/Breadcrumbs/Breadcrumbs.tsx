@@ -1,16 +1,43 @@
-import { Link, Params, useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { MdOutlineKeyboardDoubleArrowRight } from 'react-icons/md';
 import s from './Breadcrumbs.module.scss';
-import { I_RoutePath, I_UserData } from '../../app/model/typesModel';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../app/controller/redux/store';
+import { I_RoutePath } from '../../app/model/typesModel';
 
-export default function Breadcrumbs() {
-  const userData = useSelector((state: RootState) => state.data);
-  const params = useParams();
-  const routes = getRoutePaths(params, userData);
+interface I_Props {
+  titles: string[];
+}
 
-  return routes.length === 0 ? null : (
+export default function Breadcrumbs({ titles }: I_Props) {
+  const { conspectID, sectionID, pageID, linksetID } = useParams();
+  const routes: I_RoutePath[] = [];
+
+  if (conspectID !== undefined) {
+    routes.push(
+      { path: '/conspect', text: 'Мои конспекты' },
+      { path: `/conspect/${conspectID}`, text: titles[0] }
+    );
+
+    if (sectionID !== undefined) {
+      routes.push({
+        path: `${routes[1].path}/${sectionID}`,
+        text: titles[1],
+      });
+
+      if (pageID !== undefined) {
+        routes.push({
+          path: `${routes[2].path}/${pageID}`,
+          text: titles[2],
+        });
+      }
+    }
+  } else if (linksetID !== undefined) {
+    routes.push(
+      { path: '/linkset', text: 'Мои ссылки' },
+      { path: `/linkset/${linksetID}`, text: titles[0] }
+    );
+  }
+
+  return (
     <nav aria-label="breadcrumb" className="border-bottom mb-2">
       <ol className={s.list}>
         {routes.map((route, idx) => (
@@ -32,45 +59,4 @@ export default function Breadcrumbs() {
       </ol>
     </nav>
   );
-}
-
-function getRoutePaths(
-  params: Readonly<Params<string>>,
-  userData: I_UserData
-): I_RoutePath[] {
-  const ids: I_RoutePath[] = [];
-  const routeVars = {
-    conspect: ['conspectID', 'sectionID', 'pageID'],
-  };
-
-  const conspectID = params[routeVars.conspect[0]];
-  if (conspectID) {
-    const conspect = userData.conspects.find(
-      (c) => c.id === conspectID
-    );
-    if (conspect === undefined) return ids;
-    const conspectLink = `/conspect/${conspectID}`;
-    ids.push({ path: conspectLink, text: conspect.title });
-
-    const sectionID = params[routeVars.conspect[1]];
-    if (sectionID) {
-      const section = conspect.sections.find(
-        (s) => s.id === sectionID
-      );
-      if (section === undefined) return ids;
-      const sectionLink = `${conspectLink}/${sectionID}`;
-      ids.push({ path: sectionLink, text: section.title });
-
-      const pageID = params[routeVars.conspect[2]];
-      if (pageID) {
-        const page = section.pages.find((p) => p.id === pageID);
-        if (page === undefined) return ids;
-        const pageLink = `${sectionLink}/${pageID}`;
-        ids.push({ path: pageLink, text: page.title });
-        return ids;
-      }
-    }
-  }
-
-  return ids;
 }
