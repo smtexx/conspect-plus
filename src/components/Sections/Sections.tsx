@@ -10,59 +10,58 @@ import {
   createSection,
   deleteConspect,
   editConspect,
-  selectConspect,
+  selectConspects,
 } from '../../app/controller/redux/data/dataSlice';
 import Page404 from '../Page404/Page404';
 import { updateUserActivity } from '../../app/controller/redux/users/usersSlice';
+import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 
 export default function Sections() {
   const [optionsIsOpen, setOptionsIsOpen] = useState(false);
-  const { conspectID } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const conspect = useSelector((state) =>
-    selectConspect(state, conspectID as string)
-  );
+  const conspectID = useParams().conspectID as string;
+  const conspects = useSelector(selectConspects);
+  const conspect = conspects.find((c) => c.id === conspectID);
 
-  function handleOptionsOpen() {
+  if (conspect === undefined) {
+    return <Page404 />;
+  }
+
+  const handleOptionsOpen = () => {
     setOptionsIsOpen(true);
-  }
-  function handleOptionsClose() {
+  };
+  const handleOptionsClose = () => {
     setOptionsIsOpen(false);
-  }
+  };
 
-  function handleCreateSection(title: string) {
-    if (conspect !== undefined) {
-      dispatch(updateUserActivity());
-      dispatch(createSection({ conspectID: conspect.id, title }));
-      handleOptionsClose();
-    }
-  }
+  const handleCreateSection = (title: string) => {
+    dispatch(updateUserActivity());
+    dispatch(createSection({ conspectID: conspect.id, title }));
+    handleOptionsClose();
+  };
 
-  function handleEditConspect(title: string, description: string) {
-    if (conspect !== undefined) {
-      dispatch(updateUserActivity());
-      dispatch(
-        editConspect({ conspectID: conspect.id, title, description })
-      );
-      handleOptionsClose();
-    }
-  }
+  const handleEditConspect = (title: string, description: string) => {
+    dispatch(updateUserActivity());
+    dispatch(
+      editConspect({ conspectID: conspect.id, title, description })
+    );
+    handleOptionsClose();
+  };
 
-  function handleDeleteConspect() {
-    if (conspect !== undefined) {
-      navigate('/conspect');
-      dispatch(updateUserActivity());
-      dispatch(deleteConspect({ conspectID: conspect.id }));
-    }
-  }
+  const handleDeleteConspect = () => {
+    navigate('/conspect');
+    dispatch(updateUserActivity());
+    dispatch(deleteConspect({ conspectID: conspect.id }));
+  };
 
-  return conspect !== undefined ? (
+  return (
     <>
       <Screen
         title={conspect.title}
         optionsHandler={handleOptionsOpen}
       >
+        <Breadcrumbs titles={[conspect.title]} />
         {conspect.sections.length === 0 ? (
           <p style={{ maxWidth: '40rem' }}>
             Разделы отсутствуют. Создайте новый раздел конспекта
@@ -126,7 +125,5 @@ export default function Sections() {
         />
       </CustomSideMenu>
     </>
-  ) : (
-    <Page404 />
   );
 }

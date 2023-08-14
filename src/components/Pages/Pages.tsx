@@ -11,7 +11,7 @@ import {
   createPageDraft,
   deleteSection,
   editSection,
-  selectConspect,
+  selectConspects,
 } from '../../app/controller/redux/data/dataSlice';
 import Page404 from '../Page404/Page404';
 import { createID } from '../../app/controller/utils';
@@ -19,18 +19,16 @@ import { updateUserActivity } from '../../app/controller/redux/users/usersSlice'
 
 export default function Pages() {
   const [optionsIsOpen, setOptionsIsOpen] = useState(false);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const params = useParams();
   const conspectID = params.conspectID as string;
   const sectionID = params.sectionID as string;
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
 
   // Extract data
-  const conspect = useSelector((state) =>
-    selectConspect(state, conspectID as string)
-  );
-  const section =
-    conspect && conspect.sections.find((s) => s.id === sectionID);
+  const conspects = useSelector(selectConspects);
+  const conspect = conspects.find((c) => c.id === conspectID);
+  const section = conspect?.sections.find((s) => s.id === sectionID);
 
   // Route checking
   if (conspect === undefined || section === undefined) {
@@ -75,7 +73,7 @@ export default function Pages() {
         title={section.title}
         optionsHandler={handleOptionsOpen}
       >
-        <Breadcrumbs />
+        <Breadcrumbs titles={[conspect.title, section.title]} />
         {section.pages.length === 0 ? (
           <p style={{ maxWidth: '40rem' }}>
             Страницы отсутствуют. Создайте новую страницу конспекта

@@ -23,7 +23,11 @@ export default function Note() {
   const section = conspect?.sections.find((s) => s.id === sectionID);
   const page = section?.pages.find((p) => p.id === pageID);
 
-  if (page === undefined) {
+  if (
+    conspect === undefined ||
+    section === undefined ||
+    page === undefined
+  ) {
     return <Page404 />;
   }
 
@@ -37,7 +41,9 @@ export default function Note() {
   return (
     <>
       <Screen title={page.title} optionsHandler={handleOptionsOpen}>
-        <Breadcrumbs />
+        <Breadcrumbs
+          titles={[conspect.title, section.title, page.title]}
+        />
         <PageInfo
           tables={[
             [
