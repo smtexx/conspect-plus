@@ -33,6 +33,10 @@ export const dataSlice = createSlice({
       state = initialState;
     },
 
+    loadData: (state, action: PayloadAction<I_UserData>) => {
+      state = action.payload;
+    },
+
     createConspect: (
       state,
       action: PayloadAction<{ title: string; description: string }>
@@ -195,6 +199,7 @@ export const {
   deletePageDraft,
   createPage,
   changeTip,
+  loadData,
 } = dataSlice.actions;
 export const { reducer: dataReducer } = dataSlice;
 
