@@ -8,6 +8,9 @@ export const usersSlice = createSlice({
   name: 'users',
   initialState,
   reducers: {
+    loadUsers: (state, action: PayloadAction<I_User[]>) => {
+      state = action.payload;
+    },
     createUser: (state, action: PayloadAction<string>) => {
       state.push({
         login: action.payload,
@@ -35,8 +38,12 @@ export const usersSlice = createSlice({
   },
 });
 
-export const { createUser, setUserActive, updateUserActivity } =
-  usersSlice.actions;
+export const {
+  createUser,
+  setUserActive,
+  updateUserActivity,
+  loadUsers,
+} = usersSlice.actions;
 export const { reducer: usersReducer } = usersSlice;
 
 // Selectors
