@@ -4,6 +4,9 @@ import { ChangeEvent } from 'react';
 import MessageModal from '../MessageModal/MessageModal';
 import ConfirmModal from '../ConfirmModal/ConfirmModal';
 import Screen from '../Screen/Screen';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../app/controller/redux/store';
+import { setUserData } from '../../app/controller/localstorage';
 
 interface I_DataCard {
   header: string;
@@ -43,6 +46,8 @@ export default function Data() {
   const [importModalOpen, setImportModalOpen] = useState(false);
   const [fileAccepted, setFileAccepted] = useState(false);
 
+  const state = useSelector((state: RootState) => state);
+
   function openMessageModal(type: E_MessageTypes) {
     setMessageType(type);
     setMessageModalOpen(true);
@@ -80,7 +85,13 @@ export default function Data() {
       запуске приложения, нажмите на кнопку ниже.`,
       buttonText: 'Сохранить',
       buttonHandler: () => {
-        openMessageModal(E_MessageTypes.SAVE_OK);
+        try {
+          setUserData(state);
+          openMessageModal(E_MessageTypes.SAVE_OK);
+        } catch (error) {
+          openMessageModal(E_MessageTypes.ERROR);
+          console.error(error);
+        }
       },
     },
     {
