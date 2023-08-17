@@ -15,7 +15,6 @@ import {
 } from '../../app/controller/redux/data/dataSlice';
 import Page404 from '../Page404/Page404';
 import { createID } from '../../app/controller/utils';
-import { updateUserActivity } from '../../app/controller/redux/users/usersSlice';
 
 export default function Pages() {
   const [optionsIsOpen, setOptionsIsOpen] = useState(false);
@@ -44,7 +43,6 @@ export default function Pages() {
 
   const handleCreatePage = () => {
     const pageID = createID();
-    dispatch(updateUserActivity());
     dispatch(
       createPageDraft({
         pageID,
@@ -56,14 +54,12 @@ export default function Pages() {
   };
 
   const handleEditSection = (title: string) => {
-    dispatch(updateUserActivity());
     dispatch(editSection({ conspectID, sectionID, title }));
     handleOptionsClose();
   };
 
   const handleDeleteSection = () => {
     navigate(`/conspect/${conspectID}`);
-    dispatch(updateUserActivity());
     dispatch(deleteSection({ conspectID, sectionID }));
   };
 

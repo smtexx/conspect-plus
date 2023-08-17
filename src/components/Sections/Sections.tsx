@@ -13,7 +13,6 @@ import {
   selectConspects,
 } from '../../app/controller/redux/data/dataSlice';
 import Page404 from '../Page404/Page404';
-import { updateUserActivity } from '../../app/controller/redux/users/usersSlice';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 
 export default function Sections() {
@@ -36,13 +35,11 @@ export default function Sections() {
   };
 
   const handleCreateSection = (title: string) => {
-    dispatch(updateUserActivity());
     dispatch(createSection({ conspectID: conspect.id, title }));
     handleOptionsClose();
   };
 
   const handleEditConspect = (title: string, description: string) => {
-    dispatch(updateUserActivity());
     dispatch(
       editConspect({ conspectID: conspect.id, title, description })
     );
@@ -51,7 +48,6 @@ export default function Sections() {
 
   const handleDeleteConspect = () => {
     navigate('/conspect');
-    dispatch(updateUserActivity());
     dispatch(deleteConspect({ conspectID: conspect.id }));
   };
 

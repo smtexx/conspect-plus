@@ -8,7 +8,6 @@ import {
   createConspect,
   selectConspects,
 } from '../../app/controller/redux/data/dataSlice';
-import { updateUserActivity } from '../../app/controller/redux/users/usersSlice';
 
 export default function Conspects() {
   const [menuIsOpen, setMenuIsOpen] = useState(false);
@@ -23,7 +22,6 @@ export default function Conspects() {
   }
 
   function handleCreateConspect(title: string, description: string) {
-    dispatch(updateUserActivity());
     dispatch(createConspect({ title, description }));
     setMenuIsOpen(false);
   }

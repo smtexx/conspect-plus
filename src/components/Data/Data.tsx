@@ -4,9 +4,14 @@ import { ChangeEvent } from 'react';
 import MessageModal from '../MessageModal/MessageModal';
 import ConfirmModal from '../ConfirmModal/ConfirmModal';
 import Screen from '../Screen/Screen';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../app/controller/redux/store';
 import { setUserData } from '../../app/controller/localstorage';
+import { I_UserData } from '../../app/model/typesModel';
+import {
+  setNotesQty,
+  updateUserActivity,
+} from '../../app/controller/redux/users/usersSlice';
 
 interface I_DataCard {
   header: string;
@@ -45,8 +50,9 @@ export default function Data() {
   const [messageModalOpen, setMessageModalOpen] = useState(false);
   const [importModalOpen, setImportModalOpen] = useState(false);
   const [fileAccepted, setFileAccepted] = useState(false);
-
-  const state = useSelector((state: RootState) => state);
+  const users = useSelector((state: RootState) => state.users);
+  const userData = useSelector((state: RootState) => state.data);
+  const dispatch = useDispatch();
 
   function openMessageModal(type: E_MessageTypes) {
     setMessageType(type);
@@ -76,6 +82,51 @@ export default function Data() {
     openMessageModal(E_MessageTypes.IMPORT_OK);
   }
 
+  function handleSaveData() {
+    // Prepare userData
+    const compressedUserData = JSON.parse(
+      JSON.stringify(userData)
+    ) as I_UserData;
+    let notesCounter = 0;
+
+    // Compress data, delete all tokens
+    compressedUserData.conspects.forEach((c) => {
+      c.sections.forEach((s) => {
+        s.pages.forEach((p) => {
+          p.tokens = [];
+          notesCounter++;
+        });
+      });
+    });
+    compressedUserData.linksets.forEach((l) => {
+      l.tokens = [];
+      notesCounter++;
+    });
+    compressedUserData.tip = '';
+
+    // Prepare user
+    const lastActivity = new Date().toString();
+    const activeUser = users.find((u) => u.isActive);
+    if (activeUser) {
+      const activeUserCopy = { ...activeUser };
+      activeUserCopy.lastActivity = lastActivity;
+      activeUserCopy.notes = notesCounter;
+
+      try {
+        // Save data
+        setUserData(activeUserCopy, compressedUserData);
+
+        // Update state
+        dispatch(setNotesQty(notesCounter));
+        dispatch(updateUserActivity(lastActivity));
+        openMessageModal(E_MessageTypes.SAVE_OK);
+      } catch (error) {
+        openMessageModal(E_MessageTypes.ERROR);
+        console.error(error);
+      }
+    }
+  }
+
   const dataActions: I_DataCard[] = [
     {
       header: 'Сохранить изменения',
@@ -84,15 +135,7 @@ export default function Data() {
       или закрытии браузера. Для того чтобы они были доступны при следующем
       запуске приложения, нажмите на кнопку ниже.`,
       buttonText: 'Сохранить',
-      buttonHandler: () => {
-        try {
-          setUserData(state);
-          openMessageModal(E_MessageTypes.SAVE_OK);
-        } catch (error) {
-          openMessageModal(E_MessageTypes.ERROR);
-          console.error(error);
-        }
-      },
+      buttonHandler: handleSaveData,
     },
     {
       header: 'Экспортировать данные',

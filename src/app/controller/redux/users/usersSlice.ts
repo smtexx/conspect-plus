@@ -9,7 +9,8 @@ export const usersSlice = createSlice({
   initialState,
   reducers: {
     loadUsers: (state, action: PayloadAction<I_User[]>) => {
-      state = action.payload;
+      state.length = 0;
+      state.push(...action.payload);
     },
     createUser: (state, action: PayloadAction<string>) => {
       state.push({
@@ -20,7 +21,10 @@ export const usersSlice = createSlice({
         notes: 0,
       });
     },
-    setUserActive: (state, action: PayloadAction<string>) => {
+    setActiveUser: (
+      state,
+      action: PayloadAction<I_User['login']>
+    ) => {
       const user = state.find(
         (user) => user.login === action.payload
       );
@@ -29,10 +33,16 @@ export const usersSlice = createSlice({
         user.isActive = true;
       }
     },
-    updateUserActivity: (state) => {
+    updateUserActivity: (state, action: PayloadAction<string>) => {
       const activeUser = state.find((user) => user.isActive);
       if (activeUser) {
-        activeUser.lastActivity = new Date().toString();
+        activeUser.lastActivity = action.payload;
+      }
+    },
+    setNotesQty: (state, action: PayloadAction<number>) => {
+      const activeUser = state.find((user) => user.isActive);
+      if (activeUser) {
+        activeUser.notes = action.payload;
       }
     },
   },
@@ -40,9 +50,10 @@ export const usersSlice = createSlice({
 
 export const {
   createUser,
-  setUserActive,
+  setActiveUser,
   updateUserActivity,
   loadUsers,
+  setNotesQty,
 } = usersSlice.actions;
 export const { reducer: usersReducer } = usersSlice;
 

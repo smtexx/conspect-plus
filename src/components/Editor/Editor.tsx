@@ -8,7 +8,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../app/controller/redux/store';
 import Page404 from '../Page404/Page404';
 import { E_PageType } from '../../app/model/typesModel';
-import { updateUserActivity } from '../../app/controller/redux/users/usersSlice';
 import {
   createPage,
   deletePageDraft,
@@ -191,7 +190,6 @@ export default function Editor() {
   };
 
   const handleSavePage = () => {
-    dispatch(updateUserActivity());
     if (draft.type === E_PageType.PAGE) {
       dispatch(
         createPage({

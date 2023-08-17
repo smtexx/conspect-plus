@@ -8,17 +8,23 @@ import {
   createUser,
   selectActiveUser,
   selectUsers,
-  setUserActive,
+  setActiveUser,
 } from '../../app/controller/redux/users/usersSlice';
+import { I_User } from '../../app/model/typesModel';
+import { getUserData } from '../../app/controller/localstorage';
+import {
+  clearData,
+  loadData,
+} from '../../app/controller/redux/data/dataSlice';
 
 export default function Users() {
+  const dispatch = useDispatch();
   const [createModalShown, setCreateModalShown] = useState(false);
   const [switchModalLogin, setSwitchModalLogin] = useState('');
   const [login, setLogin] = useState('');
   const [saveDisabled, setSaveDisabled] = useState(true);
   const users = useSelector(selectUsers);
   const activeUser = useSelector(selectActiveUser);
-  const dispatch = useDispatch();
 
   function handleCloseCreateModal() {
     setSaveDisabled(true);
@@ -29,7 +35,7 @@ export default function Users() {
     dispatch(createUser(login));
     handleCloseCreateModal();
   }
-  function handleLoginChange(e: ChangeEvent<HTMLInputElement>) {
+  function handleChangeLogin(e: ChangeEvent<HTMLInputElement>) {
     const value = e.target.value
       .trim()
       .replace(/[^a-zа-я0-9_]/gi, '');
@@ -45,6 +51,22 @@ export default function Users() {
     }
 
     setLogin(value);
+  }
+  function handleChangeUser(login: I_User['login']) {
+    dispatch(setActiveUser(login));
+
+    let userData;
+    try {
+      userData = getUserData(login);
+    } catch (error) {
+      console.error(error);
+    }
+
+    if (userData) {
+      dispatch(loadData(userData));
+    } else {
+      dispatch(clearData());
+    }
   }
 
   return (
@@ -69,7 +91,7 @@ export default function Users() {
                   if (activeUser) {
                     setSwitchModalLogin(user.login);
                   } else {
-                    dispatch(setUserActive(user.login));
+                    handleChangeUser(user.login);
                   }
                 }}
               />
@@ -115,7 +137,7 @@ export default function Users() {
             type="text"
             placeholder="Имя пользователя"
             value={login}
-            onChange={handleLoginChange}
+            onChange={handleChangeLogin}
             aria-labelledby="loginHelpBlock"
           />
         </FloatingLabel>
@@ -132,7 +154,7 @@ export default function Users() {
         buttonText="Сменить"
         disabled={false}
         buttonHandler={() => {
-          dispatch(setUserActive(switchModalLogin));
+          handleChangeUser(switchModalLogin);
           setSwitchModalLogin('');
         }}
       >

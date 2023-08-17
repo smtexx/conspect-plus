@@ -5,7 +5,6 @@ import {
   I_UserData,
 } from '../model/typesModel';
 import { parse } from './parser';
-import { RootState } from './redux/store';
 
 const namespace = 'conspect_plus_';
 const dataNamespace = `${namespace}data_`;
@@ -54,55 +53,26 @@ export function getUserData(login: string): I_UserData | null {
   return null;
 }
 
-export function setUserData(state: RootState) {
-  const activeUser = {
-    ...state.users.find((u) => u.isActive),
-  } as I_User;
-
-  if (activeUser === undefined) {
-    throw new Error(
-      'Unable to save user data, active user not found'
-    );
-  }
-
+export function setUserData(user: I_User, userData: I_UserData) {
   if (localStorage) {
-    // Update users
-    const USER_DATA_KEY = `${dataNamespace}${activeUser.login}`;
-    const users = getUsers();
-    activeUser.lastActivity = new Date().toString();
-    users.forEach((u) => (u.isActive = false));
+    const USER_DATA_KEY = `${dataNamespace}${user.login}`;
 
-    const userIndex = users.findIndex(
-      (u) => u.login === activeUser.login
+    // Update users array
+    const savedUsers = getUsers();
+    savedUsers.forEach((u) => (u.isActive = false));
+    const userIndex = savedUsers.findIndex(
+      (u) => u.login === user.login
     );
     if (userIndex !== -1) {
       // User present in localstorage
-      users.splice(userIndex, 1, activeUser);
+      savedUsers.splice(userIndex, 1, user);
     } else {
       // It is new user
-      users.push(activeUser);
+      savedUsers.push(user);
     }
 
-    const userData = JSON.parse(
-      JSON.stringify(state.data)
-    ) as I_UserData;
-
-    // Compress data, delete all tokens
-    userData.conspects.forEach((c) => {
-      c.sections.forEach((s) => {
-        s.pages.forEach((p) => {
-          p.tokens = [];
-          activeUser.notes++;
-        });
-      });
-    });
-    userData.linksets.forEach((l) => {
-      l.tokens = [];
-      activeUser.notes++;
-    });
-
     // Stringify and save data
-    localStorage.setItem(USERS_KEY, JSON.stringify(users));
+    localStorage.setItem(USERS_KEY, JSON.stringify(savedUsers));
     localStorage.setItem(USER_DATA_KEY, JSON.stringify(userData));
   } else {
     throw new Error('Unable to save user data to localstorage');

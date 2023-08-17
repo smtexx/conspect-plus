@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 import CustomSideMenu from '../CustomSideMenu/CustomSideMenu';
 import Screen from '../Screen/Screen';
 import PageInfo from '../PageInfo/PageInfo';
@@ -25,7 +24,6 @@ export default function Links() {
         title={linkset.title}
         optionsHandler={handleOptionsOpen}
       >
-        <Breadcrumbs />
         <PageInfo
           tables={[
             [
