@@ -30,11 +30,11 @@ export const dataSlice = createSlice({
   initialState,
   reducers: {
     clearData: (state) => {
-      state = initialState;
+      Object.assign(state, initialState);
     },
 
     loadData: (state, action: PayloadAction<I_UserData>) => {
-      state = action.payload;
+      Object.assign(state, action.payload);
     },
 
     createConspect: (
