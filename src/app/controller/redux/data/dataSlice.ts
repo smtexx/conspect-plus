@@ -6,6 +6,7 @@ import {
 import {
   E_PageType,
   I_Conspect,
+  I_LinksetDraft,
   I_Page,
   I_PageDraft,
   I_UserData,
@@ -184,6 +185,39 @@ export const dataSlice = createSlice({
     changeTip: (state, action: PayloadAction<{ html: string }>) => {
       state.tip = action.payload.html;
     },
+
+    addDraft: (
+      state,
+      action: PayloadAction<I_PageDraft | I_LinksetDraft>
+    ) => {
+      const draftIndex = state.drafts.findIndex(
+        (d) => d.id === action.payload.id
+      );
+      if (draftIndex === -1) {
+        state.drafts.push(action.payload);
+      } else {
+        state.drafts.splice(draftIndex, 1, action.payload);
+      }
+    },
+
+    deletePage: (
+      state,
+      action: PayloadAction<{
+        conspectID: string;
+        sectionID: string;
+        pageID: string;
+      }>
+    ) => {
+      const sections = state.conspects
+        .find((c) => c.id === action.payload.conspectID)
+        ?.sections.find((s) => s.id === action.payload.sectionID);
+
+      if (sections) {
+        sections.pages = sections.pages.filter(
+          (p) => p.id !== action.payload.pageID
+        );
+      }
+    },
   },
 });
 
@@ -200,6 +234,8 @@ export const {
   createPage,
   changeTip,
   loadData,
+  addDraft,
+  deletePage,
 } = dataSlice.actions;
 export const { reducer: dataReducer } = dataSlice;
 
