@@ -1,7 +1,12 @@
 import { useState } from 'react';
-import { getFakeRecentLinks } from '../../fakeData/getFakeRecentLinks';
 import Screen from '../Screen/Screen';
 import CustomLink from '../CustomLink/CustomLink';
+import { useSelector } from 'react-redux';
+import {
+  selectDrafts,
+  selectRecent,
+} from '../../app/controller/redux/data/dataSlice';
+import { I_RecentLink } from '../../app/model/typesModel';
 
 export enum E_QuickLinkTypes {
   NOTES = 'notes',
@@ -25,7 +30,18 @@ const cardDescription: {
 
 export default function QuickLinks() {
   const [type, setType] = useState(E_QuickLinkTypes.NOTES);
-  const { links } = getFakeRecentLinks(type);
+  const recentLinks = useSelector(selectRecent);
+  const drafts = useSelector(selectDrafts);
+
+  const links: Record<E_QuickLinkTypes, I_RecentLink[]> = {
+    [E_QuickLinkTypes.NOTES]: recentLinks.notes,
+    [E_QuickLinkTypes.LINKS]: recentLinks.links,
+    [E_QuickLinkTypes.DRAFTS]: drafts.map((d) => ({
+      href: `/edit/${d.id}`,
+      text: d.title,
+      date: d.saved,
+    })),
+  };
 
   return (
     <Screen title="Быстрые ссылки">
@@ -79,13 +95,13 @@ export default function QuickLinks() {
       <div className="border border-top-0 h-100 py-3 px-4">
         <p>{cardDescription[type].text}</p>
         <ul className="list-unstyled">
-          {links.map((link, idx) => (
+          {links[type].map((link, idx) => (
             <li key={idx}>
               {
                 <CustomLink
                   href={link.href}
                   text={link.text}
-                  date={link.wasActive}
+                  date={link.date}
                   counter={idx + 1}
                   external={type === E_QuickLinkTypes.LINKS}
                 />
