@@ -114,30 +114,20 @@ export interface I_Linkset extends I_LinksetDraft {
   tokens: I_LinkToken[];
 }
 
-// User data
-export interface I_ViewedPage {
-  id: string;
-  sectionID: string;
-  conspectID: string;
-  viewed: Date;
-}
-
-export interface I_ViewedLink {
-  text: string;
+export interface I_RecentLink {
   href: string;
-  viewed: Date;
-}
-
-export interface I_Viewed {
-  pages: I_ViewedPage[];
-  links: I_ViewedLink[];
+  text: string;
+  date: string;
 }
 
 export interface I_UserData {
   conspects: I_Conspect[];
   linksets: I_Linkset[];
   drafts: (I_PageDraft | I_LinksetDraft)[];
-  viewed: I_Viewed;
+  recent: {
+    notes: I_RecentLink[];
+    links: I_RecentLink[];
+  };
   tip: string;
 }
 

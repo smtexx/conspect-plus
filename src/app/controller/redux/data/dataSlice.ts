@@ -19,8 +19,8 @@ const initialState: I_UserData = {
   conspects: [],
   linksets: [],
   drafts: [],
-  viewed: {
-    pages: [],
+  recent: {
+    notes: [],
     links: [],
   },
   tip: '',
@@ -254,3 +254,5 @@ export const selectConspect = createSelector(
 );
 
 export const selectTip = (state: RootState) => state.data.tip;
+export const selectRecent = (state: RootState) => state.data.recent;
+export const selectDrafts = (state: RootState) => state.data.drafts;
