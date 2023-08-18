@@ -6,10 +6,15 @@ import { useState } from 'react';
 import TipScreen from '../TipScreen/TipScreen';
 import PageInfo from '../PageInfo/PageInfo';
 import ProcessDataFormPart from '../ProcessDataFormPart/ProcessDataFormPart';
-import { useParams } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { selectConspects } from '../../app/controller/redux/data/dataSlice';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  addDraft,
+  deletePage,
+  selectConspects,
+} from '../../app/controller/redux/data/dataSlice';
 import Page404 from '../Page404/Page404';
+import { I_PageDraft } from '../../app/model/typesModel';
 
 export default function Note() {
   const [optionsIsOpen, setOptionsIsOpen] = useState(false);
@@ -18,6 +23,8 @@ export default function Note() {
   const sectionID = params.sectionID as string;
   const pageID = params.pageID as string;
   const conspects = useSelector(selectConspects);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const conspect = conspects.find((c) => c.id === conspectID);
   const section = conspect?.sections.find((s) => s.id === sectionID);
@@ -31,12 +38,39 @@ export default function Note() {
     return <Page404 />;
   }
 
-  function handleOptionsOpen() {
+  const handleOptionsOpen = () => {
     setOptionsIsOpen(true);
-  }
-  function handleOptionsClose() {
+  };
+  const handleOptionsClose = () => {
     setOptionsIsOpen(false);
-  }
+  };
+
+  const handleEditPage = () => {
+    const draft: I_PageDraft = {
+      id: pageID,
+      type: page.type,
+      title: page.title,
+      created: page.created,
+      saved: new Date().toString(),
+      markup: page.markup,
+      conspectID,
+      sectionID,
+    };
+
+    dispatch(addDraft(draft));
+    navigate(`/edit/${draft.id}`);
+  };
+
+  const handleDeletePage = () => {
+    dispatch(
+      deletePage({
+        conspectID,
+        sectionID,
+        pageID,
+      })
+    );
+    navigate(`/conspect/${conspectID}/${sectionID}`);
+  };
 
   return (
     <>
@@ -71,7 +105,7 @@ export default function Note() {
           buttonText="Изменить"
           confirmTitle="Изменить страницу"
           confirmText="Вы действительно хотите изменить текущую страницу?"
-          processHandler={() => console.log('Страница изменена!')}
+          processHandler={handleEditPage}
         />
         <ProcessDataFormPart
           title="Удалить страницу"
@@ -79,7 +113,7 @@ export default function Note() {
           buttonText="Удалить"
           confirmTitle="Удаление страницы"
           confirmText="Вы действительно уверены что хотите удалить текущую страницу без возможности восстановления?"
-          processHandler={() => console.log('Страница удалена!')}
+          processHandler={handleDeletePage}
         />
       </CustomSideMenu>
     </>
