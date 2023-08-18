@@ -7,7 +7,7 @@ interface I_PropsExternal {
   text: string;
   counter?: number;
   external: true;
-  date?: Date;
+  date?: string;
 }
 
 interface I_PropsInternal {
@@ -15,7 +15,7 @@ interface I_PropsInternal {
   text: string;
   counter: number;
   external?: false;
-  date?: Date;
+  date?: string;
 }
 
 export default function CustomLink({
@@ -33,7 +33,7 @@ export default function CustomLink({
       <span className={s.text}>{text}</span>
       {date && (
         <span className={s.date}>
-          {` [${date.toLocaleString()}]`}
+          {` [${new Date(date).toLocaleString()}]`}
         </span>
       )}
     </>
