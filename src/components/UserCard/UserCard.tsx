@@ -1,6 +1,7 @@
 import { Card } from 'react-bootstrap';
 import { BsFillPersonCheckFill } from 'react-icons/bs';
 import { BiLogInCircle } from 'react-icons/bi';
+import s from './UserCard.module.scss';
 
 interface I_Props {
   login: string;
@@ -28,9 +29,9 @@ export default function UserCard({
       onClick={onClick}
       disabled={isActive}
     >
-      <Card style={{ width: '18rem' }}>
+      <Card className={s.card}>
         <Card.Body>
-          <Card.Title className="d-flex align-items-center justify-content-between">
+          <Card.Title className="d-flex align-items-center justify-content-between mb-3">
             <span className="overflow-hidden text-nowrap me-2">
               {login}
             </span>
@@ -42,28 +43,19 @@ export default function UserCard({
               )}
             </span>
           </Card.Title>
-          <Card.Subtitle
-            className="mb-2 text-muted"
-            title="Дата создания"
-          >
-            <span className="pe-2">Создан:</span>{' '}
-            {new Date(created).toLocaleDateString()}
-          </Card.Subtitle>
 
-          <table>
-            <thead></thead>
-            <tbody>
-              <tr>
-                <td className="pe-2">Активен:</td>
-                <td>{new Date(lastActivity).toLocaleString()}</td>
-              </tr>
-              <tr>
-                <td>Записей:</td>
-                <td>{notes}</td>
-              </tr>
-            </tbody>
-            <tfoot></tfoot>
-          </table>
+          <ul className="list-unstyled">
+            {[
+              ['Записей:', notes],
+              ['Создан:', new Date(created).toLocaleString()],
+              ['Активен:', new Date(lastActivity).toLocaleString()],
+            ].map(([key, value]) => (
+              <li key={key}>
+                <span className={s.feature}>{key}</span>
+                {value}
+              </li>
+            ))}
+          </ul>
         </Card.Body>
       </Card>
     </button>

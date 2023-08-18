@@ -78,7 +78,7 @@ export default function Users() {
             ? 'Учетных записей не найдено. Создайте новую учетную запись для работы с приложением.'
             : 'Ниже представлен список учетных записей, сохраненных в приложении. Вы можете использовать одну из них.'}
         </p>
-        <div className="row px-3 gy-4 mb-4 justify-content-start align-items-stretch">
+        <div className="row px-md-3 gy-4 mb-4 justify-content-start align-items-stretch">
           {users.map((user) => (
             <div key={user.login} className="col-auto">
               <UserCard
