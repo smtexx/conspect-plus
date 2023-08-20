@@ -10,6 +10,7 @@ import Page404 from '../Page404/Page404';
 import {
   E_PageType,
   I_LinksetDraft,
+  I_PageDraft,
 } from '../../app/model/typesModel';
 import {
   createLinkset,
@@ -197,18 +198,16 @@ export default function Editor() {
 
   const handleSavePage = () => {
     if (draft.type === E_PageType.PAGE) {
-      dispatch(
-        createPage({
-          ...draft,
-          title,
-          markup,
-          saved: new Date().toString(),
-        })
-      );
+      const newDraft: I_PageDraft = {
+        ...draft,
+        title,
+        markup,
+      };
+
+      dispatch(createPage(newDraft));
       navigate(
         `/conspect/${draft.conspectID}/${draft.sectionID}/${draft.id}`
       );
-      dispatch(deletePageDraft(draftID));
     }
 
     if (draft.type === E_PageType.LINKSET) {
@@ -217,7 +216,6 @@ export default function Editor() {
         title,
         description,
         markup,
-        saved: new Date().toString(),
       };
 
       dispatch(createLinkset(newDraft));

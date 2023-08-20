@@ -13,6 +13,7 @@ import {
   I_Page,
   I_PageDraft,
   I_UserData,
+  T_Token,
 } from '../../../model/typesModel';
 import { createID } from '../../utils';
 import { RootState } from '../store';
@@ -168,20 +169,31 @@ export const dataSlice = createSlice({
     },
 
     createPage: (state, action: PayloadAction<I_PageDraft>) => {
-      const conspect = state.conspects.find(
-        (c) => c.id === action.payload.conspectID
-      );
-      if (conspect !== undefined) {
-        const section = conspect.sections.find(
-          (s) => s.id === action.payload.sectionID
-        );
-        if (section) {
-          const newPage: I_Page = {
-            ...action.payload,
-            tokens: parse(action.payload.markup),
-          };
-          section.pages.push(newPage);
+      const { conspectID, sectionID, id: pageID } = action.payload;
+      const pages = state.conspects
+        .find((c) => c.id === conspectID)
+        ?.sections.find((s) => s.id === sectionID)?.pages;
+
+      if (pages !== undefined) {
+        const newPage: I_Page = {
+          ...action.payload,
+          saved: new Date().toString(),
+          tokens: parse(action.payload.markup) as Exclude<
+            T_Token,
+            I_LinkToken
+          >[],
+        };
+
+        const newPageIndex = pages.findIndex((p) => p.id === pageID);
+
+        if (newPageIndex === -1) {
+          pages.push(newPage);
+        } else {
+          pages.splice(newPageIndex, 1, newPage);
         }
+
+        // Delete corresponding draft
+        state.drafts = state.drafts.filter((d) => d.id !== pageID);
       }
     },
 
