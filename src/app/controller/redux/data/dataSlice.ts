@@ -275,7 +275,15 @@ export const selectConspect = createSelector(
 );
 
 export const selectTip = (state: RootState) => state.data.tip;
+
 export const selectRecent = (state: RootState) => state.data.recent;
+
 export const selectDrafts = (state: RootState) => state.data.drafts;
+
 export const selectLinksets = (state: RootState) =>
   state.data.linksets;
+
+export const selectLinkset = (
+  state: RootState,
+  linksetID: I_Linkset['id']
+) => state.data.linksets.find((l) => l.id === linksetID);
