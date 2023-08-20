@@ -7,6 +7,7 @@ import {
   selectRecent,
 } from '../../app/controller/redux/data/dataSlice';
 import { I_RecentLink } from '../../app/model/typesModel';
+import { FaMehRollingEyes } from 'react-icons/fa';
 
 export enum E_QuickLinkTypes {
   NOTES = 'notes',
@@ -94,21 +95,31 @@ export default function QuickLinks() {
       </ul>
       <div className="border border-top-0 h-100 py-3 px-4">
         <p>{cardDescription[type].text}</p>
-        <ul className="list-unstyled">
-          {links[type].map((link, idx) => (
-            <li key={idx}>
-              {
-                <CustomLink
-                  href={link.href}
-                  text={link.text}
-                  date={link.date}
-                  counter={idx + 1}
-                  external={type === E_QuickLinkTypes.LINKS}
-                />
-              }
-            </li>
-          ))}
-        </ul>
+        {links[type].length === 0 ? (
+          <p className="mt-4 text-center text-body-tertiary">
+            <span className="fs-1">
+              <FaMehRollingEyes />
+            </span>
+            <br />
+            ссылки отсутствуют
+          </p>
+        ) : (
+          <ul className="list-unstyled">
+            {links[type].map((link, idx) => (
+              <li key={idx}>
+                {
+                  <CustomLink
+                    href={link.href}
+                    text={link.text}
+                    date={link.date}
+                    counter={idx + 1}
+                    external={type === E_QuickLinkTypes.LINKS}
+                  />
+                }
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
     </Screen>
   );
