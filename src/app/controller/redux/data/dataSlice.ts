@@ -147,7 +147,7 @@ export const dataSlice = createSlice({
         sectionID: string;
       }>
     ) => {
-      state.drafts.push({
+      const newDraft = {
         conspectID: action.payload.conspectID,
         sectionID: action.payload.sectionID,
         id: action.payload.pageID,
@@ -156,7 +156,9 @@ export const dataSlice = createSlice({
         saved: new Date().toString(),
         markup: '',
         type: E_PageType.PAGE,
-      });
+      };
+
+      insertElement(newDraft, state.drafts);
     },
 
     deletePageDraft: (
@@ -184,13 +186,7 @@ export const dataSlice = createSlice({
           >[],
         };
 
-        const newPageIndex = pages.findIndex((p) => p.id === pageID);
-
-        if (newPageIndex === -1) {
-          pages.push(newPage);
-        } else {
-          pages.splice(newPageIndex, 1, newPage);
-        }
+        insertElement(newPage, pages);
 
         // Delete corresponding draft
         state.drafts = state.drafts.filter((d) => d.id !== pageID);
@@ -205,14 +201,7 @@ export const dataSlice = createSlice({
       state,
       action: PayloadAction<I_PageDraft | I_LinksetDraft>
     ) => {
-      const draftIndex = state.drafts.findIndex(
-        (d) => d.id === action.payload.id
-      );
-      if (draftIndex === -1) {
-        state.drafts.push(action.payload);
-      } else {
-        state.drafts.splice(draftIndex, 1, action.payload);
-      }
+      insertElement(action.payload, state.drafts);
     },
 
     deletePage: (
@@ -238,7 +227,7 @@ export const dataSlice = createSlice({
       state,
       action: PayloadAction<I_LinksetDraft['id']>
     ) => {
-      state.drafts.push({
+      const newDraft = {
         type: E_PageType.LINKSET,
         id: action.payload,
         title: '',
@@ -246,7 +235,9 @@ export const dataSlice = createSlice({
         created: new Date().toString(),
         saved: new Date().toString(),
         markup: '',
-      });
+      };
+
+      insertElement(newDraft, state.drafts);
     },
 
     createLinkset: (state, action: PayloadAction<I_LinksetDraft>) => {
@@ -256,15 +247,7 @@ export const dataSlice = createSlice({
         tokens: parse(action.payload.markup) as I_LinkToken[],
       };
 
-      const linksetIndex = state.linksets.findIndex(
-        (l) => l.id === newLinkset.id
-      );
-
-      if (linksetIndex === -1) {
-        state.linksets.push(newLinkset);
-      } else {
-        state.linksets.splice(linksetIndex, 1, newLinkset);
-      }
+      insertElement(newLinkset, state.linksets);
 
       // Delete corresponding draft
       state.drafts = state.drafts.filter(
@@ -334,3 +317,17 @@ export const selectLinkset = (
   state: RootState,
   linksetID: I_Linkset['id']
 ) => state.data.linksets.find((l) => l.id === linksetID);
+
+// Helpers
+function insertElement(
+  element: { id: string },
+  array: { id: string }[]
+) {
+  const elementIndex = array.findIndex((e) => e.id === element.id);
+
+  if (elementIndex === -1) {
+    array.push(element);
+  } else {
+    array.splice(elementIndex, 1, element);
+  }
+}
