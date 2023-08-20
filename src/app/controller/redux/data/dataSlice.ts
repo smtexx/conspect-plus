@@ -7,6 +7,7 @@ import {
   E_PageType,
   I_Conspect,
   I_Draft,
+  I_Linkset,
   I_LinksetDraft,
   I_Page,
   I_PageDraft,
@@ -219,6 +220,24 @@ export const dataSlice = createSlice({
         );
       }
     },
+
+    createLinkset: (
+      state,
+      action: PayloadAction<{ title: string; description: string }>
+    ) => {
+      const newLinkset: I_Linkset = {
+        type: E_PageType.LINKSET,
+        id: createID(),
+        title: action.payload.title,
+        description: action.payload.description,
+        created: new Date().toString(),
+        saved: new Date().toString(),
+        markup: '',
+        tokens: [],
+      };
+
+      state.linksets.push(newLinkset);
+    },
   },
 });
 
@@ -237,6 +256,7 @@ export const {
   loadData,
   addDraft,
   deletePage,
+  createLinkset,
 } = dataSlice.actions;
 export const { reducer: dataReducer } = dataSlice;
 
@@ -257,3 +277,5 @@ export const selectConspect = createSelector(
 export const selectTip = (state: RootState) => state.data.tip;
 export const selectRecent = (state: RootState) => state.data.recent;
 export const selectDrafts = (state: RootState) => state.data.drafts;
+export const selectLinksets = (state: RootState) =>
+  state.data.linksets;
