@@ -83,6 +83,16 @@ export const dataSlice = createSlice({
       state.conspects = state.conspects.filter(
         (c) => c.id !== action.payload.conspectID
       );
+      state.drafts = state.drafts.filter((d) => {
+        if (
+          d.type === E_PageType.PAGE &&
+          d.conspectID === action.payload.conspectID
+        ) {
+          return false;
+        }
+
+        return true;
+      });
     },
 
     createSection: (
@@ -129,13 +139,28 @@ export const dataSlice = createSlice({
       state,
       action: PayloadAction<{ conspectID: string; sectionID: string }>
     ) => {
+      const { conspectID, sectionID } = action.payload;
+
       const conspect = state.conspects.find(
-        (c) => c.id === action.payload.conspectID
+        (c) => c.id === conspectID
       );
+
       if (conspect !== undefined) {
         conspect.sections = conspect.sections.filter(
-          (s) => s.id !== action.payload.sectionID
+          (s) => s.id !== sectionID
         );
+
+        state.drafts = state.drafts.filter((d) => {
+          if (
+            d.type === E_PageType.PAGE &&
+            d.conspectID === conspectID &&
+            d.sectionID === sectionID
+          ) {
+            return false;
+          }
+
+          return true;
+        });
       }
     },
 
@@ -212,14 +237,18 @@ export const dataSlice = createSlice({
         pageID: string;
       }>
     ) => {
-      const sections = state.conspects
-        .find((c) => c.id === action.payload.conspectID)
-        ?.sections.find((s) => s.id === action.payload.sectionID);
+      const { conspectID, sectionID, pageID } = action.payload;
 
-      if (sections) {
+      const sections = state.conspects
+        .find((c) => c.id === conspectID)
+        ?.sections.find((s) => s.id === sectionID);
+
+      if (sections !== undefined) {
         sections.pages = sections.pages.filter(
-          (p) => p.id !== action.payload.pageID
+          (p) => p.id !== pageID
         );
+
+        state.drafts = state.drafts.filter((d) => d.id !== pageID);
       }
     },
 
