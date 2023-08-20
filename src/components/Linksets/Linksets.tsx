@@ -2,17 +2,20 @@ import { useState } from 'react';
 import CustomSideMenu from '../CustomSideMenu/CustomSideMenu';
 import DataCard from '../DataCard/DataCard';
 import Screen from '../Screen/Screen';
-import EditBlockFormPart from '../EditBlockFormPart/EditBlockFormPart';
 import { useDispatch, useSelector } from 'react-redux';
 import {
-  createLinkset,
+  createLinksetDraft,
   selectLinksets,
 } from '../../app/controller/redux/data/dataSlice';
+import ProcessDataFormPart from '../ProcessDataFormPart/ProcessDataFormPart';
+import { createID } from '../../app/controller/utils';
+import { useNavigate } from 'react-router-dom';
 
 export default function Linksets() {
   const [menuIsOpen, setMenuIsOpen] = useState(false);
   const links = useSelector(selectLinksets);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   function handleMenuOpen() {
     setMenuIsOpen(true);
@@ -21,12 +24,10 @@ export default function Linksets() {
     setMenuIsOpen(false);
   }
 
-  const handleCreateLinkset = (
-    title: string,
-    description: string
-  ) => {
-    dispatch(createLinkset({ title, description }));
-    handleMenuClose();
+  const handleCreateLinkset = () => {
+    const linksetID = createID();
+    dispatch(createLinksetDraft(linksetID));
+    navigate(`/edit/${linksetID}`);
   };
 
   return (
@@ -53,21 +54,13 @@ export default function Linksets() {
         </div>
       </Screen>
       <CustomSideMenu show={menuIsOpen} onHide={handleMenuClose}>
-        <EditBlockFormPart
+        <ProcessDataFormPart
           title="Создать набор ссылок"
-          description="Для создания нового набора ссылок заполните поля с названием и описанием набора ссылок: "
-          titleFieldConfig={{
-            placeholder: 'Название набора ссылок',
-            minLength: 3,
-            maxLength: 25,
-          }}
-          descriptionFieldConfig={{
-            placeholder: 'Описание набора ссылок',
-            minLength: 20,
-            maxLength: 60,
-          }}
+          description="Для создания нового набора ссылок, нажмите на кнопку ниже. Вы будете перенаправлены в редактор страниц."
           buttonText="Создать"
-          buttonHandler={handleCreateLinkset}
+          confirmTitle="Создать набор ссылок"
+          confirmText="Вы действительно хотите создать новый набор ссылок?"
+          processHandler={handleCreateLinkset}
         />
       </CustomSideMenu>
     </>
