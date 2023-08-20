@@ -7,6 +7,7 @@ import {
   E_PageType,
   I_Conspect,
   I_Draft,
+  I_LinkToken,
   I_Linkset,
   I_LinksetDraft,
   I_Page,
@@ -221,22 +222,42 @@ export const dataSlice = createSlice({
       }
     },
 
-    createLinkset: (
+    createLinksetDraft: (
       state,
-      action: PayloadAction<{ title: string; description: string }>
+      action: PayloadAction<I_LinksetDraft['id']>
     ) => {
-      const newLinkset: I_Linkset = {
+      state.drafts.push({
         type: E_PageType.LINKSET,
-        id: createID(),
-        title: action.payload.title,
-        description: action.payload.description,
+        id: action.payload,
+        title: '',
+        description: '',
         created: new Date().toString(),
         saved: new Date().toString(),
         markup: '',
-        tokens: [],
+      });
+    },
+
+    createLinkset: (state, action: PayloadAction<I_LinksetDraft>) => {
+      const newLinkset: I_Linkset = {
+        ...action.payload,
+        saved: new Date().toString(),
+        tokens: parse(action.payload.markup) as I_LinkToken[],
       };
 
-      state.linksets.push(newLinkset);
+      const linksetIndex = state.linksets.findIndex(
+        (l) => l.id === newLinkset.id
+      );
+
+      if (linksetIndex === -1) {
+        state.linksets.push(newLinkset);
+      } else {
+        state.linksets.splice(linksetIndex, 1, newLinkset);
+      }
+
+      // Delete corresponding draft
+      state.drafts = state.drafts.filter(
+        (d) => d.id !== newLinkset.id
+      );
     },
   },
 });
@@ -256,6 +277,7 @@ export const {
   loadData,
   addDraft,
   deletePage,
+  createLinksetDraft,
   createLinkset,
 } = dataSlice.actions;
 export const { reducer: dataReducer } = dataSlice;
