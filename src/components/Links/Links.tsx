@@ -4,18 +4,25 @@ import Screen from '../Screen/Screen';
 import PageInfo from '../PageInfo/PageInfo';
 import ProcessDataFormPart from '../ProcessDataFormPart/ProcessDataFormPart';
 import CustomLink from '../CustomLink/CustomLink';
-import { useParams } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { selectLinkset } from '../../app/controller/redux/data/dataSlice';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  addDraft,
+  deleteLinkset,
+  selectLinkset,
+} from '../../app/controller/redux/data/dataSlice';
 import { RootState } from '../../app/controller/redux/store';
 import Page404 from '../Page404/Page404';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 import { FaMehRollingEyes } from 'react-icons/fa';
+import { I_LinksetDraft } from '../../app/model/typesModel';
 
 export default function Links() {
   const [optionsIsOpen, setOptionsIsOpen] = useState(false);
   const params = useParams();
   const linksetID = params.linksetID as string;
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const linkset = useSelector((state: RootState) =>
     selectLinkset(state, linksetID)
   );
@@ -29,6 +36,20 @@ export default function Links() {
   };
   const handleOptionsClose = () => {
     setOptionsIsOpen(false);
+  };
+
+  const handleEditLinkset = () => {
+    const linksetDraft: I_LinksetDraft = {
+      ...linkset,
+    };
+
+    dispatch(addDraft(linksetDraft));
+    navigate(`/edit/${linksetDraft.id}`);
+  };
+
+  const handleDeleteLinkset = () => {
+    navigate('/linkset');
+    dispatch(deleteLinkset(linksetID));
   };
 
   return (
@@ -86,7 +107,7 @@ export default function Links() {
           buttonText="Изменить"
           confirmTitle="Изменить страницу"
           confirmText="Вы действительно хотите изменить текущую страницу?"
-          processHandler={() => console.log('Страница изменена!')}
+          processHandler={handleEditLinkset}
         />
         <ProcessDataFormPart
           title="Удалить страницу"
@@ -94,7 +115,7 @@ export default function Links() {
           buttonText="Удалить"
           confirmTitle="Удаление страницы"
           confirmText="Вы действительно уверены что хотите удалить текущую страницу без возможности восстановления?"
-          processHandler={() => console.log('Страница удалена!')}
+          processHandler={handleDeleteLinkset}
         />
       </CustomSideMenu>
     </>
