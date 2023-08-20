@@ -1,14 +1,18 @@
 import { Alert, Button, ButtonGroup, Form } from 'react-bootstrap';
 import Screen from '../Screen/Screen';
-import { ChangeEvent, useRef, useState, useEffect } from 'react';
+import { ChangeEvent, useRef, useState } from 'react';
 import { E_Marker, E_TokenType } from '../../app/model/types';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import PageInfo from '../PageInfo/PageInfo';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../app/controller/redux/store';
 import Page404 from '../Page404/Page404';
-import { E_PageType } from '../../app/model/typesModel';
 import {
+  E_PageType,
+  I_LinksetDraft,
+} from '../../app/model/typesModel';
+import {
+  createLinkset,
   createPage,
   deletePageDraft,
 } from '../../app/controller/redux/data/dataSlice';
@@ -28,9 +32,12 @@ const titleLength = {
   max: 40,
 };
 
+const descriptionLength = {
+  min: 20,
+  max: 60,
+};
+
 export default function Editor() {
-  const [title, setTitle] = useState('');
-  const [markup, setMarkup] = useState('');
   const [cursorPos, setCursorPos] = useState(0);
   const [error, setError] = useState('');
   const [saveDisabled, setSaveDisabled] = useState(true);
@@ -43,12 +50,20 @@ export default function Editor() {
   const userData = useSelector((state: RootState) => state.data);
   const draft = userData.drafts.find((d) => d.id === draftID);
 
-  useEffect(() => {
-    if (draft?.title && draft.markup) {
-      setTitle(draft.title);
-      setMarkup(draft.markup);
-    }
-  }, [draft]);
+  // Fields initial state
+  const initial = {
+    title: draft?.title ? draft.title : '',
+    markup: draft?.markup ? draft.markup : '',
+    description: '',
+  };
+
+  if (draft?.type === E_PageType.LINKSET) {
+    initial.description = draft.description;
+  }
+
+  const [title, setTitle] = useState(initial.title);
+  const [description, setDescription] = useState(initial.description);
+  const [markup, setMarkup] = useState(initial.markup);
 
   if (draft === undefined) {
     return <Page404 />;
@@ -56,7 +71,6 @@ export default function Editor() {
 
   let conspectTitle = '';
   let sectionTitle = '';
-  let alert: React.ReactNode;
 
   if (draft.type === E_PageType.PAGE) {
     const conspect = userData.conspects.find(
@@ -66,24 +80,10 @@ export default function Editor() {
       (s) => s.id === draft.sectionID
     );
 
-    if (conspect === undefined) {
-      alert = (
-        <Alert variant="danger" style={{ maxWidth: '40rem' }}>
-          Черновик который вы хотели отредактировать, принадлежал
-          удаленному конспекту. Редактирование такого черновика
-          невозможно, поэтому он был также удален.
-        </Alert>
-      );
-    } else if (section === undefined) {
-      alert = (
-        <Alert variant="danger" style={{ maxWidth: '40rem' }}>
-          Черновик который вы хотели отредактировать, принадлежал
-          удаленному разделу конспекта. Редактирование такого
-          черновика невозможно, поэтому он был также удален.
-        </Alert>
-      );
-    } else {
+    if (conspect) {
       conspectTitle = conspect.title;
+    }
+    if (section) {
       sectionTitle = section.title;
     }
   }
@@ -91,6 +91,12 @@ export default function Editor() {
   function handleTitleChange(e: ChangeEvent<HTMLInputElement>) {
     const value = e.target.value;
     setTitle(value);
+    setSaveDisabled(true);
+  }
+
+  function handleDescriptionChange(e: ChangeEvent<HTMLInputElement>) {
+    const value = e.target.value;
+    setDescription(value);
     setSaveDisabled(true);
   }
 
@@ -202,13 +208,24 @@ export default function Editor() {
       navigate(
         `/conspect/${draft.conspectID}/${draft.sectionID}/${draft.id}`
       );
+      dispatch(deletePageDraft(draftID));
     }
-    dispatch(deletePageDraft(draftID));
+
+    if (draft.type === E_PageType.LINKSET) {
+      const newDraft: I_LinksetDraft = {
+        ...draft,
+        title,
+        description,
+        markup,
+        saved: new Date().toString(),
+      };
+
+      dispatch(createLinkset(newDraft));
+      navigate(`/linkset/${draft.id}`);
+    }
   };
 
   const checkNewPage = () => {
-    const titleIsCorrect = title.length <= 3 && title.length <= 40;
-
     try {
       // Title checking
       if (title.length < titleLength.min) {
@@ -223,7 +240,32 @@ export default function Editor() {
         );
       }
 
+      // Description checking
+      if (
+        draft.type === E_PageType.LINKSET &&
+        description.length < descriptionLength.min
+      ) {
+        throw new PageError(
+          `Длинна описания страницы менее ${descriptionLength.min} символов.`
+        );
+      }
+
+      if (
+        draft.type === E_PageType.LINKSET &&
+        description.length > descriptionLength.max
+      ) {
+        throw new PageError(
+          `Длинна описания страницы более ${descriptionLength.min} символов.`
+        );
+      }
+
       // Markup checking
+      if (markup.trim().length === 0) {
+        throw new PageError(
+          `Пустая разметка страницы. Кажется вы забыли ее написать.`
+        );
+      }
+
       if (draft.type === E_PageType.LINKSET) {
         // Resources checking
         // Invalid tags
@@ -330,7 +372,7 @@ export default function Editor() {
         );
       }
 
-      setSaveDisabled(titleIsCorrect);
+      setSaveDisabled(false);
       setError('');
     } catch (error) {
       if (error instanceof PageError) {
@@ -431,106 +473,125 @@ export default function Editor() {
 
   return (
     <Screen title="Редактор страниц">
-      {alert || (
-        <>
-          <PageInfo tables={pageInfo} />
-          <Form>
-            <h5 className="text-white">Редактор</h5>
-            <p>
-              Используйте форму ниже, для редактирования страницы.
-              Вставляйте элементы разметки, с помощью меню над
-              редактируемым полем. <br />
-              Более подробно о том как использовать теги разметки
-              конспекта вы можете узнать перейдя по ссылке на{' '}
-              <Link to="/help">справочную страницу</Link>.
+      <>
+        <PageInfo tables={pageInfo} />
+        <Form>
+          <h5 className="text-white">Редактор</h5>
+          <p>
+            Используйте форму ниже, для редактирования страницы.
+            Вставляйте элементы разметки, с помощью меню над
+            редактируемым полем. <br />
+            Более подробно о том как использовать теги разметки
+            конспекта вы можете узнать перейдя по ссылке на{' '}
+            <Link to="/help">справочную страницу</Link>.
+          </p>
+          <Form.Group className="mb-4" controlId="draftTitleInput">
+            <Form.Label>Название страницы:</Form.Label>
+            <Form.Control
+              className="text-white"
+              type="text"
+              value={title}
+              placeholder="Новая страница"
+              onChange={handleTitleChange}
+            />
+            <p className="form-text">
+              Длинна названия страницы от 3 до 40 символов. Текущая:{' '}
+              {title.length}
             </p>
-            <Form.Group className="mb-4" controlId="draftTitleInput">
-              <Form.Label>Название страницы:</Form.Label>
+          </Form.Group>
+
+          {draft.type === E_PageType.LINKSET && (
+            <Form.Group
+              className="mb-4"
+              controlId="draftDescriptionInput"
+            >
+              <Form.Label>Описание страницы:</Form.Label>
               <Form.Control
                 className="text-white"
                 type="text"
-                value={title}
-                placeholder="Одна из страниц конспекта"
-                onChange={handleTitleChange}
+                value={description}
+                placeholder="Например: онлайн конвертеры изображений"
+                onChange={handleDescriptionChange}
               />
               <p className="form-text">
-                Длинна названия страницы от 3 до 40 символов. Текущая:{' '}
-                {title.length}
+                Длинна описания страницы от 20 до 60 символов.
+                Текущая: {description.length}
               </p>
             </Form.Group>
-            <Form.Group
-              className="mb-3"
-              controlId="draftMarkupTextarea"
-            >
-              <Form.Label>Разметка страницы:</Form.Label>
-              <div className="d-flex column-gap-4 row-gap-3 flex-wrap mb-3">
-                {menu.map((menuGroup) => (
-                  <ButtonGroup
-                    aria-label={menuGroup.label}
-                    key={menuGroup.label}
-                  >
-                    {menuGroup.buttons.map((button) => (
-                      <Button
-                        aria-label={button.text}
-                        title={button.text}
-                        className="fw-bold"
-                        variant="primary"
-                        key={button.text}
-                        onClick={() => insertMarkup(button.symbol)}
-                      >
-                        {button.symbol}
-                      </Button>
-                    ))}
-                  </ButtonGroup>
-                ))}
-              </div>
-              <Form.Control
-                className="text-white font-monospace"
-                value={markup}
-                as="textarea"
-                rows={15}
-                onChange={handleMarkupChange}
-                onSelect={handleMarkupSelectionChange}
-                ref={markupRef}
-              />
-              <p className="form-text mb-4">
-                Разметка страницы должна соответствовать правилам
-                описанным на{' '}
-                <Link to="/help">справочной странице</Link>.
-              </p>
+          )}
 
-              {error && (
-                <Alert variant="danger" className="mb-4">
-                  <Alert.Heading>Найдена ошибка</Alert.Heading>
-                  <p>{error}</p>
-                  <hr />
-                  <p className="mb-0">
-                    Для того чтобы сохранить страницу, вам необходимо
-                    исправить найденную ошибку и выполнить проверку
-                    черновика повторно.
-                  </p>
-                </Alert>
-              )}
-
-              <div className="d-flex justify-content-end column-gap-3 mt-4">
-                <Button variant="primary" onClick={handleDeleteDraft}>
-                  Удалить черновик
-                </Button>
-                <Button variant="primary" onClick={checkNewPage}>
-                  Проверить
-                </Button>
-                <Button
-                  disabled={saveDisabled}
-                  variant="primary"
-                  onClick={handleSavePage}
+          <Form.Group
+            className="mb-3"
+            controlId="draftMarkupTextarea"
+          >
+            <Form.Label>Разметка страницы:</Form.Label>
+            <div className="d-flex column-gap-4 row-gap-3 flex-wrap mb-3">
+              {menu.map((menuGroup) => (
+                <ButtonGroup
+                  aria-label={menuGroup.label}
+                  key={menuGroup.label}
                 >
-                  Сохранить
-                </Button>
-              </div>
-            </Form.Group>
-          </Form>
-        </>
-      )}
+                  {menuGroup.buttons.map((button) => (
+                    <Button
+                      aria-label={button.text}
+                      title={button.text}
+                      className="fw-bold"
+                      variant="primary"
+                      key={button.text}
+                      onClick={() => insertMarkup(button.symbol)}
+                    >
+                      {button.symbol}
+                    </Button>
+                  ))}
+                </ButtonGroup>
+              ))}
+            </div>
+            <Form.Control
+              className="text-white font-monospace"
+              value={markup}
+              as="textarea"
+              rows={15}
+              onChange={handleMarkupChange}
+              onSelect={handleMarkupSelectionChange}
+              ref={markupRef}
+            />
+            <p className="form-text mb-4">
+              Разметка страницы должна соответствовать правилам
+              описанным на <Link to="/help">справочной странице</Link>
+              .
+            </p>
+
+            {error && (
+              <Alert variant="danger" className="mb-4">
+                <Alert.Heading>Найдена ошибка</Alert.Heading>
+                <p>{error}</p>
+                <hr />
+                <p className="mb-0">
+                  Для того чтобы сохранить страницу, вам необходимо
+                  исправить найденную ошибку и выполнить проверку
+                  черновика повторно.
+                </p>
+              </Alert>
+            )}
+
+            <div className="d-flex justify-content-end column-gap-3 mt-4">
+              <Button variant="primary" onClick={handleDeleteDraft}>
+                Удалить черновик
+              </Button>
+              <Button variant="primary" onClick={checkNewPage}>
+                Проверить
+              </Button>
+              <Button
+                disabled={saveDisabled}
+                variant="primary"
+                onClick={handleSavePage}
+              >
+                Сохранить
+              </Button>
+            </div>
+          </Form.Group>
+        </Form>
+      </>
     </Screen>
   );
 }
