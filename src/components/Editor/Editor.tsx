@@ -203,7 +203,7 @@ export default function Editor() {
         `/conspect/${draft.conspectID}/${draft.sectionID}/${draft.id}`
       );
     }
-    dispatch(deletePageDraft({ draftID: draftID }));
+    dispatch(deletePageDraft(draftID));
   };
 
   const checkNewPage = () => {
@@ -340,6 +340,11 @@ export default function Editor() {
         throw error;
       }
     }
+  };
+
+  const handleDeleteDraft = () => {
+    navigate('/quicklinks');
+    dispatch(deletePageDraft(draftID));
   };
 
   const menu: I_MenuGroup[] =
@@ -508,7 +513,9 @@ export default function Editor() {
               )}
 
               <div className="d-flex justify-content-end column-gap-3 mt-4">
-                <Button variant="primary">Удалить черновик</Button>
+                <Button variant="primary" onClick={handleDeleteDraft}>
+                  Удалить черновик
+                </Button>
                 <Button variant="primary" onClick={checkNewPage}>
                   Проверить
                 </Button>

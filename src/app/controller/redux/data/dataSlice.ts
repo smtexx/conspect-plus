@@ -6,6 +6,7 @@ import {
 import {
   E_PageType,
   I_Conspect,
+  I_Draft,
   I_LinksetDraft,
   I_Page,
   I_PageDraft,
@@ -157,10 +158,10 @@ export const dataSlice = createSlice({
 
     deletePageDraft: (
       state,
-      action: PayloadAction<{ draftID: string }>
+      action: PayloadAction<I_Draft['id']>
     ) => {
       state.drafts = state.drafts.filter(
-        (d) => d.id !== action.payload.draftID
+        (d) => d.id !== action.payload
       );
     },
 
