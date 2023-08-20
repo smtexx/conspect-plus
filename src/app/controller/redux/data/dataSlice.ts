@@ -271,6 +271,18 @@ export const dataSlice = createSlice({
         (d) => d.id !== newLinkset.id
       );
     },
+
+    deleteLinkset: (
+      state,
+      action: PayloadAction<I_Linkset['id']>
+    ) => {
+      state.linksets = state.linksets.filter(
+        (l) => l.id !== action.payload
+      );
+      state.drafts = state.drafts.filter(
+        (d) => d.id !== action.payload
+      );
+    },
   },
 });
 
@@ -291,6 +303,7 @@ export const {
   deletePage,
   createLinksetDraft,
   createLinkset,
+  deleteLinkset,
 } = dataSlice.actions;
 export const { reducer: dataReducer } = dataSlice;
 
