@@ -81,19 +81,28 @@ export const dataSlice = createSlice({
       state,
       action: PayloadAction<{ conspectID: string }>
     ) => {
+      const { conspectID } = action.payload;
+
       state.conspects = state.conspects.filter(
-        (c) => c.id !== action.payload.conspectID
+        (c) => c.id !== conspectID
       );
+
+      // Delete drafts
       state.drafts = state.drafts.filter((d) => {
         if (
           d.type === E_PageType.PAGE &&
-          d.conspectID === action.payload.conspectID
+          d.conspectID === conspectID
         ) {
           return false;
         }
 
         return true;
       });
+
+      // Delete recent links
+      state.recent.notes = state.recent.notes.filter(
+        (n) => !n.href.startsWith(`/conspect/${conspectID}/`)
+      );
     },
 
     createSection: (
@@ -151,6 +160,7 @@ export const dataSlice = createSlice({
           (s) => s.id !== sectionID
         );
 
+        // Delete drafts
         state.drafts = state.drafts.filter((d) => {
           if (
             d.type === E_PageType.PAGE &&
@@ -159,9 +169,13 @@ export const dataSlice = createSlice({
           ) {
             return false;
           }
-
           return true;
         });
+
+        // Delete recent links
+        state.recent.notes = state.recent.notes.filter(
+          (n) => !n.href.startsWith(`/${conspectID}/${sectionID}/`)
+        );
       }
     },
 
@@ -249,7 +263,16 @@ export const dataSlice = createSlice({
           (p) => p.id !== pageID
         );
 
+        // Delete drafts
         state.drafts = state.drafts.filter((d) => d.id !== pageID);
+
+        // Delete recent links
+        state.recent.notes = state.recent.notes.filter(
+          (n) =>
+            !n.href.startsWith(
+              `/${conspectID}/${sectionID}/${pageID}`
+            )
+        );
       }
     },
 
@@ -292,6 +315,8 @@ export const dataSlice = createSlice({
       state.linksets = state.linksets.filter(
         (l) => l.id !== action.payload
       );
+
+      // Delete drafts
       state.drafts = state.drafts.filter(
         (d) => d.id !== action.payload
       );
