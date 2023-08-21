@@ -83,6 +83,7 @@ export default function Pages() {
                   href={`/conspect/${conspectID}/${sectionID}/${page.id}`}
                   text={page.title}
                   counter={idx + 1}
+                  addRecent={true}
                 />
               </li>
             ))}

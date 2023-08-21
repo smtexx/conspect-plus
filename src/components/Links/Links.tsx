@@ -89,7 +89,8 @@ export default function Links() {
                 <CustomLink
                   text={token.text}
                   href={token.href}
-                  external
+                  external={true}
+                  addRecent={true}
                 />
               </li>
             ))}

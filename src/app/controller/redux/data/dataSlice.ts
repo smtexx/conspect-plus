@@ -12,6 +12,7 @@ import {
   I_LinksetDraft,
   I_Page,
   I_PageDraft,
+  I_RecentLink,
   I_UserData,
   T_Token,
 } from '../../../model/typesModel';
@@ -295,6 +296,22 @@ export const dataSlice = createSlice({
         (d) => d.id !== action.payload
       );
     },
+
+    updateRecentLinks: (
+      state,
+      action: PayloadAction<Omit<I_RecentLink, 'date'>>
+    ) => {
+      const link: I_RecentLink = {
+        ...action.payload,
+        date: new Date().toString(),
+      };
+
+      if (link.href.startsWith('/conspect')) {
+        updateRecent(link, state.recent.notes);
+      } else {
+        updateRecent(link, state.recent.links);
+      }
+    },
   },
 });
 
@@ -316,6 +333,7 @@ export const {
   createLinksetDraft,
   createLinkset,
   deleteLinkset,
+  updateRecentLinks,
 } = dataSlice.actions;
 export const { reducer: dataReducer } = dataSlice;
 
@@ -359,4 +377,17 @@ function insertElement(
   } else {
     array.splice(elementIndex, 1, element);
   }
+}
+
+function updateRecent(link: I_RecentLink, queue: I_RecentLink[]) {
+  const linkIndex = queue.findIndex((l) => l.href === link.href);
+
+  if (linkIndex !== -1) {
+    queue.splice(linkIndex);
+  }
+  if (queue.length >= 10) {
+    queue.pop();
+  }
+
+  queue.unshift(link);
 }

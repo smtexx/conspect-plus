@@ -1,21 +1,24 @@
 import { Link } from 'react-router-dom';
 import { FaExternalLinkAlt } from 'react-icons/fa';
 import s from './CustomLink.module.scss';
+import { useDispatch } from 'react-redux';
+import { updateRecentLinks } from '../../app/controller/redux/data/dataSlice';
 
-interface I_PropsExternal {
+interface I_Props {
   href: string;
   text: string;
-  counter?: number;
-  external: true;
   date?: string;
+  addRecent?: boolean;
 }
 
-interface I_PropsInternal {
-  href: string;
-  text: string;
+interface I_PropsExternal extends I_Props {
+  counter?: number;
+  external: true;
+}
+
+interface I_PropsInternal extends I_Props {
   counter: number;
   external?: false;
-  date?: string;
 }
 
 export default function CustomLink({
@@ -24,7 +27,17 @@ export default function CustomLink({
   counter,
   date,
   external,
+  addRecent,
 }: I_PropsExternal | I_PropsInternal) {
+  const dispatch = useDispatch();
+
+  let handleClick;
+  if (addRecent) {
+    handleClick = () => {
+      dispatch(updateRecentLinks({ text, href }));
+    };
+  }
+
   const parts = (
     <>
       <span className={s.icon}>
@@ -44,11 +57,12 @@ export default function CustomLink({
       href={href}
       rel="noreferrer noopener"
       target="_blank"
+      onClick={handleClick}
     >
       {parts}
     </a>
   ) : (
-    <Link className={s.internal} to={href}>
+    <Link className={s.internal} to={href} onClick={handleClick}>
       {parts}
     </Link>
   );
