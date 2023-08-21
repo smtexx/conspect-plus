@@ -85,11 +85,7 @@ export default function Sections() {
         <EditBlockFormPart
           title="Создать раздел"
           description="Для создания нового раздела в текущем конспекте заполните поле с названием раздела ниже:"
-          titleFieldConfig={{
-            placeholder: 'Название раздела',
-            minLength: 3,
-            maxLength: 25,
-          }}
+          titlePlaceholder="Название раздела"
           buttonText="Создать"
           buttonHandler={handleCreateSection}
         />
@@ -97,16 +93,8 @@ export default function Sections() {
         <EditBlockFormPart
           title="Изменить конспект"
           description="Для изменения названия или описания конспекта, введите новые значения в поля ниже:"
-          titleFieldConfig={{
-            placeholder: 'Название конспекта',
-            minLength: 3,
-            maxLength: 25,
-          }}
-          descriptionFieldConfig={{
-            placeholder: 'Описание конспекта',
-            minLength: 20,
-            maxLength: 60,
-          }}
+          titlePlaceholder="Название конспекта"
+          descriptionPlaceholder="Описание конспекта"
           buttonText="Сохранить"
           buttonHandler={handleEditConspect}
         />

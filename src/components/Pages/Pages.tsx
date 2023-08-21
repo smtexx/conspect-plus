@@ -106,11 +106,7 @@ export default function Pages() {
         <EditBlockFormPart
           title="Изменить раздел"
           description="Для изменения названия раздела, введите новое значение в поле ниже:"
-          titleFieldConfig={{
-            placeholder: 'Название раздела',
-            minLength: 3,
-            maxLength: 25,
-          }}
+          titlePlaceholder="Название раздела"
           buttonText="Сохранить"
           buttonHandler={handleEditSection}
         />

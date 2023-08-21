@@ -54,16 +54,8 @@ export default function Conspects() {
         <EditBlockFormPart
           title="Создать конспект"
           description="Для создания нового конспекта заполните поля с названием и описанием конспекта: "
-          titleFieldConfig={{
-            placeholder: 'Название конспекта',
-            minLength: 3,
-            maxLength: 25,
-          }}
-          descriptionFieldConfig={{
-            placeholder: 'Описание конспекта',
-            minLength: 20,
-            maxLength: 60,
-          }}
+          titlePlaceholder="Название конспекта"
+          descriptionPlaceholder="Описание конспекта"
           buttonText="Создать"
           buttonHandler={handleCreateConspect}
         />

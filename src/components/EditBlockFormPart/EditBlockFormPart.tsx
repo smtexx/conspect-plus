@@ -1,80 +1,50 @@
 import { Button, FloatingLabel, Form } from 'react-bootstrap';
-import { ChangeEvent, useState, useEffect } from 'react';
+import { ChangeEvent, useState, FormEventHandler } from 'react';
 import { createId } from '../../lib/createId';
 import CustomSideForm from '../CustomSideForm/CustomSideForm';
-
-interface I_FieldConfig {
-  placeholder: string;
-  minLength: number;
-  maxLength: number;
-}
 
 interface I_Props {
   title: string;
   description: string;
-  titleFieldConfig: I_FieldConfig;
-  descriptionFieldConfig?: I_FieldConfig;
+  titlePlaceholder: string;
+  descriptionPlaceholder?: string;
   buttonText: string;
   buttonHandler: (title: string, description: string) => void;
 }
 
+const options = {
+  minTitle: 3,
+  maxTitle: 25,
+  minDescription: 20,
+  maxDescription: 60,
+  filter: /[^\wа-я.,: -]/gi,
+};
+
 export default function EditBlockFormPart({
   title,
   description,
-  titleFieldConfig,
-  descriptionFieldConfig,
+  titlePlaceholder,
+  descriptionPlaceholder,
   buttonText,
   buttonHandler,
 }: I_Props) {
   const [titleField, setTitleField] = useState('');
   const [descriptionField, setDescriptionField] = useState('');
-  const [disabled, setDisabled] = useState(true);
-
-  useEffect(() => {
-    const tests = [
-      titleField.length >= titleFieldConfig.minLength,
-      titleField.length <= titleFieldConfig.maxLength,
-    ];
-
-    if (descriptionFieldConfig) {
-      tests.push(
-        descriptionField.length >= descriptionFieldConfig.minLength,
-        descriptionField.length <= descriptionFieldConfig.maxLength
-      );
-    }
-
-    let unlock = true;
-    for (let test of tests) {
-      if (!test) {
-        unlock = false;
-        break;
-      }
-    }
-
-    if (unlock) {
-      setDisabled(false);
-    } else {
-      setDisabled(true);
-    }
-  }, [
-    titleField,
-    descriptionField,
-    titleFieldConfig.minLength,
-    titleFieldConfig.maxLength,
-    descriptionFieldConfig,
-    descriptionFieldConfig?.minLength,
-    descriptionFieldConfig?.maxLength,
-  ]);
 
   function handleTitleChange(e: ChangeEvent<HTMLInputElement>) {
-    const value = e.target.value;
+    const value = e.target.value.replaceAll(options.filter, '');
     setTitleField(value);
   }
 
   function handleDescriptionChange(e: ChangeEvent<HTMLInputElement>) {
-    const value = e.target.value;
+    const value = e.target.value.replaceAll(options.filter, '');
     setDescriptionField(value);
   }
+
+  const handleSubmit: FormEventHandler<HTMLFormElement> = (e) => {
+    e.preventDefault();
+    buttonHandler(titleField, descriptionField);
+  };
 
   const fieldPartID = createId(5);
   const titleInputID = `title_input_${fieldPartID}`;
@@ -83,48 +53,54 @@ export default function EditBlockFormPart({
   const descriptionInputHelpID = `description_input_help_${fieldPartID}`;
 
   return (
-    <CustomSideForm title={title} description={description}>
+    <CustomSideForm
+      title={title}
+      description={description}
+      onSubmit={handleSubmit}
+    >
       <FloatingLabel
         controlId={titleInputID}
-        label={titleFieldConfig.placeholder}
+        label={titlePlaceholder}
       >
         <Form.Control
           type="text"
-          placeholder={titleFieldConfig.placeholder}
+          placeholder={titlePlaceholder}
           value={titleField}
           onChange={handleTitleChange}
           aria-labelledby={titleInputHelpID}
+          minLength={options.minTitle}
+          maxLength={options.maxTitle}
+          required={true}
         />
       </FloatingLabel>
       <p id={titleInputHelpID} className="form-text">
-        {`Длинна от ${titleFieldConfig.minLength} до ${titleFieldConfig.maxLength} символов. Текущая: ${titleField.length}`}
+        {`Длинна от ${options.minTitle} до ${options.maxTitle} символов. Текущая: ${titleField.length}`}
       </p>
-      {descriptionFieldConfig && (
+      {descriptionPlaceholder && (
         <>
           <FloatingLabel
             controlId={descriptionInputID}
-            label={descriptionFieldConfig.placeholder}
+            label={descriptionPlaceholder}
           >
             <Form.Control
               as="textarea"
-              placeholder={descriptionFieldConfig.placeholder}
+              placeholder={descriptionPlaceholder}
               style={{ height: '100px' }}
               value={descriptionField}
               onChange={handleDescriptionChange}
               aria-labelledby={descriptionInputHelpID}
+              minLength={options.minDescription}
+              maxLength={options.maxDescription}
+              required={true}
             />
           </FloatingLabel>
           <p id={descriptionInputHelpID} className="form-text">
-            {`Длинна от ${descriptionFieldConfig.minLength} до ${descriptionFieldConfig.maxLength} символов. Текущая: ${descriptionField.length}`}
+            {`Длинна от ${options.minDescription} до ${options.maxDescription} символов. Текущая: ${descriptionField.length}`}
           </p>
         </>
       )}
       <div className="pt-3 d-flex justify-content-end">
-        <Button
-          variant="primary"
-          disabled={disabled}
-          onClick={() => buttonHandler(titleField, descriptionField)}
-        >
+        <Button type="submit" variant="primary">
           {buttonText}
         </Button>
       </div>
