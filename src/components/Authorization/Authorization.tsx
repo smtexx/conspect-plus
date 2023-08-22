@@ -31,9 +31,7 @@ export default function Authorization({ children }: I_Props) {
         dispatch(loadData(userData));
       }
 
-      if (activeUser) {
-        navigate('/quicklinks');
-      } else {
+      if (activeUser === undefined) {
         navigate('/users');
       }
     } catch (error) {
@@ -45,9 +43,7 @@ export default function Authorization({ children }: I_Props) {
   const activeUser = useSelector(selectActiveUser);
   const { pathname } = useLocation();
   useEffect(() => {
-    if (activeUser && pathname === '/') {
-      navigate('/quicklinks');
-    } else if (!activeUser) {
+    if (activeUser === undefined && pathname !== '/users') {
       navigate('/users');
     }
   }, [pathname, activeUser, navigate]);
