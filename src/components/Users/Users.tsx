@@ -139,6 +139,7 @@ export default function Users() {
             value={login}
             onChange={handleChangeLogin}
             aria-labelledby="loginHelpBlock"
+            autoFocus={true}
           />
         </FloatingLabel>
         <p id="loginHelpBlock" className="form-text">
