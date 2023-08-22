@@ -28,7 +28,7 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
     children: [
       {
-        path: 'quicklinks',
+        path: '',
         element: <QuickLinks />,
       },
       {
