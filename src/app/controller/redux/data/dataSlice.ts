@@ -174,7 +174,10 @@ export const dataSlice = createSlice({
 
         // Delete recent links
         state.recent.notes = state.recent.notes.filter(
-          (n) => !n.href.startsWith(`/${conspectID}/${sectionID}/`)
+          (n) =>
+            !n.href.startsWith(
+              `/conspect/${conspectID}/${sectionID}/`
+            )
         );
       }
     },
@@ -230,6 +233,13 @@ export const dataSlice = createSlice({
 
         // Delete corresponding draft
         state.drafts = state.drafts.filter((d) => d.id !== pageID);
+
+        // Rename page in quicklinks
+        const href = `/conspect/${conspectID}/${sectionID}/${pageID}`;
+        const page = state.recent.notes.find((n) => n.href === href);
+        if (page) {
+          page.text = action.payload.title;
+        }
       }
     },
 
@@ -269,9 +279,8 @@ export const dataSlice = createSlice({
         // Delete recent links
         state.recent.notes = state.recent.notes.filter(
           (n) =>
-            !n.href.startsWith(
-              `/${conspectID}/${sectionID}/${pageID}`
-            )
+            n.href !==
+            `/conspect/${conspectID}/${sectionID}/${pageID}`
         );
       }
     },
