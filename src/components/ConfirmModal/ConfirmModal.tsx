@@ -28,7 +28,7 @@ export default function ConfirmModal({
       type="primary"
       controls={
         <div className="d-flex justify-content-end ">
-          <Button variant="secondary" onClick={onHide}>
+          <Button variant="secondary" onClick={onHide} tabIndex={1}>
             Отмена
           </Button>
           <Button
@@ -36,6 +36,7 @@ export default function ConfirmModal({
             variant="primary"
             onClick={buttonHandler}
             disabled={disabled}
+            tabIndex={2}
           >
             {buttonText}
           </Button>

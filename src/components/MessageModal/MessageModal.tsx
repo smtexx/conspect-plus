@@ -30,6 +30,7 @@ export default function MessageModal({
         <Button
           variant={type === 'error' ? 'outline-danger' : 'primary'}
           onClick={buttonHandler}
+          tabIndex={1}
         >
           {buttonText}
         </Button>
