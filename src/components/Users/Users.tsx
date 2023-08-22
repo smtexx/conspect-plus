@@ -68,6 +68,14 @@ export default function Users() {
       dispatch(clearData());
     }
   }
+  const handleKeyDown: React.KeyboardEventHandler<
+    HTMLInputElement
+  > = (e) => {
+    const keyCode = e.code;
+    if (!saveDisabled && keyCode === 'Enter') {
+      handleSaveUser();
+    }
+  };
 
   return (
     <>
@@ -140,6 +148,7 @@ export default function Users() {
             onChange={handleChangeLogin}
             aria-labelledby="loginHelpBlock"
             autoFocus={true}
+            onKeyDown={handleKeyDown}
           />
         </FloatingLabel>
         <p id="loginHelpBlock" className="form-text">
