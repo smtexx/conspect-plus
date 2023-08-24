@@ -1,0 +1,90 @@
+import { AES, enc } from 'crypto-js';
+import { I_User, I_UserData } from '../model/typesModel';
+import { getUserData, getUsers } from './localstorage';
+
+const FILE_INTACT_KEY = '3й$8 я+9e 2Жc* b1_6 Н5e0';
+const FILE_SECURITY_KEY = 'VaO_81QGBMudScBgErSt';
+
+interface I_FileData {
+  user: I_User;
+  data: I_UserData;
+  key: typeof FILE_INTACT_KEY;
+}
+
+function encryptData(dataJSON: string): string {
+  return AES.encrypt(dataJSON, FILE_SECURITY_KEY).toString();
+}
+
+function decryptData(encryptedData: string): string {
+  const bytes = AES.decrypt(encryptedData, FILE_SECURITY_KEY);
+  return bytes.toString(enc.Utf8);
+}
+
+async function saveFile(login: string, encryptedData: string) {
+  const fileName = `${login}_${new Date().toLocaleString()}.tip`;
+  const blobData = new Blob([encryptedData], { type: 'text/plain' });
+
+  const dataURL = await new Promise((resolve, reject) => {
+    const fileReader = new FileReader();
+
+    fileReader.onload = () => {
+      resolve(fileReader.result);
+    };
+    fileReader.onerror = () => {
+      reject(fileReader.error);
+    };
+    fileReader.readAsDataURL(blobData);
+  });
+
+  const link = document.createElement('a');
+  link.download = fileName;
+  link.href = dataURL as string;
+  link.click();
+}
+
+async function readFile(file: File): Promise<string> {
+  const data = await new Promise((resolve, reject) => {
+    const fileReader = new FileReader();
+
+    fileReader.onload = () => {
+      resolve(fileReader.result);
+    };
+    fileReader.onerror = () => {
+      reject(fileReader.error);
+    };
+    fileReader.readAsText(file);
+  });
+
+  return data as string;
+}
+
+export async function exportStoredData(login: string) {
+  const user = getUsers().find((u) => u.login === login);
+  const data = getUserData(login);
+
+  if (user !== undefined && data !== null) {
+    const fileData: I_FileData = {
+      user: { ...user, isActive: false },
+      data,
+      key: FILE_INTACT_KEY,
+    };
+
+    const encryptedData = encryptData(JSON.stringify(fileData));
+    await saveFile(login, encryptedData);
+  }
+}
+
+export async function importStoredData(
+  file: File
+): Promise<I_FileData> {
+  const encryptedData = await readFile(file);
+  const fileData = JSON.parse(
+    decryptData(encryptedData)
+  ) as I_FileData;
+
+  if (fileData.key !== FILE_INTACT_KEY) {
+    throw new Error('File is damaged and cannot be read');
+  }
+
+  return fileData;
+}
