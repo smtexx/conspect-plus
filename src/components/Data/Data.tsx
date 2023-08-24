@@ -13,6 +13,7 @@ import {
   updateUserActivity,
 } from '../../app/controller/redux/users/usersSlice';
 import { setSaved } from '../../app/controller/redux/data/dataSlice';
+import { exportStoredData } from '../../app/controller/fileProcessing';
 
 interface I_DataCard {
   header: string;
@@ -70,20 +71,8 @@ export default function Data() {
     setImportModalOpen(false);
     setFileAccepted(false);
   }
-  function handleFileChange(e: ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0];
-    if (file && file.name.endsWith('.tip')) {
-      setFileAccepted(true);
-    } else {
-      setFileAccepted(false);
-    }
-  }
-  function handleFileImport() {
-    closeImportModal();
-    openMessageModal(E_MessageTypes.IMPORT_OK);
-  }
 
-  function handleSaveData() {
+  function saveData() {
     // Prepare userData
     const compressedUserData = JSON.parse(
       JSON.stringify(userData)
@@ -113,20 +102,58 @@ export default function Data() {
       activeUserCopy.lastActivity = lastActivity;
       activeUserCopy.notes = notesCounter;
 
-      try {
-        // Save data
-        setUserData(activeUserCopy, compressedUserData);
-
-        // Update state
-        dispatch(setNotesQty(notesCounter));
-        dispatch(updateUserActivity(lastActivity));
-        dispatch(setSaved());
-        openMessageModal(E_MessageTypes.SAVE_OK);
-      } catch (error) {
-        openMessageModal(E_MessageTypes.ERROR);
-        console.error(error);
-      }
+      // Save data
+      setUserData(activeUserCopy, compressedUserData);
+      // Update state
+      dispatch(setNotesQty(notesCounter));
+      dispatch(updateUserActivity(lastActivity));
+      dispatch(setSaved());
     }
+  }
+
+  function handleSaveData() {
+    try {
+      handleSaveData();
+      openMessageModal(E_MessageTypes.SAVE_OK);
+    } catch (error) {
+      openMessageModal(E_MessageTypes.ERROR);
+      console.error(error);
+    }
+  }
+
+  async function exportData() {
+    if (!userData.saved) {
+      saveData();
+    }
+
+    const user = users.find((u) => u.isActive);
+    if (user !== undefined) {
+      await exportStoredData(user.login);
+    }
+  }
+
+  async function handleExportData() {
+    try {
+      await exportData();
+      openMessageModal(E_MessageTypes.EXPORT_OK);
+    } catch (error) {
+      openMessageModal(E_MessageTypes.ERROR);
+      console.error(error);
+    }
+  }
+
+  function handleFileChange(e: ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (file && file.name.endsWith('.tip')) {
+      setFileAccepted(true);
+    } else {
+      setFileAccepted(false);
+    }
+  }
+
+  function handleFileImport() {
+    closeImportModal();
+    openMessageModal(E_MessageTypes.IMPORT_OK);
   }
 
   const dataActions: I_DataCard[] = [
@@ -146,9 +173,7 @@ export default function Data() {
       устройстве или в другом браузере. Таким образом вы можете 
       работать с вашими конспектами где вам удобно.`,
       buttonText: 'Экспортировать',
-      buttonHandler: () => {
-        openMessageModal(E_MessageTypes.EXPORT_OK);
-      },
+      buttonHandler: handleExportData,
     },
     {
       header: 'Импортировать данные',
