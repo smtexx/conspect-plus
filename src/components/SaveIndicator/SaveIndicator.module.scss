@@ -1,0 +1,24 @@
+.wrapper {
+  display: flex;
+  color: var(--secondary);
+
+  &:hover {
+    color: var(--secondary);
+  }
+}
+
+.active {
+  animation: blink infinite linear 1.2s;
+}
+
+@keyframes blink {
+  0% {
+    color: var(--bs-primary);
+  }
+  40% {
+    color: var(--bs-primary);
+  }
+  100% {
+    color: transparent;
+  }
+}

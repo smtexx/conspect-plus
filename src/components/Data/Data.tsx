@@ -12,6 +12,7 @@ import {
   setNotesQty,
   updateUserActivity,
 } from '../../app/controller/redux/users/usersSlice';
+import { setSaved } from '../../app/controller/redux/data/dataSlice';
 
 interface I_DataCard {
   header: string;
@@ -119,6 +120,7 @@ export default function Data() {
         // Update state
         dispatch(setNotesQty(notesCounter));
         dispatch(updateUserActivity(lastActivity));
+        dispatch(setSaved());
         openMessageModal(E_MessageTypes.SAVE_OK);
       } catch (error) {
         openMessageModal(E_MessageTypes.ERROR);

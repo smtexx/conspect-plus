@@ -129,6 +129,7 @@ export interface I_UserData {
     links: I_RecentLink[];
   };
   tip: string;
+  saved: boolean;
 }
 
 export interface I_User {

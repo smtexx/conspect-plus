@@ -9,6 +9,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectActiveUser } from '../../app/controller/redux/users/usersSlice';
+import SaveIndicator from '../SaveIndicator/SaveIndicator';
 
 export default function NavBar() {
   const [opened, setOpened] = useState(false);
@@ -116,7 +117,7 @@ export default function NavBar() {
               </NavDropdown.Item>
             </NavDropdown>
             <div className="border-top border-2 my-3 my-lg-0"></div>
-            <Nav.Link as="div">
+            <Nav.Link as="div" className="d-flex">
               <Link
                 to="/users"
                 className="d-flex align-items-center ms-lg-5 text-white text-decoration-none"
@@ -138,6 +139,11 @@ export default function NavBar() {
                   </>
                 )}
               </Link>
+              {user ? (
+                <div className="d-flex ms-auto ms-lg-4 fs-3 text-secondary">
+                  <SaveIndicator />
+                </div>
+              ) : null}
             </Nav.Link>
           </Nav>
         </Navbar.Collapse>
