@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { Button, Accordion, Alert } from 'react-bootstrap';
 import { ChangeEvent } from 'react';
 import MessageModal from '../MessageModal/MessageModal';
@@ -12,8 +12,15 @@ import {
   setNotesQty,
   updateUserActivity,
 } from '../../app/controller/redux/users/usersSlice';
-import { setSaved } from '../../app/controller/redux/data/dataSlice';
-import { exportStoredData } from '../../app/controller/fileProcessing';
+import {
+  loadData,
+  setSaved,
+} from '../../app/controller/redux/data/dataSlice';
+import {
+  exportStoredData,
+  importStoredData,
+} from '../../app/controller/fileProcessing';
+import { regenerateTokens } from '../../app/controller/utils';
 
 interface I_DataCard {
   header: string;
@@ -55,6 +62,7 @@ export default function Data() {
   const users = useSelector((state: RootState) => state.users);
   const userData = useSelector((state: RootState) => state.data);
   const dispatch = useDispatch();
+  const inputFileRef = useRef<HTMLInputElement>(null);
 
   function openMessageModal(type: E_MessageTypes) {
     setMessageType(type);
@@ -93,6 +101,7 @@ export default function Data() {
       notesCounter++;
     });
     compressedUserData.tip = '';
+    compressedUserData.saved = true;
 
     // Prepare user
     const lastActivity = new Date().toString();
@@ -113,7 +122,7 @@ export default function Data() {
 
   function handleSaveData() {
     try {
-      handleSaveData();
+      saveData();
       openMessageModal(E_MessageTypes.SAVE_OK);
     } catch (error) {
       openMessageModal(E_MessageTypes.ERROR);
@@ -151,9 +160,35 @@ export default function Data() {
     }
   }
 
-  function handleFileImport() {
+  async function importUserData() {
+    if (
+      inputFileRef.current !== null &&
+      inputFileRef.current.files !== null
+    ) {
+      const file = inputFileRef.current.files[0];
+      const { userData } = await importStoredData(file);
+      regenerateTokens(userData);
+      userData.saved = false;
+
+      // Update state
+      dispatch(loadData(userData));
+      dispatch(updateUserActivity(new Date().toString()));
+    }
+  }
+
+  async function handleImportData() {
+    let messageType;
+
+    try {
+      await importUserData();
+      messageType = E_MessageTypes.IMPORT_OK;
+    } catch (error) {
+      messageType = E_MessageTypes.ERROR;
+      console.error(error);
+    }
+
     closeImportModal();
-    openMessageModal(E_MessageTypes.IMPORT_OK);
+    openMessageModal(messageType);
   }
 
   const dataActions: I_DataCard[] = [
@@ -248,7 +283,7 @@ export default function Data() {
         disabled={!fileAccepted}
         onHide={closeImportModal}
         buttonText="Импортировать"
-        buttonHandler={handleFileImport}
+        buttonHandler={handleImportData}
       >
         <p>
           Выберите файл содержащий данные с конспектами, которые будут
@@ -279,8 +314,7 @@ export default function Data() {
           aria-labelledby="fileHelpBlock"
           accept=".tip"
           onChange={handleFileChange}
-          // value={login}
-          // autoFocus={true}
+          ref={inputFileRef}
         />
         <div id="fileHelpBlock" className="form-text">
           Файл пользовательских конспектов filename.tip
