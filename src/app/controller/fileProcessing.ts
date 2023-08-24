@@ -1,12 +1,11 @@
 import { AES, enc } from 'crypto-js';
-import { I_User, I_UserData } from '../model/typesModel';
-import { getUserData, getUsers } from './localstorage';
+import { I_UserData } from '../model/typesModel';
+import { getUserData } from './localstorage';
 
 const FILE_INTACT_KEY = '3й$8 я+9e 2Жc* b1_6 Н5e0';
 const FILE_SECURITY_KEY = 'VaO_81QGBMudScBgErSt';
 
 interface I_FileData {
-  user: I_User;
   data: I_UserData;
   key: typeof FILE_INTACT_KEY;
 }
@@ -59,12 +58,10 @@ async function readFile(file: File): Promise<string> {
 }
 
 export async function exportStoredData(login: string) {
-  const user = getUsers().find((u) => u.login === login);
   const data = getUserData(login);
 
-  if (user !== undefined && data !== null) {
+  if (data !== null) {
     const fileData: I_FileData = {
-      user: { ...user, isActive: false },
       data,
       key: FILE_INTACT_KEY,
     };
