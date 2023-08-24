@@ -1,10 +1,5 @@
-import {
-  E_TokenType,
-  I_LinkToken,
-  I_User,
-  I_UserData,
-} from '../model/typesModel';
-import { parse } from './parser';
+import { I_User, I_UserData } from '../model/typesModel';
+import { regenerateTokens } from './utils';
 
 const namespace = 'conspect_plus_';
 const dataNamespace = `${namespace}data_`;
@@ -29,22 +24,10 @@ export function getUserData(login: string): I_UserData | null {
   if (localStorage) {
     const dataString = localStorage.getItem(key);
     if (dataString !== null) {
-      const dataObject = JSON.parse(dataString) as I_UserData;
+      const userData = JSON.parse(dataString) as I_UserData;
       // Regenerate tokens
-      dataObject.conspects.forEach((c) => {
-        c.sections.forEach((s) => {
-          s.pages.forEach((p) => {
-            p.tokens = parse(p.markup);
-          });
-        });
-      });
-      dataObject.linksets.forEach((l) => {
-        const tokens = parse(l.markup);
-        l.tokens = tokens.filter(
-          (t) => t.type === E_TokenType.R
-        ) as I_LinkToken[];
-      });
-      return dataObject;
+      regenerateTokens(userData);
+      return userData;
     }
   } else {
     throw new Error('Localstorage is not available in your browser');
