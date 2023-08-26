@@ -12,7 +12,7 @@ export const usersSlice = createSlice({
       state.length = 0;
       state.push(...action.payload);
     },
-    createUser: (state, action: PayloadAction<string>) => {
+    createUser: (state, action: PayloadAction<I_User['login']>) => {
       state.push({
         login: action.payload,
         isActive: false,
@@ -20,6 +20,14 @@ export const usersSlice = createSlice({
         lastActivity: new Date().toString(),
         notes: 0,
       });
+    },
+    deleteUser: (state, action: PayloadAction<I_User['login']>) => {
+      const userIndex = state.findIndex(
+        (u) => u.login === action.payload
+      );
+      if (userIndex !== -1) {
+        state.splice(userIndex, 1);
+      }
     },
     setActiveUser: (
       state,
@@ -54,6 +62,7 @@ export const {
   updateUserActivity,
   loadUsers,
   setNotesQty,
+  deleteUser,
 } = usersSlice.actions;
 export const { reducer: usersReducer } = usersSlice;
 
