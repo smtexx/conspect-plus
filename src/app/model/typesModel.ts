@@ -128,8 +128,6 @@ export interface I_UserData {
     notes: I_RecentLink[];
     links: I_RecentLink[];
   };
-  tip: string;
-  saved: boolean;
 }
 
 export interface I_User {

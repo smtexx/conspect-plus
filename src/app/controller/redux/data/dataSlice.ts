@@ -28,8 +28,6 @@ const initialState: I_UserData = {
     notes: [],
     links: [],
   },
-  tip: '',
-  saved: false,
 };
 
 export const dataSlice = createSlice({
@@ -58,7 +56,6 @@ export const dataSlice = createSlice({
       };
 
       state.conspects.push(newConspect);
-      state.saved = false;
     },
 
     editConspect: (
@@ -76,7 +73,6 @@ export const dataSlice = createSlice({
       if (conspect !== undefined) {
         conspect.title = action.payload.title;
         conspect.description = action.payload.description;
-        state.saved = false;
       }
     },
 
@@ -89,7 +85,6 @@ export const dataSlice = createSlice({
       state.conspects = state.conspects.filter(
         (c) => c.id !== conspectID
       );
-      state.saved = false;
 
       // Delete drafts
       state.drafts = state.drafts.filter((d) => {
@@ -125,7 +120,6 @@ export const dataSlice = createSlice({
           saved: new Date().toString(),
           pages: [],
         });
-        state.saved = false;
       }
     },
 
@@ -146,7 +140,6 @@ export const dataSlice = createSlice({
         );
         if (section !== undefined) {
           section.title = action.payload.title;
-          state.saved = false;
         }
       }
     },
@@ -177,7 +170,6 @@ export const dataSlice = createSlice({
           }
           return true;
         });
-        state.saved = false;
 
         // Delete recent links
         state.recent.notes = state.recent.notes.filter(
@@ -209,7 +201,6 @@ export const dataSlice = createSlice({
       };
 
       insertElement(newDraft, state.drafts);
-      state.saved = false;
     },
 
     deletePageDraft: (
@@ -219,7 +210,6 @@ export const dataSlice = createSlice({
       state.drafts = state.drafts.filter(
         (d) => d.id !== action.payload
       );
-      state.saved = false;
     },
 
     createPage: (state, action: PayloadAction<I_PageDraft>) => {
@@ -239,7 +229,6 @@ export const dataSlice = createSlice({
         };
 
         insertElement(newPage, pages);
-        state.saved = false;
 
         // Delete corresponding draft
         state.drafts = state.drafts.filter((d) => d.id !== pageID);
@@ -253,16 +242,11 @@ export const dataSlice = createSlice({
       }
     },
 
-    changeTip: (state, action: PayloadAction<{ html: string }>) => {
-      state.tip = action.payload.html;
-    },
-
     addDraft: (
       state,
       action: PayloadAction<I_PageDraft | I_LinksetDraft>
     ) => {
       insertElement(action.payload, state.drafts);
-      state.saved = false;
     },
 
     deletePage: (
@@ -283,7 +267,6 @@ export const dataSlice = createSlice({
         sections.pages = sections.pages.filter(
           (p) => p.id !== pageID
         );
-        state.saved = false;
 
         // Delete drafts
         state.drafts = state.drafts.filter((d) => d.id !== pageID);
@@ -312,7 +295,6 @@ export const dataSlice = createSlice({
       };
 
       insertElement(newDraft, state.drafts);
-      state.saved = false;
     },
 
     createLinkset: (state, action: PayloadAction<I_LinksetDraft>) => {
@@ -323,7 +305,6 @@ export const dataSlice = createSlice({
       };
 
       insertElement(newLinkset, state.linksets);
-      state.saved = false;
 
       // Delete corresponding draft
       state.drafts = state.drafts.filter(
@@ -338,7 +319,6 @@ export const dataSlice = createSlice({
       state.linksets = state.linksets.filter(
         (l) => l.id !== action.payload
       );
-      state.saved = false;
 
       // Delete drafts
       state.drafts = state.drafts.filter(
@@ -360,11 +340,6 @@ export const dataSlice = createSlice({
       } else {
         updateRecent(link, state.recent.links);
       }
-      state.saved = false;
-    },
-
-    setSaved: (state) => {
-      state.saved = true;
     },
   },
 });
@@ -380,7 +355,6 @@ export const {
   createPageDraft,
   deletePageDraft,
   createPage,
-  changeTip,
   loadData,
   addDraft,
   deletePage,
@@ -388,7 +362,6 @@ export const {
   createLinkset,
   deleteLinkset,
   updateRecentLinks,
-  setSaved,
 } = dataSlice.actions;
 export const { reducer: dataReducer } = dataSlice;
 
@@ -405,10 +378,6 @@ export const selectConspect = createSelector(
     return conspects.find((c) => c.id === conspectID);
   }
 );
-
-export const selectSaved = (state: RootState) => state.data.saved;
-
-export const selectTip = (state: RootState) => state.data.tip;
 
 export const selectRecent = (state: RootState) => state.data.recent;
 
