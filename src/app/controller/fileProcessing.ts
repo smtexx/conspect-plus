@@ -1,6 +1,7 @@
 import { AES, enc } from 'crypto-js';
 import { I_UserData } from '../model/typesModel';
 import { getUserData } from './localstorage';
+import { regenerateTokens } from './utils';
 
 const FILE_INTACT_KEY = '3й$8 я+9e 2Жc* b1_6 Н5e0';
 const FILE_SECURITY_KEY = 'VaO_81QGBMudScBgErSt';
@@ -71,9 +72,7 @@ export async function exportStoredData(login: string) {
   }
 }
 
-export async function importStoredData(
-  file: File
-): Promise<I_FileData> {
+export async function readFileData(file: File): Promise<I_UserData> {
   const encryptedData = await readFile(file);
   const fileData = JSON.parse(
     decryptData(encryptedData)
@@ -83,5 +82,7 @@ export async function importStoredData(
     throw new Error('File is damaged and cannot be read');
   }
 
-  return fileData;
+  regenerateTokens(fileData.userData);
+
+  return fileData.userData;
 }
