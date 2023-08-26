@@ -11,6 +11,7 @@ import {
   setUserData,
 } from '../../localstorage';
 import {
+  addUser,
   deleteUser,
   loadUsers,
   setActiveUser,
@@ -119,6 +120,37 @@ const exportAndExit = createAsyncThunk(
     await exportStoredData(login);
     removeUser(login);
     dispatch(deleteUser(login));
+  }
+);
+
+const createUser = createAsyncThunk(
+  'app/createUser',
+  async (login: I_User['login'], { dispatch, getState }) => {
+    const state = getState() as RootState;
+    if (state.users.findIndex((u) => u.login === login) !== -1) {
+      throw new AlreadyExistError('User already exists in app state');
+    }
+
+    const user: I_User = {
+      login,
+      created: new Date().toString(),
+      lastActivity: new Date().toString(),
+      isActive: false,
+      notes: 0,
+    };
+
+    const userData: I_UserData = {
+      conspects: [],
+      linksets: [],
+      drafts: [],
+      recent: {
+        links: [],
+        notes: [],
+      },
+    };
+
+    setUserData(user, userData);
+    dispatch(addUser(user));
   }
 );
 
@@ -232,6 +264,24 @@ export const appSlice = createSlice({
       };
       console.error(action.error);
     });
+
+    // Create user
+    builder.addCase(createUser.fulfilled, (state) => {
+      state.message = {
+        type: 'primary',
+        text: 'Новая учетная запись успешно создана и доступна для использования',
+      };
+    });
+    builder.addCase(createUser.rejected, (state, action) => {
+      state.message = {
+        type: 'error',
+        text:
+          action.error instanceof AlreadyExistError
+            ? 'Учетная запись с таким именем уже существует, используйте другое имя учетной записи.'
+            : 'Во время создания учетной записи возникла ошибка. Попробуйте перезагрузить приложение или использовать другой браузер',
+      };
+      console.error(action.error);
+    });
   },
 });
 
@@ -242,3 +292,5 @@ export const { reducer: appReducer } = appSlice;
 export const selectMessage = (state: RootState) => state.app.message;
 export const selectTip = (state: RootState) => state.app.tip;
 export const selectSaved = (state: RootState) => state.app.saved;
+
+class AlreadyExistError extends Error {}
