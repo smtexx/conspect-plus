@@ -14,11 +14,11 @@ export function getUsers(): I_User[] {
       return [];
     }
   } else {
-    throw new Error('Localstorage is not available in your browser');
+    throw new Error('Localstorage is not available');
   }
 }
 
-export function getUserData(login: string): I_UserData | null {
+export function getUserData(login: string): I_UserData {
   const key = `${dataNamespace}${login}`;
 
   if (localStorage) {
@@ -28,12 +28,14 @@ export function getUserData(login: string): I_UserData | null {
       // Regenerate tokens
       regenerateTokens(userData);
       return userData;
+    } else {
+      throw new Error(
+        `Data of user "${login}" not found in localstorage`
+      );
     }
   } else {
-    throw new Error('Localstorage is not available in your browser');
+    throw new Error('Localstorage is not available');
   }
-
-  return null;
 }
 
 export function setUserData(user: I_User, userData: I_UserData) {
@@ -58,6 +60,27 @@ export function setUserData(user: I_User, userData: I_UserData) {
     localStorage.setItem(USERS_KEY, JSON.stringify(savedUsers));
     localStorage.setItem(USER_DATA_KEY, JSON.stringify(userData));
   } else {
-    throw new Error('Unable to save user data to localstorage');
+    throw new Error('Localstorage is not available');
+  }
+}
+
+export function removeUser(login: I_User['login']) {
+  if (localStorage) {
+    const USER_DATA_KEY = `${dataNamespace}${login}`;
+
+    // Update users
+    const savedUsers = getUsers();
+    const userIndex = savedUsers.findIndex((u) => u.login === login);
+    if (userIndex !== -1) {
+      savedUsers.splice(userIndex, 1);
+    }
+
+    // Stringify and save data
+    localStorage.setItem(USERS_KEY, JSON.stringify(savedUsers));
+
+    // Delete user data
+    localStorage.removeItem(USER_DATA_KEY);
+  } else {
+    throw new Error('Localstorage is not available');
   }
 }
