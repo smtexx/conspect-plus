@@ -237,3 +237,8 @@ export const appSlice = createSlice({
 
 export const { setMessage, setUnsaved, setTip } = appSlice.actions;
 export const { reducer: appReducer } = appSlice;
+
+// Selectors
+export const selectMessage = (state: RootState) => state.app.message;
+export const selectTip = (state: RootState) => state.app.tip;
+export const selectSaved = (state: RootState) => state.app.saved;
