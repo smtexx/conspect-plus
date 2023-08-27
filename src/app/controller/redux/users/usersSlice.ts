@@ -64,3 +64,5 @@ export const { reducer: usersReducer } = usersSlice;
 export const selectUsers = (state: RootState) => state.users;
 export const selectActiveUser = (state: RootState) =>
   state.users.find((user) => user.isActive);
+export const selectActiveUserLogin = (state: RootState) =>
+  state.users.find((user) => user.isActive)?.login || '';
