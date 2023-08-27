@@ -186,7 +186,7 @@ export const appSlice = createSlice({
         type: 'error',
         text: 'Ошибка при сохранении состояния приложения. Попробуйте использовать другой браузер.',
       };
-      console.error(action.error);
+      console.error(action.error.message);
     });
     // Read app state
     builder.addCase(readAppState.fulfilled, (state) => {
@@ -200,13 +200,13 @@ export const appSlice = createSlice({
         type: 'error',
         text: 'Ошибка при чтении сохраненных данных приложения. Возможно данные были удалены браузером.',
       };
-      console.error(action.error);
+      console.error(action.error.message);
     });
     // Changing user
     builder.addCase(changeUser.fulfilled, (state) => {
       state.message = {
         type: 'primary',
-        text: 'Вход в аккаунт выполнен успешно. Данные пользователя прочитаны.',
+        text: 'Вход в учетную запись был выполнен успешно.',
       };
       state.saved = false;
     });
@@ -215,7 +215,7 @@ export const appSlice = createSlice({
         type: 'error',
         text: 'Ошибка при чтении сохраненных данных пользователя. Возможно данные были удалены браузером.',
       };
-      console.error(action.error);
+      console.error(action.error.message);
     });
     // Export data
     builder.addCase(exportUserData.fulfilled, (state) => {
@@ -229,7 +229,7 @@ export const appSlice = createSlice({
         type: 'error',
         text: 'Во время экспорта данных в файл произошла ошибка. Экспорт небыл выполнен.',
       };
-      console.error(action.error);
+      console.error(action.error.message);
     });
     // Import data
     builder.addCase(importUserData.fulfilled, (state) => {
@@ -244,7 +244,7 @@ export const appSlice = createSlice({
         type: 'error',
         text: 'Во время импорта данных из файла произошла ошибка. Импорт небыл выполнен.',
       };
-      console.error(action.error);
+      console.error(action.error.message);
     });
     // Export data and exit
     builder.addCase(exportAndExit.fulfilled, (state) => {
@@ -258,7 +258,7 @@ export const appSlice = createSlice({
         type: 'error',
         text: 'Во время экспорта данных или выхода произошла ошибка. Удаление пользователя небыло выполнено.',
       };
-      console.error(action.error);
+      console.error(action.error.message);
     });
     // Create user
     builder.addCase(createUser.fulfilled, (state) => {
@@ -270,12 +270,11 @@ export const appSlice = createSlice({
     builder.addCase(createUser.rejected, (state, action) => {
       state.message = {
         type: 'error',
-        text:
-          action.error instanceof AlreadyExistError
-            ? 'Учетная запись с таким именем уже существует, используйте другое имя учетной записи.'
-            : 'Во время создания учетной записи возникла ошибка. Попробуйте перезагрузить приложение или использовать другой браузер',
+        text: (action.error.name = 'AlreadyExistError'
+          ? 'Учетная запись с таким именем уже существует, используйте другое имя учетной записи.'
+          : 'Во время создания учетной записи возникла ошибка. Попробуйте перезагрузить приложение или использовать другой браузер'),
       };
-      console.error(action.error);
+      console.error(action.error.message);
     });
   },
 });
@@ -288,4 +287,9 @@ export const selectMessage = (state: RootState) => state.app.message;
 export const selectTip = (state: RootState) => state.app.tip;
 export const selectSaved = (state: RootState) => state.app.saved;
 
-class AlreadyExistError extends Error {}
+class AlreadyExistError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = 'AlreadyExistError';
+  }
+}
