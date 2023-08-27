@@ -1,80 +1,87 @@
 import { Button, FloatingLabel, Form } from 'react-bootstrap';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useState, useRef } from 'react';
 import ConfirmModal from '../ConfirmModal/ConfirmModal';
 import Screen from '../Screen/Screen';
 import UserCard from '../UserCard/UserCard';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  createUser,
-  selectActiveUser,
-  selectUsers,
-  setActiveUser,
-} from '../../app/controller/redux/users/usersSlice';
+import { selectUsers } from '../../app/controller/redux/users/usersSlice';
 import { I_User } from '../../app/model/typesModel';
-import { getUserData } from '../../app/controller/localstorage';
 import {
-  clearData,
-  loadData,
-} from '../../app/controller/redux/data/dataSlice';
+  changeUser,
+  createUser,
+  selectSaved,
+  writeAppState,
+} from '../../app/controller/redux/app/appSlice';
+import { AppDispatch } from '../../app/controller/redux/store';
 
 export default function Users() {
-  const dispatch = useDispatch();
   const [createModalShown, setCreateModalShown] = useState(false);
-  const [switchModalLogin, setSwitchModalLogin] = useState('');
+  const [saveModalShown, setSaveModalShown] = useState(false);
   const [login, setLogin] = useState('');
   const [saveDisabled, setSaveDisabled] = useState(true);
   const users = useSelector(selectUsers);
-  const activeUser = useSelector(selectActiveUser);
+  const isSaved = useSelector(selectSaved);
+  const dispatch = useDispatch() as AppDispatch;
+  const userToChangeRef = useRef('');
 
-  function handleCloseCreateModal() {
+  const handleOpenCreateModal = () => {
+    setCreateModalShown(true);
+  };
+
+  const handleCloseCreateModal = () => {
     setSaveDisabled(true);
     setLogin('');
     setCreateModalShown(false);
-  }
-  function handleSaveUser() {
+  };
+
+  const handleCreateUser = () => {
     dispatch(createUser(login));
     handleCloseCreateModal();
-  }
-  function handleChangeLogin(e: ChangeEvent<HTMLInputElement>) {
+  };
+
+  const handleKeyDown: React.KeyboardEventHandler<
+    HTMLInputElement
+  > = (e) => {
+    const keyCode = e.code;
+    if (!saveDisabled && keyCode === 'Enter') {
+      handleCreateUser();
+    }
+  };
+
+  const handleChangeLogin = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value
       .trim()
       .replace(/[^a-zа-я0-9_]/gi, '');
     const correctLoginRegExp = /^[a-zа-я0-9_]{3,20}$/i;
 
-    const alreadyExists =
-      users.findIndex((user) => user.login === value) !== -1;
-
-    if (correctLoginRegExp.test(value) && !alreadyExists) {
+    if (correctLoginRegExp.test(value)) {
       setSaveDisabled(false);
     } else {
       setSaveDisabled(true);
     }
 
     setLogin(value);
-  }
-  function handleChangeUser(login: I_User['login']) {
-    dispatch(setActiveUser(login));
+  };
 
-    let userData;
-    try {
-      userData = getUserData(login);
-    } catch (error) {
-      console.error(error);
-    }
-
-    if (userData) {
-      dispatch(loadData(userData));
+  const handleChangeUser = (login: I_User['login']) => {
+    if (isSaved) {
+      dispatch(changeUser(login));
+      handleCloseCreateModal();
     } else {
-      dispatch(clearData());
+      userToChangeRef.current = login;
+      setSaveModalShown(true);
     }
-  }
-  const handleKeyDown: React.KeyboardEventHandler<
-    HTMLInputElement
-  > = (e) => {
-    const keyCode = e.code;
-    if (!saveDisabled && keyCode === 'Enter') {
-      handleSaveUser();
-    }
+  };
+
+  const handleSaveAndChangeUserCancel = () => {
+    userToChangeRef.current = '';
+    setSaveModalShown(false);
+  };
+
+  const handleSaveAndChangeUser = async () => {
+    await dispatch(writeAppState());
+    await dispatch(changeUser(userToChangeRef.current));
+    handleSaveAndChangeUserCancel();
   };
 
   return (
@@ -95,13 +102,7 @@ export default function Users() {
                 created={user.created}
                 lastActivity={user.lastActivity}
                 notes={user.notes}
-                onClick={() => {
-                  if (activeUser) {
-                    setSwitchModalLogin(user.login);
-                  } else {
-                    handleChangeUser(user.login);
-                  }
-                }}
+                onClick={() => handleChangeUser(user.login)}
               />
             </div>
           ))}
@@ -115,7 +116,7 @@ export default function Users() {
         <Button
           className="mt-2 ms-lg-3"
           variant="primary"
-          onClick={() => setCreateModalShown(true)}
+          onClick={handleOpenCreateModal}
         >
           Создать учетную запись
         </Button>
@@ -126,7 +127,7 @@ export default function Users() {
         open={createModalShown}
         onHide={handleCloseCreateModal}
         buttonText="Создать"
-        buttonHandler={handleSaveUser}
+        buttonHandler={handleCreateUser}
         disabled={saveDisabled}
       >
         <p>
@@ -153,26 +154,23 @@ export default function Users() {
         </FloatingLabel>
         <p id="loginHelpBlock" className="form-text">
           Имя пользователя должно состоять из букв, цифр, символов
-          нижнего подчеркивания, иметь длинну 3-20 знаков.
+          нижнего подчеркивания, иметь длинну 3-20 знаков. Текущая:{' '}
+          {login.length}.
         </p>
       </ConfirmModal>
 
       <ConfirmModal
-        title="Сменить учетную запись"
-        open={switchModalLogin !== ''}
-        onHide={() => setSwitchModalLogin('')}
-        buttonText="Сменить"
+        title="Сохранить изменения?"
+        open={saveModalShown}
+        onHide={handleSaveAndChangeUserCancel}
+        buttonText="Сохранить"
         disabled={false}
-        buttonHandler={() => {
-          handleChangeUser(switchModalLogin);
-          setSwitchModalLogin('');
-        }}
+        buttonHandler={handleSaveAndChangeUser}
       >
         <p>
-          Вы действительно хотите сменить учетную запись на{' '}
-          {`"${switchModalLogin}"`}? Все несохраненные данные текущей
-          учетной записи {`"${activeUser?.login}"`} будут утеряны.
-          Убедитесь что сохранили данные перед сменой пользователя.
+          Данные активной учетной записи не сохранены и будут удалены
+          при выходе из нее. Вы можете сохранить данные учетной записи
+          или отменить смену пользователя.
         </p>
       </ConfirmModal>
     </>
