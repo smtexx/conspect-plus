@@ -1,6 +1,6 @@
 import { Alert, Button, ButtonGroup, Form } from 'react-bootstrap';
 import Screen from '../Screen/Screen';
-import { ChangeEvent, useRef, useState } from 'react';
+import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { E_Marker, E_TokenType } from '../../app/model/types';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import PageInfo from '../PageInfo/PageInfo';
@@ -13,6 +13,7 @@ import {
   I_PageDraft,
 } from '../../app/model/typesModel';
 import {
+  addDraft,
   createLinkset,
   createPage,
   deletePageDraft,
@@ -65,6 +66,24 @@ export default function Editor() {
   const [title, setTitle] = useState(initial.title);
   const [description, setDescription] = useState(initial.description);
   const [markup, setMarkup] = useState(initial.markup);
+
+  useEffect(() => {
+    if (draft !== undefined) {
+      let currentDraft: I_PageDraft | I_LinksetDraft = {
+        ...draft,
+        title,
+        markup,
+        saved: new Date().toString(),
+      };
+      if (currentDraft.type === E_PageType.LINKSET) {
+        currentDraft.description = description;
+      }
+
+      dispatch(addDraft(currentDraft));
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [title, markup, description]);
 
   if (draft === undefined) {
     return <Page404 />;
