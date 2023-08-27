@@ -68,6 +68,7 @@ export default function Data() {
     if (inputFileRef.current && inputFileRef.current.files) {
       await dispatch(importUserData(inputFileRef.current.files[0]));
     }
+    handleCloseImportModal();
   };
 
   const dataActions: I_DataCard[] = [
