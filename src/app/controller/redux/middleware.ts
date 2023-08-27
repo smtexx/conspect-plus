@@ -1,8 +1,8 @@
-import { Action, Middleware } from '@reduxjs/toolkit';
+import { Middleware } from '@reduxjs/toolkit';
 import { setUnsaved } from './app/appSlice';
 
 export const markUnsaved: Middleware =
-  (storeAPI) => (next) => (action: Action<string>) => {
+  (storeAPI) => (next) => (action) => {
     const unsavedOnActions = [
       'users/addUser',
       'users/deleteUser',
