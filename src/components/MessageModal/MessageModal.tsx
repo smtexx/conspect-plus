@@ -31,6 +31,7 @@ export default function MessageModal({
           variant={type === 'error' ? 'outline-danger' : 'primary'}
           onClick={buttonHandler}
           tabIndex={1}
+          autoFocus={true}
         >
           {buttonText}
         </Button>
