@@ -21,7 +21,7 @@ function decryptData(encryptedData: string): string {
 }
 
 async function saveFile(login: string, encryptedData: string) {
-  const fileName = `${login}_${new Date().toLocaleString()}.tip`;
+  const fileName = `${login} ${new Date().toLocaleString()}.tip`;
   const blobData = new Blob([encryptedData], { type: 'text/plain' });
 
   const dataURL = await new Promise((resolve, reject) => {
