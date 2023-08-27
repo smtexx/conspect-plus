@@ -37,7 +37,7 @@ const initialState: I_InitialState = {
   saved: true,
 };
 
-const writeAppState = createAsyncThunk(
+export const writeAppState = createAsyncThunk(
   'app/saveAppState',
   async (data, { dispatch, getState }) => {
     const rootState = getState() as RootState;
@@ -76,7 +76,7 @@ const writeAppState = createAsyncThunk(
   }
 );
 
-const readAppState = createAsyncThunk(
+export const readAppState = createAsyncThunk(
   'app/saveAppState',
   async (data, { dispatch }) => {
     const users = getUsers();
@@ -90,7 +90,7 @@ const readAppState = createAsyncThunk(
   }
 );
 
-const changeUser = createAsyncThunk(
+export const changeUser = createAsyncThunk(
   'app/changeUser',
   async (login: I_User['login'], { dispatch }) => {
     const userData = getUserData(login);
@@ -99,14 +99,14 @@ const changeUser = createAsyncThunk(
   }
 );
 
-const exportUserData = createAsyncThunk(
+export const exportUserData = createAsyncThunk(
   'app/exportUserData',
   async (login: I_User['login']) => {
     await exportStoredData(login);
   }
 );
 
-const importUserData = createAsyncThunk(
+export const importUserData = createAsyncThunk(
   'app/importUserData',
   async (file: File, { dispatch }) => {
     const userData = await readFileData(file);
@@ -114,7 +114,7 @@ const importUserData = createAsyncThunk(
   }
 );
 
-const exportAndExit = createAsyncThunk(
+export const exportAndExit = createAsyncThunk(
   'app/exportAndExit',
   async (login: I_User['login'], { dispatch }) => {
     await exportStoredData(login);
@@ -123,7 +123,7 @@ const exportAndExit = createAsyncThunk(
   }
 );
 
-const createUser = createAsyncThunk(
+export const createUser = createAsyncThunk(
   'app/createUser',
   async (login: I_User['login'], { dispatch, getState }) => {
     const state = getState() as RootState;
