@@ -2,22 +2,23 @@ import { useEffect, useState } from 'react';
 import { Alert } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import {
-  changeTip,
   selectTip,
-} from '../../app/controller/redux/data/dataSlice';
+  setTip,
+} from '../../app/controller/redux/app/appSlice';
 
 export default function TipScreen() {
   const [isShown, setIsShown] = useState(true);
-  const tip = useSelector(selectTip);
+  const tip =
+    useSelector(selectTip) ||
+    'Нажмите на символ "?" внутри фрагмента с кодом, чтобы вывести справочную информацию.';
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(
-      changeTip({
-        html: 'Нажмите на символ "?" внутри фрагмента с кодом, чтобы вывести справочную информацию.',
-      })
-    );
-  }, [dispatch]);
+    return () => {
+      dispatch(setTip(null));
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   function handlePageScroll() {
     const scrollHeight = Math.max(
