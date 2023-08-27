@@ -402,7 +402,7 @@ export default function Editor() {
   };
 
   const handleDeleteDraft = () => {
-    navigate('/quicklinks');
+    navigate('/');
     dispatch(deletePageDraft(draftID));
   };
 
