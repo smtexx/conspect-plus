@@ -77,7 +77,7 @@ export const writeAppState = createAsyncThunk(
 );
 
 export const readAppState = createAsyncThunk(
-  'app/saveAppState',
+  'app/readAppState',
   async (data, { dispatch }) => {
     const users = getUsers();
     dispatch(loadUsers(users));
@@ -188,7 +188,6 @@ export const appSlice = createSlice({
       };
       console.error(action.error);
     });
-
     // Read app state
     builder.addCase(readAppState.fulfilled, (state) => {
       state.message = {
@@ -203,7 +202,6 @@ export const appSlice = createSlice({
       };
       console.error(action.error);
     });
-
     // Changing user
     builder.addCase(changeUser.fulfilled, (state) => {
       state.message = {
@@ -219,7 +217,6 @@ export const appSlice = createSlice({
       };
       console.error(action.error);
     });
-
     // Export data
     builder.addCase(exportUserData.fulfilled, (state) => {
       state.message = {
@@ -234,7 +231,6 @@ export const appSlice = createSlice({
       };
       console.error(action.error);
     });
-
     // Import data
     builder.addCase(importUserData.fulfilled, (state) => {
       state.message = {
@@ -250,7 +246,6 @@ export const appSlice = createSlice({
       };
       console.error(action.error);
     });
-
     // Export data and exit
     builder.addCase(exportAndExit.fulfilled, (state) => {
       state.message = {
@@ -265,7 +260,6 @@ export const appSlice = createSlice({
       };
       console.error(action.error);
     });
-
     // Create user
     builder.addCase(createUser.fulfilled, (state) => {
       state.message = {
