@@ -1,5 +1,5 @@
 import { Button, FloatingLabel, Form } from 'react-bootstrap';
-import { ChangeEvent, useState, useRef } from 'react';
+import { ChangeEvent, useState } from 'react';
 import ConfirmModal from '../ConfirmModal/ConfirmModal';
 import Screen from '../Screen/Screen';
 import UserCard from '../UserCard/UserCard';
@@ -16,13 +16,11 @@ import { AppDispatch } from '../../app/controller/redux/store';
 
 export default function Users() {
   const [createModalShown, setCreateModalShown] = useState(false);
-  const [saveModalShown, setSaveModalShown] = useState(false);
   const [login, setLogin] = useState('');
   const [saveDisabled, setSaveDisabled] = useState(true);
   const users = useSelector(selectUsers);
   const isSaved = useSelector(selectSaved);
   const dispatch = useDispatch() as AppDispatch;
-  const userToChangeRef = useRef('');
 
   const handleOpenCreateModal = () => {
     setCreateModalShown(true);
@@ -63,25 +61,11 @@ export default function Users() {
     setLogin(value);
   };
 
-  const handleChangeUser = (login: I_User['login']) => {
-    if (isSaved) {
-      dispatch(changeUser(login));
-      handleCloseCreateModal();
-    } else {
-      userToChangeRef.current = login;
-      setSaveModalShown(true);
+  const handleChangeUser = async (login: I_User['login']) => {
+    if (!isSaved) {
+      await dispatch(writeAppState());
     }
-  };
-
-  const handleSaveAndChangeUserCancel = () => {
-    userToChangeRef.current = '';
-    setSaveModalShown(false);
-  };
-
-  const handleSaveAndChangeUser = async () => {
-    await dispatch(writeAppState());
-    await dispatch(changeUser(userToChangeRef.current));
-    handleSaveAndChangeUserCancel();
+    await dispatch(changeUser(login));
   };
 
   return (
@@ -156,21 +140,6 @@ export default function Users() {
           Имя пользователя должно состоять из букв, цифр, символов
           нижнего подчеркивания, иметь длинну 3-20 знаков. Текущая:{' '}
           {login.length}.
-        </p>
-      </ConfirmModal>
-
-      <ConfirmModal
-        title="Сохранить изменения?"
-        open={saveModalShown}
-        onHide={handleSaveAndChangeUserCancel}
-        buttonText="Сохранить"
-        disabled={false}
-        buttonHandler={handleSaveAndChangeUser}
-      >
-        <p>
-          Данные активной учетной записи не сохранены и будут удалены
-          при выходе из нее. Вы можете сохранить данные учетной записи
-          или отменить смену пользователя.
         </p>
       </ConfirmModal>
     </>
