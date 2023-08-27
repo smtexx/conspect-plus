@@ -1,6 +1,8 @@
 .wrapper {
   display: flex;
   color: var(--secondary);
+  background: none;
+  border: none;
 
   &:hover {
     color: var(--secondary);

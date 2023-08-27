@@ -1,22 +1,31 @@
 import { AiOutlineSave } from 'react-icons/ai';
 import s from './SaveIndicator.module.scss';
-import { useSelector } from 'react-redux';
-import { selectSaved } from '../../app/controller/redux/data/dataSlice';
-import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  selectSaved,
+  writeAppState,
+} from '../../app/controller/redux/app/appSlice';
+import { AppDispatch } from '../../app/controller/redux/store';
 
 export default function SaveIndicator() {
   const saved = useSelector(selectSaved);
+  const dispatch = useDispatch() as AppDispatch;
+
+  const handleSaveData = () => {
+    dispatch(writeAppState());
+  };
 
   return (
-    <Link
+    <button
       className={`${s.wrapper} ${saved ? '' : s.active}`}
-      to="/data"
+      disabled={saved}
+      onClick={handleSaveData}
       aria-label={
         saved ? 'Изменения сохранены' : 'Сохранить изменения'
       }
       title={saved ? 'Изменения сохранены' : 'Сохранить изменения'}
     >
       <AiOutlineSave />
-    </Link>
+    </button>
   );
 }
