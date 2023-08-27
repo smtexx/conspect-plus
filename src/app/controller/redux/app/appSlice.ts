@@ -210,6 +210,7 @@ export const appSlice = createSlice({
         type: 'primary',
         text: 'Вход в аккаунт выполнен успешно. Данные пользователя прочитаны.',
       };
+      state.saved = false;
     });
     builder.addCase(changeUser.rejected, (state, action) => {
       state.message = {
