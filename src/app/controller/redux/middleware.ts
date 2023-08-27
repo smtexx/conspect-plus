@@ -28,6 +28,11 @@ export const markUnsaved: Middleware =
 
     if (unsavedOnActions.includes(action.type)) {
       storeAPI.dispatch(setUnsaved());
+      window.onbeforeunload = () => false;
+    }
+
+    if (action.type === 'app/saveAppState/fulfilled') {
+      window.onbeforeunload = null;
     }
 
     return next(action);
