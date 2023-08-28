@@ -1,5 +1,5 @@
 import { Fragment } from 'react';
-import { E_TokenType, T_Token } from '../../app/model/types';
+import { E_TokenType, T_Token } from '../../app/model/typesModel';
 import { useDispatch } from 'react-redux';
 import { setTip } from '../../app/controller/redux/app/appSlice';
 

@@ -1,7 +1,7 @@
 import { Alert, Button, ButtonGroup, Form } from 'react-bootstrap';
 import Screen from '../Screen/Screen';
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
-import { E_Marker, E_TokenType } from '../../app/model/types';
+import { E_Marker, E_TokenType } from '../../app/model/typesModel';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import PageInfo from '../PageInfo/PageInfo';
 import { useDispatch, useSelector } from 'react-redux';

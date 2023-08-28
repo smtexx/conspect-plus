@@ -6,7 +6,7 @@ import {
   I_ListToken,
   I_PreparsedToken,
   I_TextToken,
-} from '../model/types';
+} from '../model/typesModel';
 import {
   escapeUnsupportedChars,
   normalizeWs,
