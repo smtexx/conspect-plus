@@ -9,4 +9,8 @@ a:hover {
   color: $primary !important;
 }
 
+pre {
+  font-size: 0.875rem !important;
+}
+
 @import '~bootstrap/scss/bootstrap';
