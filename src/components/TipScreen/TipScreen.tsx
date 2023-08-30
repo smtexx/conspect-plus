@@ -7,16 +7,27 @@ import {
 } from '../../app/controller/redux/app/appSlice';
 
 export default function TipScreen() {
-  const [isShown, setIsShown] = useState(true);
+  const [isShown, setIsShown] = useState(false);
   const tip =
     useSelector(selectTip) ||
     'Нажмите на символ "?" внутри фрагмента с кодом, чтобы вывести справочную информацию.';
   const dispatch = useDispatch();
 
+  // Set tip
   useEffect(() => {
-    return () => {
-      dispatch(setTip(null));
-    };
+    const hasTips = document.querySelector(
+      'button.cm-token-code-tip'
+    );
+
+    if (hasTips !== null) {
+      window.addEventListener('scroll', handlePageScroll);
+      setIsShown(true);
+      return () => {
+        dispatch(setTip(null));
+        window.removeEventListener('scroll', handlePageScroll);
+      };
+    }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -39,14 +50,6 @@ export default function TipScreen() {
       setIsShown(true);
     }
   }
-
-  useEffect(() => {
-    window.addEventListener('scroll', handlePageScroll);
-
-    return () => {
-      window.removeEventListener('scroll', handlePageScroll);
-    };
-  }, []);
 
   return (
     <div
