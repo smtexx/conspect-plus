@@ -428,6 +428,14 @@ export default function Editor() {
         }
       }
 
+      // Code block without code
+      const emptyCodeBlocks = markup.match(/##_C\s*\(.*?\)##_\/C/gs);
+      if (emptyCodeBlocks !== null) {
+        throw new PageError(
+          `Разметка содержит блоки кода без фрагментов кода: ${emptyCodeBlocks[0]}.`
+        );
+      }
+
       // Empty link
       const linkWithoutText = markup.match(
         /##_([RA])\s*\(.*?\)##_\/(\1)/gs
