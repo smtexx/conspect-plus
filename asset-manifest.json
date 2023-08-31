@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/conspect-plus/static/css/main.644dc69b.css",
-    "main.js": "/conspect-plus/static/js/main.70b5896e.js",
+    "main.js": "/conspect-plus/static/js/main.96abbcb4.js",
     "static/js/787.897dc7e8.chunk.js": "/conspect-plus/static/js/787.897dc7e8.chunk.js",
     "static/media/subset-Unbounded-Bold.woff": "/conspect-plus/static/media/subset-Unbounded-Bold.eea32a71db303d135348.woff",
     "static/media/subset-Unbounded-Regular.woff": "/conspect-plus/static/media/subset-Unbounded-Regular.bc32bcd8e8dc07256667.woff",
@@ -9,11 +9,11 @@
     "static/media/subset-Unbounded-Regular.woff2": "/conspect-plus/static/media/subset-Unbounded-Regular.1890d98e54ace9250d88.woff2",
     "index.html": "/conspect-plus/index.html",
     "main.644dc69b.css.map": "/conspect-plus/static/css/main.644dc69b.css.map",
-    "main.70b5896e.js.map": "/conspect-plus/static/js/main.70b5896e.js.map",
+    "main.96abbcb4.js.map": "/conspect-plus/static/js/main.96abbcb4.js.map",
     "787.897dc7e8.chunk.js.map": "/conspect-plus/static/js/787.897dc7e8.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.644dc69b.css",
-    "static/js/main.70b5896e.js"
+    "static/js/main.96abbcb4.js"
   ]
 }
