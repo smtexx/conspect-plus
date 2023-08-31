@@ -1,5 +1,6 @@
 {
-  "name": "my-cheats",
+  "name": "conspect-plus",
+  "homepage": "https://smtexx.github.io/conspect-plus",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
