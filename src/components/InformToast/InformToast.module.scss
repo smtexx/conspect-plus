@@ -1,0 +1,13 @@
+.wrapper {
+  width: auto;
+  position: fixed;
+  left: 50%;
+  bottom: 5vh;
+  transform: translateX(-50%);
+
+  @media screen and (min-width: 576px) {
+    left: auto;
+    right: 7vw;
+    transform: none;
+  }
+}
