@@ -1,7 +1,10 @@
 import { Alert, Button } from 'react-bootstrap';
 import { useRouteError } from 'react-router-dom';
+import useTitle from '../lib/useTitle';
 
 export default function ErrorPage() {
+  useTitle('Ошибка приложения');
+
   const error = useRouteError();
   console.error(error);
 

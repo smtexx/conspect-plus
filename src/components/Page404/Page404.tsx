@@ -1,6 +1,9 @@
+import useTitle from '../../lib/useTitle';
 import Screen from '../Screen/Screen';
 
 export default function Page404() {
+  useTitle('404 cтраница не найдена');
+
   return (
     <Screen title="404">
       <div>

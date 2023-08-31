@@ -8,6 +8,7 @@ import {
 } from '../../app/controller/redux/data/dataSlice';
 import { I_RecentLink } from '../../app/model/typesModel';
 import { FaMehRollingEyes } from 'react-icons/fa';
+import useTitle from '../../lib/useTitle';
 
 export enum E_QuickLinkTypes {
   NOTES = 'notes',
@@ -33,6 +34,7 @@ export default function QuickLinks() {
   const [type, setType] = useState(E_QuickLinkTypes.NOTES);
   const recentLinks = useSelector(selectRecent);
   const drafts = useSelector(selectDrafts);
+  useTitle('Недавние записи | Конспект+');
 
   const links: Record<E_QuickLinkTypes, I_RecentLink[]> = {
     [E_QuickLinkTypes.NOTES]: recentLinks.notes,

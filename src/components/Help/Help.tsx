@@ -1,3 +1,4 @@
+import useTitle from '../../lib/useTitle';
 import Screen from '../Screen/Screen';
 import TagCard from '../TagCard/TagCard';
 
@@ -113,9 +114,11 @@ const markers: I_Tag[] = [
 ];
 
 export default function Help() {
+  useTitle('Справочный раздел');
+
   return (
     <>
-      <Screen title="Инструкция">
+      <Screen title="Справочный раздел">
         <section>
           <h2 className="fs-4">Основные блоки</h2>
           <p style={{ maxWidth: '40rem' }}>

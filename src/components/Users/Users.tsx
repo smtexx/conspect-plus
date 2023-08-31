@@ -13,6 +13,7 @@ import {
   writeAppState,
 } from '../../app/controller/redux/app/appSlice';
 import { AppDispatch } from '../../app/controller/redux/store';
+import useTitle from '../../lib/useTitle';
 
 export default function Users() {
   const [createModalShown, setCreateModalShown] = useState(false);
@@ -21,6 +22,7 @@ export default function Users() {
   const users = useSelector(selectUsers);
   const isSaved = useSelector(selectSaved);
   const dispatch = useDispatch() as AppDispatch;
+  useTitle('Учетные записи | Конспект+');
 
   const handleOpenCreateModal = () => {
     setCreateModalShown(true);

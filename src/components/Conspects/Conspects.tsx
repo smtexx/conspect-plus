@@ -8,11 +8,13 @@ import {
   createConspect,
   selectConspects,
 } from '../../app/controller/redux/data/dataSlice';
+import useTitle from '../../lib/useTitle';
 
 export default function Conspects() {
   const [menuIsOpen, setMenuIsOpen] = useState(false);
   const conspects = useSelector(selectConspects);
   const dispatch = useDispatch();
+  useTitle('Мои конспекты | Конспект+');
 
   function handleMenuOpen() {
     setMenuIsOpen(true);

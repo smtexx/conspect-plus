@@ -10,12 +10,14 @@ import {
 import ProcessDataFormPart from '../ProcessDataFormPart/ProcessDataFormPart';
 import { createID } from '../../app/controller/utils';
 import { useNavigate } from 'react-router-dom';
+import useTitle from '../../lib/useTitle';
 
 export default function Linksets() {
   const [menuIsOpen, setMenuIsOpen] = useState(false);
   const links = useSelector(selectLinksets);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  useTitle('Мои ссылки | Конспект+');
 
   function handleMenuOpen() {
     setMenuIsOpen(true);

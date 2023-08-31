@@ -15,6 +15,7 @@ import {
   selectSaved,
   writeAppState,
 } from '../../app/controller/redux/app/appSlice';
+import useTitle from '../../lib/useTitle';
 
 interface I_DataCard {
   header: string;
@@ -31,6 +32,8 @@ export default function Data() {
   const dispatch = useDispatch() as AppDispatch;
   const isSaved = useSelector(selectSaved);
   const userLogin = useSelector(selectActiveUserLogin);
+
+  useTitle('Менеджмент данных | Конспект+');
 
   const handleExportData = async () => {
     if (userLogin !== '') {
