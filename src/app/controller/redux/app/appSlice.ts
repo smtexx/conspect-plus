@@ -177,7 +177,7 @@ export const appSlice = createSlice({
     builder.addCase(writeAppState.fulfilled, (state, action) => {
       state.message = {
         type: 'primary',
-        text: 'Состояние приложения успешно сохранено в локальном хранилище браузера.',
+        text: 'Состояние приложения успешно сохранено в локальном хранилище.',
       };
       state.saved = true;
     });
