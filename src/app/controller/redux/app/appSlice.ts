@@ -81,11 +81,31 @@ export const readAppState = createAsyncThunk(
   async (data, { dispatch }) => {
     const users = getUsers();
     dispatch(loadUsers(users));
-
     const activeUser = users.find((u) => u.isActive);
-    if (activeUser !== undefined) {
+
+    if (users.length === 0) {
+      dispatch(
+        setMessage({
+          type: 'primary',
+          text: 'Приветствуем в приложении Конспект+, создайте новую учетную запись для начала работы!',
+        })
+      );
+    } else if (activeUser === undefined) {
+      dispatch(
+        setMessage({
+          type: 'primary',
+          text: 'Для начала работы выберите одну из существующих учетных записей, или создайте новую.',
+        })
+      );
+    } else {
       const userData = getUserData(activeUser.login);
       dispatch(loadData(userData));
+      dispatch(
+        setMessage({
+          type: 'primary',
+          text: 'Предыдущая сессия пользователя успешно восстановлена. Желаем приятной работы.',
+        })
+      );
     }
   }
 );
@@ -188,13 +208,7 @@ export const appSlice = createSlice({
       };
       console.error(action.error.message);
     });
-    // Read app state
-    builder.addCase(readAppState.fulfilled, (state) => {
-      state.message = {
-        type: 'primary',
-        text: 'Предыдущая сессия пользователя успешно восстановлена. Желаем приятной работы.',
-      };
-    });
+
     builder.addCase(readAppState.rejected, (state, action) => {
       state.message = {
         type: 'error',
