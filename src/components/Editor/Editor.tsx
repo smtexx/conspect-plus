@@ -39,10 +39,35 @@ const descriptionLength = {
   max: 60,
 };
 
+const languages: { title: string; code: string }[] = [
+  { title: 'Arduino', code: 'arduino' },
+  { title: 'C#', code: 'csharp' },
+  { title: 'C++', code: 'cpp' },
+  { title: 'CSS', code: 'css' },
+  { title: 'cURL', code: 'curl' },
+  { title: 'Dart', code: 'dart' },
+  { title: 'GraphQL', code: 'graphql' },
+  { title: 'HTML', code: 'html' },
+  { title: 'JSON', code: 'json' },
+  { title: 'Java', code: 'java' },
+  { title: 'JavaScript', code: 'javascript' },
+  { title: 'Kotlin', code: 'kotlin' },
+  { title: 'Lua', code: 'lua' },
+  { title: 'Markdown', code: 'markdown' },
+  { title: 'Objective C', code: 'objectivec' },
+  { title: 'PHP', code: 'php' },
+  { title: 'Python', code: 'python' },
+  { title: 'SCSS', code: 'scss' },
+  { title: 'Svelte', code: 'svelte' },
+  { title: 'Swift', code: 'swift' },
+  { title: 'TypeScript', code: 'typescript' },
+];
+
 export default function Editor() {
   const [cursorPos, setCursorPos] = useState(0);
   const [error, setError] = useState('');
   const [saveDisabled, setSaveDisabled] = useState(true);
+  const [lang, setLang] = useState('javascript');
   const markupRef = useRef<HTMLTextAreaElement>(null);
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -162,8 +187,12 @@ export default function Editor() {
       case E_TokenType.W:
       case E_TokenType.O:
       case E_TokenType.U:
-      case E_TokenType.C:
         insertion = `${startLineBreak}##_${type}\n\n##_/${type}`;
+        cursorShift = 5 + startLineBreak.length;
+        break;
+
+      case E_TokenType.C:
+        insertion = `${startLineBreak}##_${type}\n\n(${lang})##_/${type}`;
         cursorShift = 5 + startLineBreak.length;
         break;
 
@@ -369,6 +398,44 @@ export default function Editor() {
         );
       }
 
+      // Code block without lang attribute
+      const codeBlocksEndingsSum = markup.match(/##_\/C/gs);
+      const codeBlocksEndingsCorrect =
+        markup.match(/\([a-z]+\)##_\/C/gs);
+
+      if (
+        codeBlocksEndingsSum !== null &&
+        codeBlocksEndingsCorrect?.length !==
+          codeBlocksEndingsSum.length
+      ) {
+        throw new PageError(
+          'Разметка содержит блок кода без указания языка разработки.'
+        );
+      }
+
+      // Code blocks with wrong language
+      const allCodeBlocks = Array.from(
+        markup.matchAll(/\(([a-z]+)\)##_\/C/gs)
+      );
+      for (let block of allCodeBlocks) {
+        const lang = block[1];
+        const langIsWrong =
+          languages.findIndex(({ code }) => code === lang) === -1;
+        if (langIsWrong) {
+          throw new PageError(
+            `Разметка содержит блок кода с неподдерживаемым языком разработки: ${lang}.`
+          );
+        }
+      }
+
+      // Code block without code
+      const emptyCodeBlocks = markup.match(/##_C\s*\(.*?\)##_\/C/gs);
+      if (emptyCodeBlocks !== null) {
+        throw new PageError(
+          `Разметка содержит блоки кода без фрагментов кода: ${emptyCodeBlocks[0]}.`
+        );
+      }
+
       // Empty link
       const linkWithoutText = markup.match(
         /##_([RA])\s*\(.*?\)##_\/(\1)/gs
@@ -562,7 +629,23 @@ export default function Editor() {
                   ))}
                 </ButtonGroup>
               ))}
+              {draft.type === E_PageType.PAGE && (
+                <Form.Select
+                  aria-label="Язык блоков кода"
+                  title="Язык блоков кода"
+                  style={{ width: '11.25rem' }}
+                  value={lang}
+                  onChange={(e) => setLang(e.target.value)}
+                >
+                  {languages.map((l) => (
+                    <option key={l.code} value={l.code}>
+                      {l.title}
+                    </option>
+                  ))}
+                </Form.Select>
+              )}
             </div>
+
             <Form.Control
               className="text-white font-monospace"
               value={markup}
