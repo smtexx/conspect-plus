@@ -178,7 +178,7 @@ export default function Help() {
           </p>
           <div
             className="p-3 ps-4  bg-body-secondary rounded"
-            style={{ maxWidth: '40rem' }}
+            style={{ maxWidth: '50rem' }}
           >
             <code>
               <pre className="text-primary">
