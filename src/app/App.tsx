@@ -18,67 +18,64 @@ import Page404 from '../components/Page404/Page404';
 import { Provider } from 'react-redux';
 import { store } from './controller/redux/store';
 
-const router = createHashRouter(
-  [
-    {
-      path: '/',
-      element: <Layout />,
-      errorElement: <ErrorPage />,
-      children: [
-        {
-          path: '',
-          element: <QuickLinks />,
-        },
-        {
-          path: 'users',
-          element: <Users />,
-        },
-        {
-          path: 'data',
-          element: <Data />,
-        },
-        {
-          path: 'conspect',
-          element: <Conspects />,
-        },
-        {
-          path: 'conspect/:conspectID',
-          element: <Sections />,
-        },
-        {
-          path: 'conspect/:conspectID/:sectionID',
-          element: <Pages />,
-        },
-        {
-          path: 'conspect/:conspectID/:sectionID/:pageID',
-          element: <Note />,
-        },
-        {
-          path: 'edit/:draftID',
-          element: <Editor />,
-        },
-        {
-          path: 'linkset',
-          element: <Linksets />,
-        },
-        {
-          path: 'linkset/:linksetID',
-          element: <Links />,
-        },
-        {
-          path: 'search',
-          element: <Search />,
-        },
-        {
-          path: 'help',
-          element: <Help />,
-        },
-        { path: '*', element: <Page404 /> },
-      ],
-    },
-  ],
-  { basename: '/conspect-plus' }
-);
+const router = createHashRouter([
+  {
+    path: '/',
+    element: <Layout />,
+    errorElement: <ErrorPage />,
+    children: [
+      {
+        path: '',
+        element: <QuickLinks />,
+      },
+      {
+        path: 'users',
+        element: <Users />,
+      },
+      {
+        path: 'data',
+        element: <Data />,
+      },
+      {
+        path: 'conspect',
+        element: <Conspects />,
+      },
+      {
+        path: 'conspect/:conspectID',
+        element: <Sections />,
+      },
+      {
+        path: 'conspect/:conspectID/:sectionID',
+        element: <Pages />,
+      },
+      {
+        path: 'conspect/:conspectID/:sectionID/:pageID',
+        element: <Note />,
+      },
+      {
+        path: 'edit/:draftID',
+        element: <Editor />,
+      },
+      {
+        path: 'linkset',
+        element: <Linksets />,
+      },
+      {
+        path: 'linkset/:linksetID',
+        element: <Links />,
+      },
+      {
+        path: 'search',
+        element: <Search />,
+      },
+      {
+        path: 'help',
+        element: <Help />,
+      },
+      { path: '*', element: <Page404 /> },
+    ],
+  },
+]);
 
 export default function App() {
   return (
