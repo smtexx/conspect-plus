@@ -1,8 +1,5 @@
 import './view/styles/index.scss';
-import {
-  createBrowserRouter,
-  RouterProvider,
-} from 'react-router-dom';
+import { createHashRouter, RouterProvider } from 'react-router-dom';
 import Layout from './Layout';
 import ErrorPage from './ErrorPage';
 import QuickLinks from '../components/QuickLinks/QuickLinks';
@@ -21,7 +18,7 @@ import Page404 from '../components/Page404/Page404';
 import { Provider } from 'react-redux';
 import { store } from './controller/redux/store';
 
-const router = createBrowserRouter(
+const router = createHashRouter(
   [
     {
       path: '/',
