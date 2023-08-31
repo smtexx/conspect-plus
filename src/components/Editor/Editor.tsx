@@ -39,6 +39,30 @@ const descriptionLength = {
   max: 60,
 };
 
+const languages: { title: string; code: string }[] = [
+  { title: 'Arduino', code: 'arduino' },
+  { title: 'C#', code: 'csharp' },
+  { title: 'C++', code: 'cpp' },
+  { title: 'CSS', code: 'css' },
+  { title: 'cURL', code: 'curl' },
+  { title: 'Dart', code: 'dart' },
+  { title: 'GraphQL', code: 'graphql' },
+  { title: 'HTML', code: 'html' },
+  { title: 'JSON', code: 'json' },
+  { title: 'Java', code: 'java' },
+  { title: 'JavaScript', code: 'javascript' },
+  { title: 'Kotlin', code: 'kotlin' },
+  { title: 'Lua', code: 'lua' },
+  { title: 'Markdown', code: 'markdown' },
+  { title: 'Objective C', code: 'objectivec' },
+  { title: 'PHP', code: 'php' },
+  { title: 'Python', code: 'python' },
+  { title: 'SCSS', code: 'scss' },
+  { title: 'Svelte', code: 'svelte' },
+  { title: 'Swift', code: 'swift' },
+  { title: 'TypeScript', code: 'typescript' },
+];
+
 export default function Editor() {
   const [cursorPos, setCursorPos] = useState(0);
   const [error, setError] = useState('');
@@ -367,6 +391,36 @@ export default function Editor() {
         throw new PageError(
           `Вложенность одинаковых тегов во фрагменте "${identicalTagsNesting[0]}".`
         );
+      }
+
+      // Code block without lang attribute
+      const codeBlocksEndingsSum = markup.match(/##_\/C/gs);
+      const codeBlocksEndingsCorrect =
+        markup.match(/\([a-z]+\)##_\/C/gs);
+
+      if (
+        codeBlocksEndingsSum !== null &&
+        codeBlocksEndingsCorrect?.length !==
+          codeBlocksEndingsSum.length
+      ) {
+        throw new PageError(
+          'Разметка содержит блок кода без указания языка разработки.'
+        );
+      }
+
+      // Code blocks with wrong language
+      const allCodeBlocks = Array.from(
+        markup.matchAll(/\(([a-z]+)\)##_\/C/gs)
+      );
+      for (let block of allCodeBlocks) {
+        const lang = block[1];
+        const langIsWrong =
+          languages.findIndex(({ code }) => code === lang) === -1;
+        if (langIsWrong) {
+          throw new PageError(
+            `Разметка содержит блок кода с неподдерживаемым языком разработки: ${lang}.`
+          );
+        }
       }
 
       // Empty link
