@@ -87,7 +87,7 @@ export default function Note() {
           ]}
         />
 
-        <div className="text-white pt-3">
+        <div className="pt-3">
           {page.tokens.map((token, idx) => (
             <Token key={idx} token={token} />
           ))}
