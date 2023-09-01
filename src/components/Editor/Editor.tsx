@@ -674,7 +674,7 @@ export default function Editor() {
               </Alert>
             )}
 
-            <div className="d-flex justify-content-end column-gap-3 mt-4">
+            <div className="d-flex justify-content-end flex-wrap gap-3 column-gap-3 mt-4">
               <Button variant="primary" onClick={handleDeleteDraft}>
                 Удалить черновик
               </Button>
